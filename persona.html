@@ -168,6 +168,49 @@
     .row3{grid-template-columns:1fr 1fr}
     .row3 label:first-child{grid-column:1/-1}
   }
+
+  /* ───────── 여백 정리 (덜 뭉쳐 보이게) ───────── */
+  body{line-height:1.7}
+  .wrap{max-width:1240px;padding-top:40px}
+  .title{margin-top:34px}
+  .notice{margin-top:30px;padding:14px 18px;line-height:1.7}
+  .cols{gap:72px;margin-top:56px}
+  .sec{margin-bottom:72px}
+  .sec-h{padding-bottom:10px;margin-bottom:22px}
+  .sec-h h2{font-size:30px}
+  .hint{margin:0 0 22px;line-height:1.75;max-width:520px}
+  label.f,.f{margin-bottom:24px}
+  label.f > span,.slot-label{margin-bottom:8px}
+  input[type=text],select,textarea{font-size:16px;padding:9px 0}
+  .row2{gap:28px}
+  .type-seg button{padding:9px 16px;font-size:12px}
+  .type-hint{margin:10px 0 0}
+  .keychk{margin:4px 0 28px;gap:12px}
+  .keychk .txt small{margin-top:3px}
+  .slots{padding:8px 0 8px 18px;max-height:400px}
+  .slots .off{padding:8px 0}
+  .slots .off::before{top:15px}
+  .slots .slot{margin:3px 0;padding:6px 12px}
+  .slots .slot.on{padding:9px 12px}
+  .slots .ex-mine{padding:6px 12px}
+  .btns{gap:10px;margin-top:4px}
+  .btn{padding:10px 18px}
+  .mine-list{margin-top:26px;border-top:1px solid var(--hair)}
+  .mine-list li{padding:16px 0;gap:16px}
+  .picked{margin-bottom:22px;gap:8px}
+  .picked button{padding:5px 12px}
+  .grp{margin-bottom:20px}
+  .grp h5{margin-bottom:8px}
+  .grp div{gap:7px}
+  .pick{padding:5px 12px}
+  .opt{padding:16px 0}
+  .opt small{margin-top:3px}
+  .seg button{padding:8px 15px}
+  .backup textarea{margin-top:14px}
+  .preview .sec-h{margin-bottom:18px}
+  .canvas-box{padding:18px}
+  .pv-meta{margin-top:12px}
+  @media (max-width:880px){ .cols{gap:30px} .sec{margin-bottom:56px} }
 </style>
 </head>
 <body>
