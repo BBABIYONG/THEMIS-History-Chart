@@ -1034,7 +1034,7 @@ function popHint(id, key, where){
   if (!el) {
     el = document.createElement("div"); el.id = id; el.className = "hint-pop arrow";
     el.innerHTML = `<span>✦</span><p><b>처음이신가요?</b> 먼저 <b>최애</b>를 골라 보세요. 고른 캐릭터의 연표를 보면서 내 기록을 넣을 수 있어요.</p><button aria-label="닫기">닫기</button>`;
-    where.after(el);
+    where.prepend(el);
   }
   el.hidden = false;
   el.querySelector("button").onclick = () => { el.hidden = true; markSeen(key); };
@@ -1060,7 +1060,7 @@ function boot(){
   $("#pName").value = S.name; $("#pEn").value = S.en;
   seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
   resetForm(); renderFav(); draw(); showTab(curTab); renderSlots("instant");
-  if (!S.favs.length && !S.entries.length) popHint("hintStart", "start", $("#tabbar"));
+  if (!S.favs.length && !S.entries.length) popHint("hintStart", "start", secs[0]);
   updateHowto();
 }
 let redraw; addEventListener("resize", () => { clearTimeout(redraw); redraw = setTimeout(draw, 200); });
