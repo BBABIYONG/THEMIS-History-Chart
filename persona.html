@@ -203,6 +203,43 @@
   .slots .off.none::before{display:none}
   .slots .ex-mine em{font-style:normal;font-size:11px;color:var(--sub)}
   .slot-legend{display:flex;gap:14px;color:var(--faint);margin-top:8px;font-size:10px;text-transform:none}
+  /* ───────── 탭 (포스터 톤) ───────── */
+  .tabbar{position:sticky;top:0;z-index:20;background:var(--paper);display:grid;grid-template-columns:repeat(5,1fr);
+          border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);margin-bottom:38px}
+  .tab{background:none;border:none;cursor:pointer;color:var(--ink);font:inherit;text-align:left;position:relative;min-width:0;
+       padding:12px 12px 11px;display:flex;flex-direction:column;gap:6px;transition:background .25s,color .25s}
+  .tab + .tab::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:1px;background:var(--hair)}
+  .tab i{font-style:normal;font-family:var(--disp);font-weight:500;font-size:34px;line-height:.8;letter-spacing:-.05em;
+         color:transparent;-webkit-text-stroke:1px var(--ink);transition:color .3s,-webkit-text-stroke-color .3s}
+  .tab b{display:block;font-weight:500;font-size:13.5px;letter-spacing:-.01em;
+         white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tab small{display:block;font-family:var(--mono);font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:14px;margin-top:-4px}
+  .tab::after{content:"";position:absolute;right:10px;top:10px;width:9px;height:9px;background:currentColor;opacity:0;transform:scale(.3) rotate(-45deg);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;
+    transition:opacity .35s,transform .45s cubic-bezier(.3,1.5,.5,1)}
+  .tab:hover i{color:rgba(17,17,18,.12)}
+  .tab.on{background:var(--ink);color:var(--paper)}
+  .tab.on + .tab::before,.tab.on::before{opacity:0}
+  .tab.on i{color:var(--paper);-webkit-text-stroke-color:transparent}
+  .tab.on small{color:var(--faint)}
+  .tab.on::after{opacity:1;transform:none}
+  .tabs-col > .sec > .sec-h{display:none}
+  .tabs-col > .sec{display:none;margin-bottom:0}
+  .tabs-col > .sec.on{display:block;animation:tabIn .4s cubic-bezier(.2,.7,.2,1)}
+  @keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  /* 탭 안 머리말: 큰 영문 제목 + 한글 안내 */
+  .tab-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:-10px 0 26px}
+  .tab-head h3{font-family:var(--disp);font-weight:500;font-size:clamp(34px,4.4vw,52px);line-height:.9;letter-spacing:-.04em}
+  .tab-head span{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;padding-bottom:4px}
+  .tab-nav{display:flex;justify-content:space-between;align-items:center;margin-top:46px;padding-top:14px;border-top:2px solid var(--ink)}
+  .tab-nav button{background:none;border:none;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+                  cursor:pointer;color:var(--ink);padding:7px 12px;transition:.15s}
+  .tab-nav button:first-child{padding-left:0}
+  .tab-nav button:last-child{border:1px solid var(--ink)}
+  .tab-nav button:last-child:hover{background:var(--ink);color:var(--paper)}
+  .tab-nav button:first-child:hover{text-decoration:line-through}
+  .tab-nav button:disabled{visibility:hidden}
   /* 주요 사건 체크 */
   .keychk{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:2px 0 16px;user-select:none}
   .keychk input{position:absolute;opacity:0;pointer-events:none}
@@ -224,6 +261,11 @@
   }
   @media (max-width:520px){
     .wrap{padding:24px 18px 70px}
+    .tab{padding:10px 6px 9px;gap:4px}
+    .tab i{font-size:24px}
+    .tab b{font-size:11px}
+    .tab small{display:none}
+    .tab::after{right:5px;top:6px;width:7px;height:7px}
     .topline b{font-size:15px}
     .back{white-space:nowrap;padding:3px 8px}
     .row3{grid-template-columns:1fr 1fr}
@@ -286,11 +328,12 @@
     <p>내 캐릭터의 기록을 공식 연표 사이에 끼워 넣고, 최애와 함께한 연대기를 이미지로 저장해요.</p>
   </div>
 
-  <div class="notice"><b class="mono">Notice</b><span>입력한 내용은 <b>이 브라우저에만</b> 저장되고 어디에도 전송되지 않아요. 브라우저 기록을 지우거나 기기를 바꾸면 사라지니, 맨 아래 <b>백업 코드</b>를 복사해 두세요.</span></div>
+  <div class="notice"><b class="mono">Notice</b><span>입력한 내용은 <b>이 브라우저에만</b> 저장되고 어디에도 전송되지 않아요. 브라우저 기록을 지우거나 기기를 바꾸면 사라지니, <b>백업</b> 탭에서 백업 코드를 복사해 두세요.</span></div>
 
   <div class="cols">
-    <!-- ───────── 왼쪽: 입력 ───────── -->
-    <div>
+    <!-- ───────── 왼쪽: 입력 (탭) ───────── -->
+    <div class="tabs-col" id="tabsCol">
+      <nav class="tabbar" id="tabbar" role="tablist"></nav>
       <section class="sec">
         <div class="sec-h"><h2><i>01</i>Favorites</h2><span class="fav-count">최애 <b id="favN">0</b> / 6</span></div>
         <p class="hint">함께 보여줄 캐릭터를 골라 주세요. 최대 6명까지 고를 수 있어요. 옆의 숫자는 연표에 나오는 기록 수예요.</p>
@@ -849,6 +892,7 @@ function draw(){
 
   $("#pvSize").textContent = `1080 × ${H}`;
   updatePreviewImg();
+  if (typeof updateTabSubs === "function") updateTabSubs();
   const mineN = rows.filter(r => r.kind === "mine" || r.kind === "evt").length, favN = rows.filter(r => r.kind === "fav").length;
   $("#pvInfo").textContent = `내 기록 ${mineN} · 최애 기록 ${favN}`;
   $("#saveImg").style.display = "none";
@@ -893,10 +937,45 @@ $("#saveBtn").onclick = () => {
 };
 
 /* ───────── 시작 ───────── */
+// ───────── 탭 ─────────
+const TABS = [["Favorites", "최애"], ["Persona", "내 캐릭터"], ["Records", "기록"], ["Options", "설정"], ["Backup", "백업"]];
+const secs = [...document.querySelectorAll("#tabsCol > section.sec")];
+let curTab = 0;
+try { curTab = Math.min(+(localStorage.getItem(KEY + "-tab") || 0), secs.length - 1); } catch (e) {}
+$("#tabbar").innerHTML = TABS.map(([en, ko], i) =>
+  `<button class="tab" role="tab" data-t="${i}" title="${en}"><i>0${i + 1}</i><b>${ko}</b><small id="tabSub${i}"></small></button>`).join("");
+secs.forEach((s, i) => {
+  const head = document.createElement("div"); head.className = "tab-head";
+  head.innerHTML = `<h3>${TABS[i][0]}</h3><span>${String(i + 1).padStart(2, "0")} / 05 · ${TABS[i][1]}</span>`;
+  s.prepend(head);
+  const nav = document.createElement("div"); nav.className = "tab-nav";
+  nav.innerHTML = `<button data-go="${i - 1}" ${i === 0 ? "disabled" : ""}>← ${i > 0 ? TABS[i - 1][0] : ""}</button>
+                   <button data-go="${i + 1}" ${i === secs.length - 1 ? "disabled" : ""}>Next · ${i < secs.length - 1 ? TABS[i + 1][0] : ""} →</button>`;
+  s.appendChild(nav);
+});
+function showTab(i, scroll){
+  curTab = i;
+  secs.forEach((s, n) => s.classList.toggle("on", n === i));
+  document.querySelectorAll(".tab").forEach((t, n) => { t.classList.toggle("on", n === i); t.setAttribute("aria-selected", n === i); });
+  try { localStorage.setItem(KEY + "-tab", i); } catch (e) {}
+  if (i === 2) renderSlots("instant");
+  if (scroll) { const top = $("#tabsCol").getBoundingClientRect().top + scrollY - 10; if (scrollY > top) scrollTo({ top, behavior: "smooth" }); }
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => showTab(+t.dataset.t));
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => showTab(+b.dataset.go, true));
+function updateTabSubs(){
+  const set = (i, t) => { const el = $("#tabSub" + i); if (el) el.textContent = t; };
+  set(0, `${S.favs.length} / 6`);
+  set(1, S.name || "미입력");
+  set(2, `${S.entries.length}건`);
+  set(3, `주변 ${S.ctx} · ${S.mark ? "표시" : "숨김"}`);
+  set(4, "");
+}
+
 function boot(){
   $("#pName").value = S.name; $("#pEn").value = S.en;
   seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
-  resetForm(); renderFav(); draw(); renderSlots("instant");
+  resetForm(); renderFav(); draw(); showTab(curTab); renderSlots("instant");
 }
 let redraw; addEventListener("resize", () => { clearTimeout(redraw); redraw = setTimeout(draw, 200); });
 boot();
