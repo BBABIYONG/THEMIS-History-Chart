@@ -110,6 +110,24 @@
   .save-img img{max-width:100%;border:1px solid var(--ink)}
   .save-img p{font-size:12.5px;color:var(--sub);margin-top:6px}
 
+  /* 위치 고르기 미니 연표 */
+  .slot-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase;margin-bottom:6px}
+  .slot-label em{font-style:normal;text-transform:none;font-family:"Noto Sans KR",sans-serif;letter-spacing:0;font-size:12px}
+  .slot-label b{color:var(--ink);font-weight:500}
+  .slots{list-style:none;border-left:1px solid var(--ink);margin-left:6px;padding:4px 0 4px 16px;max-height:340px;overflow-y:auto}
+  .slots li{position:relative;font-size:13px;line-height:1.45}
+  .slots .off{color:var(--sub);padding:5px 0}
+  .slots .off::before{content:"";position:absolute;left:-20px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--ink)}
+  .slots .off.key{color:var(--ink);font-weight:500}
+  .slots .off .no{font-family:var(--mono);font-size:10px;color:var(--faint);margin-right:8px}
+  .slots .off.none::before{display:none}
+  .slots .slot{cursor:pointer;margin:1px 0;padding:3px 10px;border:1px dashed transparent;color:var(--faint);font-size:12px;transition:.12s}
+  .slots .slot:hover{border-color:var(--ink);color:var(--ink)}
+  .slots .slot.on{border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:500;padding:6px 10px}
+  .slots .slot.on small{display:block;font-size:11px;font-weight:400;color:var(--faint)}
+  .slots .slot.on::before{content:"";position:absolute;left:-23px;top:50%;width:13px;height:13px;margin-top:-6.5px;background:var(--ink);
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat}
+  .slots .ex-mine{color:var(--ink);font-weight:500;padding:4px 10px;font-size:12.5px}
   .backup textarea{font-family:var(--mono);font-size:11px;min-height:70px;border:1px solid var(--hair);padding:8px;margin-top:8px}
 
   @media (max-width:880px){
@@ -153,14 +171,18 @@
 
       <section class="sec">
         <div class="sec-h"><h2><i>02</i>Records</h2><span class="mono">내 기록</span></div>
-        <p class="hint">연도와 내용을 넣고, 같은 해 공식 기록 중 <b>어느 사건 다음에</b> 들어갈지 골라 주세요.</p>
-        <div class="row3">
+        <p class="hint">연도와 내용을 적고, 아래 작은 연표에서 <b>들어갈 자리</b>를 눌러 주세요. 안 고르면 그해 맨 끝에 들어가요.</p>
+        <div class="row2">
           <label class="f"><span>연도</span><select id="eYear"></select></label>
           <label class="f"><span>시기 (선택)</span><input type="text" id="eWhen" maxlength="12" placeholder="예: 봄, 하반기"></label>
-          <label class="f"><span>위치</span><select id="eAfter"></select></label>
         </div>
         <label class="f"><span>내용 *</span><input type="text" id="eTitle" maxlength="40" placeholder="예: 스텔라 각성 · MUSE 배속"></label>
         <label class="f"><span>설명 (선택)</span><input type="text" id="eDesc" maxlength="60" placeholder="예: 올림포스 아스테리아 각인"></label>
+        <div class="f slot-wrap">
+          <span class="slot-label">위치 <em>— 그해 연표에서 <b>＋ 자리</b>를 눌러 고르세요</em></span>
+          <input type="hidden" id="eAfter" value="-1">
+          <ol class="slots" id="slots"></ol>
+        </div>
         <div class="btns">
           <button class="btn solid" id="eAdd">+ 기록 추가</button>
           <button class="btn" id="eCancel" style="display:none">수정 취소</button>
@@ -239,21 +261,41 @@ $("#pEn").oninput = e => { S.en = e.target.value.trim(); save(); draw(); };
 /* ───────── 02 내 기록 ───────── */
 const officialOf = y => EVENTS.filter(e => e.year === y);
 $("#eYear").innerHTML = YEARS_ALL.map(y => `<option>${y}</option>`).join("");
-function fillAfter(){
+// 위치 고르기: 그해 공식 기록을 작은 연표로 보여주고, 사이사이 자리를 눌러 고름
+function fillAfter(keep){
   const y = $("#eYear").value, list = officialOf(y);
-  $("#eAfter").innerHTML = `<option value="-1">맨 앞</option>` +
-    list.map((e, i) => `<option value="${i}">${String(i + 1).padStart(2, "0")} ${safe(strip(e.title)).slice(0, 22)} 다음</option>`).join("") +
-    (list.length ? "" : "");
-  $("#eAfter").value = list.length ? String(list.length - 1) : "-1";
+  if (!keep) $("#eAfter").value = String(list.length - 1);   // 기본값: 그해 맨 끝
+  renderSlots();
 }
-$("#eYear").onchange = fillAfter;
+function renderSlots(){
+  const y = $("#eYear").value, list = officialOf(y), cur = +$("#eAfter").value;
+  const t = ($("#eTitle").value.trim() || "내 기록") ;
+  const others = S.entries.filter(e => e.year === y && e.id !== editing);
+  const slot = i => {
+    const mine = others.filter(e => (list.length ? Math.min(Math.max(e.after, -1), list.length - 1) : -1) === i);
+    const extra = mine.map(e => `<li class="ex-mine">✦ ${safe(e.title)}</li>`).join("");
+    return extra + (i === cur
+      ? `<li class="slot on" data-i="${i}"><span>✦ ${safe(t)}</span><small>여기에 들어가요</small></li>`
+      : `<li class="slot" data-i="${i}"><span>＋ 여기에 넣기</span></li>`);
+  };
+  let html = slot(-1);
+  list.forEach((e, i) => {
+    html += `<li class="off${e.key ? " key" : ""}"><span class="no">${String(i + 1).padStart(2, "0")}</span>${safe(strip(e.title))}</li>`;
+    html += slot(i);
+  });
+  if (!list.length) html = `<li class="off none">이 해에는 공식 기록이 없어요. 그대로 추가하면 돼요.</li>` + slot(-1);
+  $("#slots").innerHTML = html;
+  $("#slots").querySelectorAll(".slot").forEach(s => s.onclick = () => { $("#eAfter").value = s.dataset.i; renderSlots(); });
+}
+$("#eYear").onchange = () => fillAfter(false);
+$("#eTitle").addEventListener("input", renderSlots);
 fillAfter();
 
 function resetForm(){
   editing = null;
   $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = "";
   $("#eAdd").textContent = "+ 기록 추가"; $("#eCancel").style.display = "none";
-  renderMine();
+  renderMine(); if (typeof renderSlots === "function") renderSlots();
 }
 $("#eAdd").onclick = () => {
   const title = $("#eTitle").value.trim();
@@ -288,7 +330,7 @@ function renderMine(){
   ul.querySelectorAll("[data-ed]").forEach(b => b.onclick = () => {
     const e = S.entries.find(x => x.id === b.dataset.ed); if (!e) return;
     editing = e.id;
-    $("#eYear").value = e.year; fillAfter(); $("#eAfter").value = String(e.after);
+    $("#eYear").value = e.year; $("#eAfter").value = String(e.after); fillAfter(true);
     $("#eWhen").value = e.when || ""; $("#eTitle").value = e.title; $("#eDesc").value = e.desc || "";
     $("#eAdd").textContent = "수정 완료"; $("#eCancel").style.display = "";
     renderMine(); $("#eTitle").focus();
