@@ -635,7 +635,7 @@ const TODO = [
 
   /* ───────── SCROLL SPY (왼쪽 떠 있는 연도) ───────── */
   .spy{display:none}
-  @media (min-width:1240px){
+  @media (min-width:1420px){
     .spy{display:block;position:fixed;left:clamp(32px, 3vw, 56px);top:50%;transform:translateY(-50%);
          width:170px;height:400px;z-index:15}
   }
@@ -658,8 +658,10 @@ const TODO = [
               color:transparent;-webkit-text-stroke:.6px var(--ink);transform-origin:left center;
               transition:font-size .5s cubic-bezier(.22,.8,.2,1),color .4s,-webkit-text-stroke-color .4s,letter-spacing .5s}
   .spy-item.sec b{font-size:16px;letter-spacing:.02em;text-transform:uppercase}
-  .spy-item small{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--sub);max-height:0;opacity:0;overflow:hidden;
+  .spy-item small{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;line-height:1.45;color:var(--sub);max-height:0;opacity:0;
+                  overflow:hidden;white-space:normal;word-break:keep-all;max-width:128px;
                   transition:max-height .5s,opacity .4s .1s,margin .5s}
+  .spy-item small .nt{display:block;font-family:"Noto Sans KR",sans-serif;font-size:11px;letter-spacing:0;text-transform:none;color:var(--sub)}
   .spy-item:hover b{color:var(--ink)}
   .spy-item.on::before{opacity:1;transform:scale(2.1);animation:spyStar 9s ease-in-out infinite}
   .spy-item.on::after{opacity:.35;transform:scale(1)}
@@ -667,7 +669,9 @@ const TODO = [
   @keyframes spyStar{0%,100%{transform:scale(2.1) rotate(0)}50%{transform:scale(1.85) rotate(45deg)}}
   .spy-item.on b{font-size:34px;font-weight:600;color:var(--ink);-webkit-text-stroke-color:transparent;letter-spacing:-.04em}
   .spy-item.on.sec b{font-size:22px}
-  .spy-item.on small{max-height:16px;opacity:1;margin-top:5px}
+  .spy-item.on{height:auto;min-height:54px;padding-top:6px;padding-bottom:8px}
+  .spy-item.on::before,.spy-item.on::after{top:24px}
+  .spy-item.on small{max-height:60px;opacity:1;margin-top:6px}
   .spy-cap{position:absolute;left:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--sub);display:flex;gap:8px;align-items:center}
   .spy-cap.top{top:-6px}.spy-cap.bot{bottom:-6px}
   .spy-cap b{color:var(--ink);font-weight:500}
@@ -1089,7 +1093,7 @@ function buildSpy(){
   const track = $("#spyTrack"); if (!track) return;
   const items = [...document.querySelectorAll("#list > .group")].map(g => {
     const y = g.dataset.year, er = ERAS.find(e => +y >= e.from && +y <= e.to);
-    return `<button class="spy-item" data-t="y-${y}"><b>${y}</b><small>${er ? er.no + " " + er.en : ""}${YEAR_NOTE[y] ? " · " + YEAR_NOTE[y] : ""}</small></button>`;
+    return `<button class="spy-item" data-t="y-${y}"><b>${y}</b><small>${er ? er.no + " " + er.en : ""}${YEAR_NOTE[y] ? `<span class="nt">${YEAR_NOTE[y]}</span>` : ""}</small></button>`;
   });
   if (TODO.length) items.push(`<button class="spy-item sec" data-t="todo"><b>Unverified</b><small>미확인 기록</small></button>`);
   items.push(`<button class="spy-item sec" data-t="roster"><b>Characters</b><small>인물 목록</small></button>`);
@@ -1112,7 +1116,8 @@ function spy(){
     if (el && el.offsetParent !== null && el.getBoundingClientRect().top + scrollY <= probe) idx = i;
   });
   btns.forEach((b, i) => b.classList.toggle("on", i === idx));
-  track.style.transform = `translateY(${-(idx * ITEM_H) - ITEM_H / 2}px)`;
+  const act = btns[idx];
+  requestAnimationFrame(() => track.style.transform = `translateY(${-(act.offsetTop + act.offsetHeight / 2)}px)`);
   $("#spyNo").textContent = String(idx + 1).padStart(2, "0");
   $("#spyAll").textContent = String(btns.length).padStart(2, "0");
 }
