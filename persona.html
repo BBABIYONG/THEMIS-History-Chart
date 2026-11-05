@@ -356,12 +356,12 @@
 <div class="wrap">
   <div class="topline">
     <b>THEMIS / PERSONAL EDITION</b>
-    <a class="back" href="index.html">← 공식 연혁표로</a>
+    <a class="back" href="index.html">← THEMIS 연혁표로</a>
   </div>
 
   <div class="title">
     <h1>Personal<br>Chronicle</h1>
-    <p>내 캐릭터의 기록을 공식 연표 사이에 끼워 넣고, 최애와 함께한 연대기를 이미지로 저장해요.</p>
+    <p>내 캐릭터의 기록을 THEMIS 연혁표 사이에 끼워 넣고, 최애와 함께한 연대기를 이미지로 저장해요.</p>
   </div>
 
   <ol class="howto" id="howto">
@@ -412,7 +412,7 @@
           <div class="pick-now" id="pickNow"></div>
           <div class="yjump" id="yJump"></div>
           <ol class="slots" id="slots"></ol>
-          <p class="slot-legend mono"><span>● 공식 기록</span><span>○ 고른 최애 등장</span><span>✦◇ 내 기록</span></p>
+          <p class="slot-legend mono"><span>● 연혁표 기록</span><span>○ 고른 최애 등장</span><span>✦◇ 내 기록</span></p>
         </div>
         <div class="f">
           <span class="slot-label">시기 <em>(선택) — 눌러서 넣거나 직접 적으세요</em></span>
@@ -422,7 +422,7 @@
         <label class="f"><span>내용 *</span><input type="text" id="eTitle" maxlength="40" placeholder="예: 스텔라 각성 · MUSE 배속"></label>
         <label class="f"><span>설명 (선택)</span><input type="text" id="eDesc" maxlength="60" placeholder="예: 올림포스 아스테리아 각인"></label>
         <label class="keychk"><input type="checkbox" id="eKey"><span class="box"></span>
-          <span class="txt">주요 사건으로 강조 <em class="demo">검은 띠</em><small>공식 연표의 주요 사건처럼 검은 띠로 표시돼요</small></span></label>
+          <span class="txt">주요 사건으로 강조 <em class="demo">검은 띠</em><small>연혁표의 주요 사건처럼 검은 띠로 표시돼요</small></span></label>
         <div class="btns">
           <button class="btn solid" id="eAdd">+ 기록 추가</button>
           <button class="btn" id="eCancel" style="display:none">수정 취소</button>
@@ -434,7 +434,7 @@
 
       <section class="sec">
         <div class="sec-h"><h2><i>04</i>Options</h2><span class="mono">이미지 설정</span></div>
-        <div class="opt"><span>주변 사건<small>내 기록 앞뒤로 보여줄 공식 기록 수</small></span>
+        <div class="opt"><span>주변 사건<small>내 기록 앞뒤로 보여줄 연혁표 기록 수</small></span>
           <div class="seg" id="ctxSeg"><button data-v="0">0</button><button data-v="1">1</button><button data-v="2">2</button></div></div>
         <div class="opt"><span>내 기록 강조<small>✦ 표시와 굵은 글씨로 구분</small></span>
           <div class="seg" id="markSeg"><button data-v="1">표시</button><button data-v="0">숨김</button></div></div>
@@ -556,7 +556,7 @@ function renderSlots(scroll){
         <span class="tt">${safe(strip(e.title))}</span>${d ? `<span class="dd">${safe(d)}</span>` : ""}</li>`;
       yhtml += slot(i);
     });
-    if (!list.length) yhtml = `<li class="off none">공식 기록 없음</li>` + yhtml;
+    if (!list.length) yhtml = `<li class="off none">기록 없음</li>` + yhtml;
     html += yhtml + `</ol></li>`;
   });
   $("#slots").innerHTML = html;
@@ -583,7 +583,7 @@ function setType(t){
   document.querySelectorAll("#typeSeg button").forEach(b => b.classList.toggle("on", b.dataset.v === t));
   $("#typeHint").textContent = t === "char"
     ? "내 캐릭터의 각성·합류·이탈 같은 기록이에요. 굵은 글씨와 ✦로 표시돼요."
-    : "세계관 사건, 내 설정 속 사건, 다른 인물 이야기 등. 공식 기록처럼 섞이고 ◇로만 살짝 구분돼요.";
+    : "세계관 사건, 내 설정 속 사건, 다른 인물 이야기 등. 연혁표 기록처럼 섞이고 ◇로만 살짝 구분돼요.";
   $("#eTitle").placeholder = t === "char" ? "예: 스텔라 각성 · MUSE 배속" : "예: 서울 남부 균열 확장 사건";
   if (typeof renderSlots === "function") renderSlots();
 }
