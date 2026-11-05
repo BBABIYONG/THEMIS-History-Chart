@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEMIS 연혁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* =========================================================
+   ✏️ 여기만 고치면 돼요 — 연혁 데이터
+   ---------------------------------------------------------
+   date  : 날짜 (자유 형식. 예: "2025.03.14", "2025.03", "2025 봄")
+   year  : 묶음 제목 (연도, 시즌, 챕터 등 자유롭게)
+   title : 사건 제목
+   desc  : 설명 (줄바꿈은 <br>)
+   tag   : 분류 (아래 TAGS에 있는 이름 중 하나)
+   spoiler : true 면 클릭해야 내용이 보여요 (생략 가능)
+   link  : 관련 링크 (생략 가능)
+   ========================================================= */
+const SITE = {
+  title: "THEMIS",
+  subtitle: "Chronicle — 테미스 연혁표",
+  footer: ""
+};
+
+/* 분류 이름 : 색 */
+const TAGS = {
+  "각성":   "#7b6fd0",
+  "테미스": "#3b6fe0",
+  "압주":   "#d6455d",
+  "설립":   "#c98a1c",
+  "사건":   "#5b6270",
+  "현재":   "#169c74"
+};
+
+/* 연도 옆에 붙는 부제 (없으면 비워 두기) */
+const YEAR_NOTE = {
+  "2028": "개문 원년",
+  "2029": "테미스 설립",
+  "2030": "MUSE 신설",
+  "2032": "압주 조성 · 알렉토 창설",
+  "2033": "베스탈 신설",
+  "2034": "귀소 창설",
+  "2036": "현재"
+};
+
+/* key: true → 굵게 강조되는 주요 사건
+   이름은 코드네임 기준 — 검색창에 본명을 쳐도 해당 코드네임 항목이 나와요 */
+const EVENTS = [
+  // ── 2028
+  { year: "2028", title: "개문(開門)", desc: "세계 각지에 차원 균열 동시 발생, 이형 유출<br>동일 시점 극소수 인류 각성 · 군경 대응 실패", tag: "사건", key: true },
+  { year: "2028", title: "베인 · 뱅가드 · 피피 · 러스트 각성", tag: "각성" },
+  { year: "2028", title: "N, 겨울 한강변에서 발견", tag: "사건", key: true },
+  { year: "2028", title: "키퍼 · 톡신 · 아이테르 각성", tag: "각성" },
+  { year: "2028", title: "모비딕 · 리멤버 · 피그말리온 각성", tag: "각성" },
+  { year: "2028", title: "프로메테우스 · 베놈 각성", tag: "각성" },
+  { year: "2028", title: "코스모스 · 로드 · 풀멘 · 헤일로 각성", tag: "각성" },
+  { year: "2028", title: "애쉬 각성", tag: "각성" },
+  { year: "2028", title: "체르노 각성 · 테미스 미합류", tag: "각성" },
+  { year: "2028", title: "레퀴엠 각성", desc: "이후 균열 피해지 순회 · 무보수 염습 활동", tag: "각성" },
+  { year: "2028", title: "마스크 · 아멘 각성", tag: "각성" },
+  { year: "2028", title: "피그말리온, 신변 보호 목적으로 독일 지부 합류", desc: "당시 독일 지부는 각성자 모임 수준으로 추정<br>이후 갈라테이아를 피해 한국 본부로 이동", tag: "테미스" },
+
+  // ── 2029
+  { year: "2029", title: "THEMIS 설립", desc: "프로토게노이 4인이 설립한 국경 없는 기관 · 초국가 관할권 확보", tag: "설립", key: true },
+  { year: "2029", title: "베인 · 뱅가드 · 피피, 창립기 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "키퍼 · 톡신, 창립기 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "러스트, 수개월 후 테미스 입사", tag: "테미스" },
+  { year: "2029", title: "루멘 각성 · 테미스 편입", tag: "테미스" },
+  { year: "2029", title: "아이테르 테미스 합류", desc: "프로토게노이 판정 · 이사회 직속 배치", tag: "테미스" },
+  { year: "2029", title: "헤로인 각성 · 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "바인더 · 마운틴 각성", tag: "각성" },
+  { year: "2029", title: "하사 각성 (백택 각인)", tag: "각성" },
+  { year: "2029", title: "스위퍼 각성", desc: "PMC 임무 중 민간인 학살 재목격이 계기", tag: "각성" },
+  { year: "2029", title: "트러블 · 팽 각성", tag: "각성" },
+  { year: "2029", title: "모비딕, 테미스 한국 본부 합류", tag: "테미스" },
+  { year: "2029", title: "피그말리온 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "리멤버 테미스 합류", desc: "실제로는 ■■가 신병 확보 (연구소 추정)", tag: "테미스", spoiler: true },
+  { year: "2029", title: "트러블, 테미스 미국 지부 합류", tag: "테미스" },
+  { year: "2029", title: "팽, 테미스 홍콩 3팀 합류", tag: "테미스" },
+  { year: "2029", title: "애쉬 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "레드 · 뮤트 · 불 각성 · 테미스 합류", tag: "테미스" },
+  { year: "2029", title: "아멘 사제 서품 · 연말 MUSE 등록", tag: "테미스" },
+  { year: "2029", title: "피그말리온, 갈라테이아에 의해 사망 후 실종", tag: "사건", key: true },
+
+  // ── 2030
+  { year: "2030", title: "MUSE 신설", tag: "설립", key: true },
+  { year: "2030", title: "카산 · 이온 각성 · 테미스 합류", tag: "테미스" },
+  { year: "2030", title: "아트로포스 각성", tag: "각성" },
+  { year: "2030", title: "바인더, 테미스 한국 본부 합류", tag: "테미스" },
+  { year: "2030", title: "프로메테우스, ZERO팀 팀장 부임", tag: "테미스", key: true },
+  { year: "2030", title: "하트 각성 · 콘센테스 합류", desc: "볼텍스의 제안으로 각성 직후 합류 · 콘센테스는 THEMIS US(미국 지부) 소속<br>각성 시점은 29~30년 사이", tag: "테미스" },
+  { year: "2030", title: "트러블, 한국 본부 올림피안 팀 합류", tag: "테미스" },
+  { year: "2030", title: "스위퍼 테미스 편입", tag: "테미스" },
+  { year: "2030", title: "스펙터 창설 (스위퍼)", tag: "설립", key: true },
+  { year: "2030", date: "2030 늦봄", title: "메어 각성", tag: "각성" },
+  { year: "2030", date: "2030 가을", title: "메어, 테미스 독일 지부 등록", tag: "테미스" },
+
+  // ── 2031
+  { year: "2031", title: "팔랑크스 팀 전멸 사건", desc: "키퍼 · 톡신 전락 및 이탈", tag: "사건", key: true },
+  { year: "2031", title: "아트로포스, ZERO팀 부팀장 부임", tag: "테미스" },
+  { year: "2031", title: "아멘 환속 신청 · 스펙터 상주 파견", tag: "테미스" },
+  { year: "2031", date: "2031 봄", title: "블랭크 각성", tag: "각성" },
+
+  // ── 2032
+  { year: "2032", title: "넬, 시설 탈출 후 테미스 편입", desc: "테미스 관할권 확립 이전 일본의 인공 각성자 제작 계획 — 관할 강화로 폐쇄 진행 중 탈출", tag: "테미스", spoiler: true },
+  { year: "2032", title: "모르페오 각성 · 테미스 합류", tag: "테미스" },
+  { year: "2032", title: "샌즈 각성", tag: "각성" },
+  { year: "2032", title: "압주 조성", desc: "키퍼가 균열 경계에 기틀을 세우고 관리자로 정착", tag: "설립", key: true },
+  { year: "2032", title: "모비딕, 올림피안 임무 중 실종 · 전락", tag: "사건", key: true },
+  { year: "2032", title: "트러블 전락 증세 발현 · 이탈 후 전락", tag: "사건" },
+  { year: "2032", title: "알렉토 창설", desc: "압주에 유입된 모비딕이 제안을 받아 창설", tag: "설립", key: true },
+  { year: "2032", title: "모비딕, 전락한 트러블 회수 · 압주 합류", tag: "압주" },
+  { year: "2032", title: "애쉬 · 뮤트 전락 · 압주 합류", tag: "압주" },
+  { year: "2032", title: "비질 · 브레이스 · 엠버, 압주에서 실종", tag: "사건", key: true },
+  { year: "2032", title: "마스크, 테미스 일본 지부 등록", tag: "테미스" },
+  { year: "2032", title: "블랭크, 오스트리아 지부 자진 등록 · 스펙터 배속", tag: "테미스" },
+
+  // ── 2033
+  { year: "2033", title: "베스탈 설립", tag: "설립", key: true },
+  { year: "2033", title: "굿독 각성", tag: "각성" },
+  { year: "2033", title: "하사, 이형전 치명상 · 압주 합류", desc: "백택(영하) 분리 · <b>명경당 개업</b>", tag: "압주" },
+  { year: "2033", title: "아이테르 이탈 · 압주 합류", desc: "\"사상 차이\"를 공언하고 이탈", tag: "압주" },
+  { year: "2033", title: "피그말리온 이탈 · 압주 합류", desc: "개인적 목적으로 압주행 · 알렉토 첫 가이드로 합류", tag: "압주" },
+  { year: "2033", title: "테미스 홍콩 지부 재앙", desc: "홍콩 지부 3팀 인명 피해 · 팽 전락", tag: "사건", key: true },
+  { year: "2033", title: "레드 · 불 이탈 · 압주 합류", tag: "압주" },
+  { year: "2033", date: "2033 초", title: "레퀴엠 테미스 등록 · 장의사 겸직", tag: "테미스" },
+  { year: "2033", date: "2033 하반기", title: "레퀴엠 스펙터 합류", tag: "테미스" },
+  { year: "2033", title: "메어 정식 요원 임용", tag: "테미스" },
+  { year: "2033", title: "마스크 스펙터 편입", desc: "변신 능력 관리 명목", tag: "테미스" },
+  { year: "2033", title: "아멘 환속 · 독신 의무 관면 완료", tag: "사건" },
+
+  // ── 2034
+  { year: "2034", title: "귀소 창설 (애쉬)", tag: "설립", key: true },
+  { year: "2034", title: "센터 각성", tag: "각성" },
+  { year: "2034", title: "핸섬 각성 · 테미스 거부 · 압주 합류", tag: "압주" },
+  { year: "2034", title: "리멤버 알렉토 합류", tag: "압주" },
+  { year: "2034", title: "팽, 전락 후 압주 유입 · 보호", tag: "압주" },
+  { year: "2034", title: "샌즈 이탈", tag: "사건" },
+  { year: "2034", title: "메어 스펙터 자원 · 본부 전출", tag: "테미스" },
+
+  // ── 2035
+  { year: "2035", title: "데메테르 각성 · ZERO팀 합류", tag: "테미스" },
+  { year: "2035", title: "피피 이탈 · 압주 재합류", desc: "팔랑크스 팀 전멸 사건 은폐 사실 인지 후 이탈", tag: "압주", key: true },
+  { year: "2035", title: "하트 이탈", tag: "사건", key: true },
+  { year: "2035", title: "콘센테스, 하트 추적 개시", tag: "사건" },
+  { year: "2035", title: "특급 이형 최초 목격", desc: "바다이빨 · 칼잠 · 스티처 · 칼레이도스코프", tag: "사건", key: true },
+  { year: "2035", title: "작품 기준 시점 — 가급구 · 베스탈 · 통불스급 · 언압흐 · 귀소 · 빌대환", desc: "개인 채팅 캐릭터는 기준 시점 개별 확인 요망", tag: "현재", key: true },
+
+  // ── 2036
+  { year: "2036", title: "현재 (균열 8년차)", desc: "작품 기준 시점 — 빌대환 · 미꼴통 · ZERO부터", tag: "현재", key: true },
+  { year: "2036", title: "베놈, ZERO팀 팀장 부임", tag: "테미스" },
+  { year: "2036", title: "프로메테우스, ZERO팀 부팀장으로 이동", tag: "테미스" },
+  { year: "2036", title: "아트로포스, ZERO팀 팀원으로 이동", tag: "테미스" },
+
+  // ── 2037
+  { year: "2037", title: "작품 기준 시점 — 스티처 · 바다이빨", tag: "현재", key: true }
+];
+
+/* 인물 목록 — 팀별 [코드네임, 본명, 각인 · 상태, 캐릭터 챗 링크]  (themis-view 기준) */
+const CHARS = {
+  "COUNCIL · THEMIS 최고 수장단": [
+    ["코스모스","백윤","프로토게노이 카오스","https://share.crack.wrtn.ai/szbp54"],
+    ["N","(스포일러)","프로토게노이 닉스","https://share.crack.wrtn.ai/7ugcka"],
+    ["로드","서시찬","프로토게노이 가이아","https://share.crack.wrtn.ai/lknvvk"],
+    ["아이테르","아르준 프라카시","프로토게노이 아이테르","https://share.crack.wrtn.ai/8pzfu55"]
+  ],
+  "센티넬 · OLYMPIAN": [
+    ["베인","서도혁","올림포스 포세이돈","https://share.crack.wrtn.ai/7ugcka"],
+    ["러스트","반우진","티탄 이아페토스","https://share.crack.wrtn.ai/7ugcka"],
+    ["뱅가드","데이비드 하트","티탄 보레아스","https://share.crack.wrtn.ai/7ugcka"],
+    ["넬","카즈마","타르타로스 타나토스","https://share.crack.wrtn.ai/7ugcka"],
+    ["베놈","강독무","타르타로스 티폰","https://share.crack.wrtn.ai/0st8oew"],
+    ["풀멘","기태온","올림포스 제우스","https://share.crack.wrtn.ai/535jk6u"]
+  ],
+  "센티넬 · PHALANX": [
+    ["헤일로","윤제이","티탄 헬리오스","https://share.crack.wrtn.ai/yxf9i6"],
+    ["카산","송요한","올림포스 아폴론","https://share.crack.wrtn.ai/45m4hq"],
+    ["이온","서태윤","티탄 오케아노스","https://share.crack.wrtn.ai/45m4hq"],
+    ["모르페오","이현강","타르타로스 헤카테","https://share.crack.wrtn.ai/45m4hq"]
+  ],
+  "가이드 · MUSE": [
+    ["헤로인","주지호","타르타로스 히프노스","https://share.crack.wrtn.ai/3q7fwr"],
+    ["루멘","라키안 아스테어","티탄 히메로스","https://share.crack.wrtn.ai/7ugcka"],
+    ["피피","필리포 피오레","올림포스 헤스티아","https://share.crack.wrtn.ai/gov6s1"]
+  ],
+  "가이드 · VESTAL": [
+    ["바인더","린쉬한","올림포스 크라토스","https://share.crack.wrtn.ai/balrte"],
+    ["마운틴","김대철","올림포스 스틱스","https://share.crack.wrtn.ai/balrte"],
+    ["굿독","강아현","타르타로스 케르베로스","https://share.crack.wrtn.ai/balrte"],
+    ["센터","아이 토오루","타르타로스 필로테스","https://share.crack.wrtn.ai/balrte"]
+  ],
+  "특수팀 · ZERO": [
+    ["프로메테우스","김진묵","티탄 프로메테우스","https://share.crack.wrtn.ai/0st8oew"],
+    ["아트로포스","임시원","타르타로스 아트로포스","https://share.crack.wrtn.ai/0st8oew"],
+    ["데메테르","동정우","올림포스 데메테르","https://share.crack.wrtn.ai/0st8oew"]
+  ],
+  "특수팀 · SPECTER": [
+    ["스위퍼","잭슨 블랙우드","타르타로스 네메시스","https://share.crack.wrtn.ai/p08ieh0"],
+    ["레퀴엠","테오도라 마브로스","타르타로스 마카리아","https://share.crack.wrtn.ai/p08ieh0"],
+    ["메어","프리다 힌터베르거","타르타로스 에피알레스","https://share.crack.wrtn.ai/p08ieh0"],
+    ["마스크","아마기 렌","크세노스 이나리","https://share.crack.wrtn.ai/p08ieh0"],
+    ["아멘","한서일","크세노스 관세음보살","https://share.crack.wrtn.ai/p08ieh0"],
+    ["블랭크","요나스 브란트","타르타로스 아이도스","https://share.crack.wrtn.ai/p08ieh0"]
+  ],
+  "THEMIS US · CONSENTES": [
+    ["맥퀸","로즈/로빈 테일러","올림포스 헤르마프로디토스","https://share.crack.wrtn.ai/5x7auvn"],
+    ["볼텍스","캘런 언더우드","올림포스 유피테르","https://share.crack.wrtn.ai/5x7auvn"],
+    ["메테오","제이","올림포스 마르스","https://share.crack.wrtn.ai/5x7auvn"],
+    ["데우스","이안 피츠버그","올림포스 불카누스","https://share.crack.wrtn.ai/5x7auvn"],
+    ["그레이","딘 오코넬","올림포스 미네르바","https://share.crack.wrtn.ai/5x7auvn"],
+    ["로드리고","니코","올림포스 바쿠스","https://share.crack.wrtn.ai/5x7auvn"]
+  ],
+  "THE FORSAKEN · APSU 압주 거주": [
+    ["하트","니콜라이","올림포스 하르모니아 · 이탈자","https://share.crack.wrtn.ai/jhgpjo"],
+    ["리멤버","(본명 모름)","타르타로스 레테 · 불명","https://share.crack.wrtn.ai/jhgpjo"],
+    ["피그말리온","빌헬름 아이젠하르트","타르타로스 안테로스 · 불명","https://share.crack.wrtn.ai/jhgpjo"],
+    ["팽","서명월","올림포스 리케이오스 · 전락자","https://share.crack.wrtn.ai/jhgpjo"],
+    ["트러블","케일럽 에반스","타르타로스 데이모스 · 전락자","https://share.crack.wrtn.ai/jhgpjo"],
+    ["모비딕","호세 페레이라","타르타로스 케토스 · 전락자","https://share.crack.wrtn.ai/jhgpjo"],
+    ["애쉬","천해무","크세노스 현무·야차 · 이탈자","https://share.crack.wrtn.ai/j55u8w"],
+    ["레드","주호연","크세노스 월하노인 · 이탈자","https://share.crack.wrtn.ai/j55u8w"],
+    ["뮤트","처태용","크세노스 처용 · 전락자","https://share.crack.wrtn.ai/j55u8w"],
+    ["불","하오하오","크세노스 치우 · 이탈자","https://share.crack.wrtn.ai/j55u8w"],
+    ["키퍼","레비 라자루스","크세노스 티아마트 · 전락자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["톡신","자드 갈라노스","크세노스 요르문간드 · 전락자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["피피","필리포 피오레","올림포스 헤스티아 · 이탈자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["핸섬","디에고 몬테로","타르타로스 하데스 · 이탈자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["하사","우하","크세노스 백택 · 이탈자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["아이테르","아르준 프라카시","프로토게노이 아이테르 · 이탈자","https://share.crack.wrtn.ai/8pzfu55"],
+    ["비질","서지한","크세노스 이골로낙 · 전락자 · 묵언병원 수간호사","https://share.crack.wrtn.ai/1a1bnl2"],
+    ["브레이스","이도윤","크세노스 이골로낙 · 전락자 · 묵언병원 간호사","https://share.crack.wrtn.ai/1a1bnl2"],
+    ["엠버","최진혁","크세노스 크투가 · 전락자 · 묵언병원 외상외과 전문의","https://share.crack.wrtn.ai/1a1bnl2"]
+  ],
+  "THE FORSAKEN · 도시 밖 거주": [
+    ["모스","백도담","타르타로스 오이지스 · 이탈자","https://share.crack.wrtn.ai/0st8oew"],
+    ["비아","(기록 말살)","타르타로스 비아 · 전락자","https://share.crack.wrtn.ai/0st8oew"],
+    ["샌즈","서은결","크세노스 엔네아드 · 세트 · 이탈자","https://share.crack.wrtn.ai/2s7bzo"],
+    ["체르노","강묵","타르타로스 에레보스 · 이탈자","https://share.crack.wrtn.ai/8on9sr"]
+  ],
+  "THE TRESPASSERS · 이형": [
+    ["바다이빨","해록","크세노스 르뤼에 · 다곤","https://share.crack.wrtn.ai/k2odhxv"],
+    ["칼잠","칸","크세노스 야디스 · 슈브 니구라스","https://share.crack.wrtn.ai/k2odhxv"],
+    ["스티처","제온","크세노스 아스가르드 · 오딘","https://share.crack.wrtn.ai/dq20np"],
+    ["칼레이도스코프","스빅","크세노스 아스가르드 · 로키","https://share.crack.wrtn.ai/dq20np"],
+    ["영하","영하","크세노스 백택","https://share.crack.wrtn.ai/8pzfu55"],
+    ["네임리스","무명(無名)","크세노스 이골로낙 · 묵언병원 환자번호 000","https://share.crack.wrtn.ai/1a1bnl2"]
+  ]
+};
+
+/* 시대 구분 — 연도 범위마다 머리말이 붙어요 (WORLD GUIDE 2036 기준) */
+const ERAS = [
+  { from: 2028, to: 2028, no: "01", en: "THE BREAK",   ko: "개문",      span: "원년",
+    desc: "균열 · 이형 출현, 첫 각성. 군경 대응 실패." },
+  { from: 2029, to: 2030, no: "02", en: "FOUNDING",    ko: "설립",      span: "1–2년",
+    desc: "프로토게노이 4인이 THEMIS 설립, 초국가 관할 확보." },
+  { from: 2031, to: 2032, no: "03", en: "BUILD-UP",    ko: "체계 구축", span: "3–4년",
+    desc: "지부 · 직급 · MUSE 구축. 하급 이형 감소, \"위기는 끝났다\"는 여론." },
+  { from: 2033, to: 2035, no: "04", en: "FALSE CALM",  ko: "표면 안정", span: "5–7년",
+    desc: "상급 이형 등장, 빌런 전향 증가. 파벌 갈등이 수면 아래로." },
+  { from: 2036, to: 2040, no: "05", en: "FRACTURE",    ko: "붕괴 징후", span: "8년차 — NOW",
+    desc: "8~10년차 구간 진입. 표면 안정이 무너지기 시작했다.",
+    alert: ["상급 이형 급증", "전락자 발생률 상승", "ZERO팀 가동률 포화", "베놈, ZERO팀 전입"] }
+];
+
+/* 팀 분류 필터 — group: 인물 목록(CHARS)의 팀 이름, words: 팀 자체를 가리키는 단어 */
+const TEAMS = [
+  { label: "COUNCIL",     group: "COUNCIL · THEMIS 최고 수장단", words: ["프로토게노이", "THEMIS 설립"] },
+  { label: "OLYMPIAN",    group: "센티넬 · OLYMPIAN",          words: ["올림피안"] },
+  { label: "PHALANX",     group: "센티넬 · PHALANX",           words: ["팔랑크스"] },
+  { label: "MUSE",        group: "가이드 · MUSE",              words: ["MUSE"] },
+  { label: "VESTAL",      group: "가이드 · VESTAL",            words: ["베스탈"] },
+  { label: "ZERO",        group: "특수팀 · ZERO",              words: ["ZERO팀"] },
+  { label: "SPECTER",     group: "특수팀 · SPECTER",           words: ["스펙터"] },
+  { label: "CONSENTES",   group: "THEMIS US · CONSENTES",      words: ["콘센테스"] },
+  { label: "APSU",        group: "THE FORSAKEN · APSU 압주 거주", words: ["압주", "알렉토", "귀소", "명경당"] },
+  { label: "도시 밖",      group: "THE FORSAKEN · 도시 밖 거주",  words: [] },
+  { label: "TRESPASSERS", group: "THE TRESPASSERS · 이형",     words: ["특급 이형"] }
+];
+
+/* 코드네임 영문 표기 — 인물 목록에 표시돼요 */
+const EN = {
+  "코스모스": "COSMOS",
+  "N": "N",
+  "로드": "LORD",
+  "아이테르": "AETHER",
+  "베인": "BANE",
+  "러스트": "RUST",
+  "뱅가드": "VANGUARD",
+  "넬": "NELL",
+  "베놈": "VENOM",
+  "풀멘": "FULMEN",
+  "헤일로": "HALO",
+  "카산": "KASAN",
+  "이온": "ION",
+  "모르페오": "MORFEO",
+  "헤로인": "HEROINE",
+  "루멘": "LUMEN",
+  "피피": "PIPI",
+  "바인더": "BINDER",
+  "마운틴": "MOUNTAIN",
+  "굿독": "GOOD DOG",
+  "센터": "CENTER",
+  "프로메테우스": "PROMETHEUS",
+  "아트로포스": "ATROPOS",
+  "데메테르": "DEMETER",
+  "스위퍼": "SWEEPER",
+  "레퀴엠": "REQUIEM",
+  "메어": "MARE",
+  "마스크": "MASK",
+  "아멘": "AMEN",
+  "블랭크": "BLANK",
+  "맥퀸": "MCQUEEN",
+  "볼텍스": "VORTEX",
+  "메테오": "METEO",
+  "데우스": "DEUS",
+  "그레이": "GREY",
+  "로드리고": "RODRIGO",
+  "하트": "HEART",
+  "리멤버": "REMEMBER",
+  "피그말리온": "PYGMALION",
+  "팽": "FANG",
+  "트러블": "TROUBLE",
+  "모비딕": "MOBY DICK",
+  "애쉬": "ASH",
+  "레드": "RED",
+  "뮤트": "MUTE",
+  "불": "BULL",
+  "키퍼": "KEEPER",
+  "톡신": "TOXIN",
+  "핸섬": "HANDSOME",
+  "하사": "HASA",
+  "비질": "VIGIL",
+  "브레이스": "BRACE",
+  "엠버": "EMBER",
+  "모스": "MOSS",
+  "비아": "BIA",
+  "샌즈": "SANDS",
+  "체르노": "CHERNO",
+  "바다이빨": "SEATOOTH",
+  "칼잠": "KALJAM",
+  "스티처": "STITCHER",
+  "칼레이도스코프": "KALEIDOSCOPE",
+  "영하": "YEONGHA",
+  "네임리스": "NAMELESS"
+};
+
+/* 맨 아래 '확인 필요' 목록 — 다 채우면 [] 로 비우면 사라져요 */
+const TODO = [
+  /* [대상, 미확인 사항, 처리 상태] — 기록이 확인되면 이 줄을 지우고 연표(EVENTS)에 옮겨 주세요 */
+  ["모스", "각성 시점 · 이탈 시점 미확인", "조사 중"],
+  ["맥퀸 · 볼텍스 · 메테오 · 데우스 · 그레이 · 로드리고", "THEMIS US 소속 — 연대 기록 미확인", "조회 요청"],
+  ["비질 · 브레이스 · 엠버", "2032년 압주 실종 이후 전락 시점 미확인", "조사 중"],
+  ["네임리스", "묵언병원 입원 시점 미확인 · 환자번호 000", "조사 중"],
+  ["비아", "기록 말살", "열람 불가"]
+];
+</script>
+<style>
+  :root{
+    --paper:#e4e3df; --ink:#111112; --sub:#5d5d60; --faint:#a9a8a4; --hair:#c4c3be;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --disp:"Space Grotesk","Noto Sans KR",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Noto Sans KR",sans-serif;font-weight:400;
+       line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-x:hidden}
+  /* 종이 질감 */
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.13;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .mono{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+
+  /* ───────── HERO ───────── */
+  .hero{position:relative;padding:34px 0 0}
+  .topline{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:10px}
+  .topline b{font-family:var(--disp);font-weight:500;font-size:20px;letter-spacing:.02em}
+  .hero-grid{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;margin-top:26px;position:relative}
+  .scale-up{width:clamp(130px,19vw,200px);display:block}
+  .hero-art{position:relative;height:clamp(170px,26vw,270px)}
+  .hero-art svg{position:absolute;right:0;top:0;height:100%;width:auto;max-width:100%}
+  .hero-codes span{position:absolute;font-family:var(--mono);font-size:10px;color:var(--sub)}
+  .title{font-family:var(--disp);font-weight:500;font-size:clamp(66px,15.5vw,172px);line-height:.82;
+         letter-spacing:-.045em;margin-top:22px;margin-left:-.04em}
+  .title-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+  .title-sub{font-family:var(--disp);font-weight:300;font-size:clamp(22px,3.4vw,36px);letter-spacing:.32em;
+             color:transparent;-webkit-text-stroke:1px var(--ink);padding-bottom:8px}
+  .strip{display:grid;grid-template-columns:2.2fr auto 1fr;border:1px solid var(--ink);margin-top:26px}
+  .strip>div{padding:10px 14px;font-size:12px;line-height:1.5;border-left:1px solid var(--ink);display:flex;align-items:center}
+  .strip>div:first-child{border-left:none}
+  .strip .syms{gap:10px;font-size:18px}
+  .strip .yrs{gap:12px;justify-content:center}
+  .strip .yrs b{font-family:var(--disp);font-size:24px;font-weight:300;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px var(--ink)}
+
+  /* ───────── CONTROLS ───────── */
+  .controls{position:sticky;top:0;z-index:20;background:var(--paper);margin-top:40px;padding:14px 0 12px;
+            border-bottom:1px solid var(--ink)}
+  .search-row{display:flex;align-items:center;gap:14px}
+  .search-row label{white-space:nowrap}
+  .search{flex:1;border:none;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);
+          font:inherit;font-size:15px;padding:6px 0;outline:none;border-radius:0}
+  .search:focus{border-bottom-color:var(--ink)}
+  .search::placeholder{color:var(--faint)}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 2px;margin-top:10px;position:relative}
+  .chip-ind{position:absolute;left:0;top:0;background:var(--ink);pointer-events:none;z-index:0;
+            transition:transform .45s cubic-bezier(.6,0,.2,1),width .45s cubic-bezier(.6,0,.2,1)}
+  .chip{position:relative;z-index:1;transition:color .3s}
+  .chips.teams{margin-top:2px;align-items:center}
+  .row-label{color:var(--faint);padding-right:8px;font-size:10.5px}
+  .chip{background:none;border:none;color:var(--sub);font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+        padding:4px 9px;cursor:pointer;transition:.12s}
+  .chip:hover{color:var(--ink)}
+  .chip.on{color:var(--paper)}
+  .tools{display:flex;justify-content:space-between;align-items:center;margin-top:8px;color:var(--sub)}
+  .tools button{background:none;border:none;color:var(--ink);font:inherit;cursor:pointer;letter-spacing:inherit;text-transform:inherit}
+  .tools button:hover{text-decoration:line-through}
+
+  /* ───────── TIMELINE ───────── */
+  #list{padding-top:20px}
+  .group{position:relative;padding-bottom:16px}
+  .group-head{position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;user-select:none;
+              padding:46px 0 30px;text-align:center}
+  .group-head .yr{font-family:var(--disp);font-weight:500;font-size:clamp(60px,9vw,104px);line-height:.9;letter-spacing:-.05em;
+                  background:var(--paper);padding:0 18px;position:relative;z-index:1}
+  .group-head .yr.alt{color:transparent;-webkit-text-stroke:1.2px var(--ink)}
+  .group-head .meta{margin-top:12px;display:flex;gap:14px;align-items:center;background:var(--paper);padding:0 12px;position:relative;z-index:1}
+  .group-head .meta .note{font-family:"Noto Sans KR";font-size:13px;font-weight:500;letter-spacing:.02em;text-transform:none}
+  .group-head .tog{font-family:var(--mono);font-size:13px;width:18px}
+  .group-head::before{content:"";position:absolute;left:0;right:0;top:calc(46px + clamp(60px,9vw,104px) * .46);height:1px;background:var(--ink)}
+  .group-head .deco{position:absolute;font-family:var(--mono);font-size:10px;color:var(--sub);top:20px}
+  .group-head .deco.l{left:0}.group-head .deco.r{right:0}
+  .fold{display:grid;grid-template-rows:1fr;transition:grid-template-rows .55s cubic-bezier(.6,0,.2,1)}
+  .fold-in{min-height:0;overflow:hidden;transition:opacity .4s ease,transform .55s cubic-bezier(.6,0,.2,1)}
+  .group.closed .fold{grid-template-rows:0fr}
+  .group.closed .fold-in{opacity:0;transform:translateY(-14px)}
+  .group-head .tog{display:inline-block;transition:transform .45s cubic-bezier(.6,0,.2,1)}
+  .group.closed .group-head .tog{transform:rotate(180deg)}
+  .group-head .yr{transition:color .35s,-webkit-text-stroke-color .35s}
+  .group.closed .group-head .yr.yr{opacity:.35}
+  .group-head:hover .yr{letter-spacing:-.035em}
+  .group-head .yr{transition:letter-spacing .4s cubic-bezier(.2,.7,.2,1),opacity .45s}
+  .group.closed .group-head .tog::before{content:"+"}
+  .group:not(.closed) .group-head .tog::before{content:"−"}
+
+  .items{position:relative;padding:6px 0 10px}
+  .items::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--ink);transform:translateX(-.5px)}
+  .ev{position:relative;width:50%;padding:0 46px 26px 0;text-align:right}
+  .ev:nth-child(even){margin-left:50%;padding:0 0 26px 46px;text-align:left}
+  .ev+.ev{margin-top:-14px}
+  .node{position:absolute;right:0;top:3px;transform:translateX(50%);width:22px;height:22px;display:grid;place-items:center;
+        background:var(--paper);font-size:13px;line-height:1;z-index:2}
+  .node i{display:block;width:9px;height:9px;background:var(--ink);border-radius:50%}
+  .n-각성 i{width:15px;height:15px;border-radius:0;background:none;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;
+    background:var(--ink)}
+  .n-압주 i{width:11px;height:11px;border:1.5px solid var(--ink);background:linear-gradient(90deg,var(--ink) 50%,var(--paper) 50%)}
+  .n-설립 i{border-radius:0;width:10px;height:10px}
+  .n-현재 i{border-radius:0;width:8px;height:8px;background:var(--paper);border:1.5px solid var(--ink);transform:rotate(45deg)}
+  .n-사건 i{border-radius:0;background:none;width:12px;height:12px;position:relative}
+  .n-사건 i::before,.n-사건 i::after{content:"";position:absolute;left:50%;top:-1px;width:1.6px;height:14px;background:var(--ink);transform:rotate(45deg)}
+  .n-사건 i::after{transform:rotate(-45deg)}
+  .ev:nth-child(even) .node{right:auto;left:0;transform:translateX(-50%)}
+  .ev::after{content:"";position:absolute;top:14px;right:11px;width:30px;height:1px;background:var(--ink)}
+  .ev:nth-child(even)::after{right:auto;left:11px}
+  .ev .meta{display:flex;gap:10px;align-items:baseline;color:var(--sub);justify-content:flex-end;flex-wrap:wrap}
+  .ev:nth-child(even) .meta{justify-content:flex-start}
+  .ev .meta .tag{color:var(--ink)}
+  .ev h3{font-size:16px;font-weight:500;line-height:1.5;margin-top:3px;letter-spacing:-.01em}
+  .ev.key h3{display:inline;background:var(--ink);color:var(--paper);padding:2px 8px;font-weight:700;
+             box-decoration-break:clone;-webkit-box-decoration-break:clone;line-height:1.85}
+  .ev .desc{font-size:13.5px;color:var(--sub);margin-top:5px;font-weight:300;line-height:1.6}
+  .ev .desc b{color:var(--ink);font-weight:500}
+  .ev .more{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--ink);text-decoration:none;
+            border-bottom:1px solid var(--ink)}
+  /* 스포일러 = 검열 막대 */
+  .spoil .body{cursor:pointer;position:relative;display:inline-block;margin-top:6px}
+  .spoil .body .desc{margin-top:0}
+  .spoil:not(.open) .body{background:var(--ink);color:var(--ink);user-select:none}
+  .spoil:not(.open) .body *{color:var(--ink)!important;border-color:var(--ink)!important}
+  .spoil-label{margin-top:4px;color:var(--sub)}
+  .spoil.open .spoil-label{display:none}
+
+  .empty{text-align:center;color:var(--sub);padding:60px 0}
+
+  /* ───────── ERA (시대 구분) ───────── */
+  .era{margin-top:70px;border-top:3px solid var(--ink);padding-top:12px}
+  #list>.era:first-child{margin-top:24px}
+  .era-top{display:flex;gap:22px;color:var(--sub)}
+  .era-top span:first-child{color:var(--ink)}
+  .era-top span:last-child{margin-left:auto}
+  .era-main{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:end;margin-top:14px}
+  .era-en{font-family:var(--disp);font-weight:700;font-size:clamp(44px,7.5vw,88px);line-height:.85;letter-spacing:-.04em;
+          text-transform:uppercase}
+  .era-txt{border-left:1px solid var(--ink);padding:2px 0 4px 18px;max-width:380px}
+  .era-txt b{font-size:15px;font-weight:700;display:block}
+  .era-txt p{font-size:13.5px;color:var(--sub);margin-top:2px}
+  .alert{display:flex;gap:24px;align-items:center;flex-wrap:wrap;background:var(--ink);color:var(--paper);
+         padding:16px 22px;margin-top:22px}
+  .alert-h{display:flex;flex-direction:column}
+  .alert-h .mono{color:var(--faint)}
+  .alert-h b{font-family:var(--disp);font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+  .alert-tags{display:flex;gap:8px;flex-wrap:wrap}
+  .alert-tags span{border:1px solid rgba(228,227,223,.45);padding:6px 11px;font-size:13px;font-weight:500}
+  .alert-h b::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--paper);
+                     margin-right:9px;vertical-align:middle;animation:blink 1.4s steps(2,start) infinite}
+  @keyframes blink{to{visibility:hidden}}
+  .era.anim{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .era.anim.in{opacity:1;transform:none}
+  .era.anim .era-en{clip-path:inset(-20% 100% -20% 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1) .2s}
+  .era.anim.in .era-en{clip-path:inset(-20% -5% -20% 0)}
+  @media (max-width:700px){
+    .era-main{grid-template-columns:1fr;gap:12px}
+    .era-top{gap:12px;flex-wrap:wrap}
+  }
+
+  /* ───────── TODO / ROSTER ───────── */
+  .sec-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-top:70px}
+  .sec-head h2{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5vw,52px);letter-spacing:-.03em;line-height:1}
+  .unv-meta{display:flex;gap:26px;flex-wrap:wrap;color:var(--sub);margin-top:10px}
+  .unv-row{display:grid;grid-template-columns:90px 1.3fr 1.3fr 90px;gap:16px;align-items:baseline;padding:11px 0;
+           border-bottom:1px solid var(--hair);font-size:14px}
+  .unv-th{color:var(--sub);border-bottom:1px solid var(--ink);margin-top:16px;padding:8px 0}
+  .unv-row .who{font-weight:500}
+  .unv-row .what{color:var(--sub);font-weight:300}
+  .unv-row .st{justify-self:end;border:1px solid var(--ink);padding:2px 7px 1px;font-size:10.5px;white-space:nowrap}
+  .unv-th span:last-child{justify-self:end}
+  .unv-row.sealed .what{background:var(--ink);color:var(--ink);user-select:none;width:fit-content;padding:0 6px}
+  .unv-row.sealed .st{background:var(--ink);color:var(--paper)}
+  .unv-note{margin-top:14px;font-size:12.5px;color:var(--sub)}
+  .unv-note b{color:var(--ink);font-weight:500}
+  @media (max-width:700px){
+    .unv-row{grid-template-columns:1fr auto;gap:2px 12px}
+    .unv-row>span:first-child{grid-column:1/-1;color:var(--sub)}
+    .unv-row .what{grid-column:1/2}
+    .unv-row .st{grid-row:2/4;grid-column:2;align-self:center}
+    .unv-th{display:none}
+  }
+  .roster summary{list-style:none;cursor:pointer}
+  .roster summary::-webkit-details-marker{display:none}
+  .roster .tog::before{content:"+ OPEN"}
+  .roster[open]:not(.shut) .tog::before{content:"− CLOSE"}
+  .roster.shut .fold{grid-template-rows:0fr}
+  .roster.shut .fold-in{opacity:0;transform:translateY(-14px)}
+  .roster h5{display:flex;gap:12px;align-items:baseline;margin:34px 0 4px}
+  .roster h5 i{font-style:normal;color:var(--sub)}
+  .roster .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:28px}
+  .roster .ch{position:relative;border-top:1px solid var(--hair);display:flex;align-items:flex-start;gap:8px}
+  .roster button{all:unset;cursor:pointer;display:block;padding:11px 0 10px;flex:1;min-width:0}
+  .roster .chat{flex:none;margin-top:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink);
+                text-decoration:none;border:1px solid var(--ink);padding:3px 7px 2px;display:inline-flex;gap:4px;align-items:center;
+                transition:background .15s,color .15s}
+  .roster .chat span{display:inline-block;transition:transform .2s}
+  .roster .chat:hover{background:var(--ink);color:var(--paper)}
+  .roster .chat:hover span{transform:translate(2px,-2px)}
+  .roster button:hover b{background:var(--ink);color:var(--paper)}
+  .roster b{font-size:16px;font-weight:700;padding:0 2px;margin-left:-2px;transition:.1s}
+  .roster small{display:block;font-size:12.5px;color:var(--sub)}
+  .roster .en{font-family:var(--disp);font-size:12px;font-weight:500;letter-spacing:.08em;margin-left:8px;color:var(--sub)}
+  .roster .dt{font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.02em;margin-top:2px}
+
+  /* ───────── FOOTER ───────── */
+  footer{margin-top:90px;padding-bottom:40px}
+  .foot-grid{display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px;border-top:1px solid var(--ink);padding-top:18px}
+  .fin{font-family:var(--disp);font-weight:500;font-size:clamp(54px,10vw,110px);letter-spacing:-.05em;line-height:.85}
+  .scale-down{width:clamp(130px,19vw,200px);display:block;transform:rotate(180deg)}
+  .foot-line{display:flex;justify-content:space-between;margin-top:18px;color:var(--sub);border-top:1px solid var(--hair);padding-top:10px}
+
+  #toTop{position:fixed;right:18px;bottom:18px;width:42px;height:42px;border:none;background:var(--ink);color:var(--paper);
+         cursor:pointer;opacity:0;pointer-events:none;transition:.2s;font-family:var(--mono);font-size:14px;z-index:30}
+  #toTop.show{opacity:1;pointer-events:auto}
+
+  /* ───────── MOTION ───────── */
+  .beam{transform-box:view-box;transform-origin:100px 40px;animation:sway 6s ease-in-out infinite}
+  @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .arc{stroke-width:2.6;stroke-dasharray:9 91;stroke-linecap:round;animation:orbit linear infinite}
+  @keyframes orbit{to{stroke-dashoffset:-100}}
+  .tw{transform-box:fill-box;transform-origin:center;animation:twinkle 7s ease-in-out infinite}
+  .tw.d2{animation-delay:-2.5s;animation-duration:8.5s}.tw.d3{animation-delay:-5s;animation-duration:9.5s}
+  @keyframes twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.86) rotate(6deg);opacity:.72}}
+
+  .hero .topline,.hero-grid,.title-row,.strip{animation:rise 1s cubic-bezier(.2,.7,.2,1) both}
+  .hero-grid{animation-delay:.12s}.title-row{animation-delay:.24s}.strip{animation-delay:.38s}
+  @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  .title{display:inline-block;animation:wipe 1.2s cubic-bezier(.7,0,.2,1) .3s both}
+  @keyframes wipe{from{clip-path:inset(-25% 100% -25% -5%)}to{clip-path:inset(-25% -5% -25% -5%)}}
+  .scale-up,.scale-down{overflow:visible}
+
+  .anim .items::before{transform:translateX(-.5px) scaleY(0);transform-origin:top;transition:transform 1.4s cubic-bezier(.6,0,.2,1)}
+  .anim.in .items::before{transform:translateX(-.5px) scaleY(1)}
+  .anim .group-head::before{transform:scaleX(0);transition:transform 1.1s cubic-bezier(.6,0,.2,1)}
+  .anim.in .group-head::before{transform:scaleX(1)}
+  .anim .group-head .yr{opacity:0;transform:translateY(18px);transition:.9s cubic-bezier(.2,.7,.2,1) .15s}
+  .anim.in .group-head .yr{opacity:1;transform:none}
+  .ev.anim{opacity:0;transform:translateX(-26px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  .ev.anim:nth-child(even){transform:translateX(26px)}
+  .ev.anim.in{opacity:1;transform:none}
+  .ev.anim .node{transform:translateX(50%) scale(0);transition:transform .5s cubic-bezier(.3,1.6,.5,1) .25s}
+  .ev.anim:nth-child(even) .node{transform:translateX(-50%) scale(0)}
+  .ev.anim.in .node{transform:translateX(50%) scale(1)}
+  .ev.anim.in:nth-child(even) .node{transform:translateX(-50%) scale(1)}
+  .ev.anim::after{transform:scaleX(0);transform-origin:right;transition:transform .6s ease .35s}
+  .ev.anim:nth-child(even)::after{transform-origin:left}
+  .ev.anim.in::after{transform:scaleX(1)}
+  /* 주요 사건: 검은 띠가 그어지듯 */
+  .ev.key.anim h3{background:linear-gradient(var(--ink),var(--ink)) no-repeat left/0% 100%;color:var(--ink);
+                  transition:background-size .7s cubic-bezier(.7,0,.2,1) .4s,color .2s .75s}
+  .ev.key.anim.in h3{background-size:100% 100%;color:var(--paper)}
+  .ev .node i{transition:transform .25s}
+  .ev:hover .node i{transform:scale(1.5) rotate(45deg)}
+  .n-현재 i{transition:transform .25s}
+  .spoil .body{transition:background-color .35s,color .35s}
+  .roster button b{transition:background .15s,color .15s}
+  .roster[open]:not(.shut) .grid .ch{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .anim,.anim *{opacity:1!important}
+  }
+
+  #order .arr{display:inline-block;transition:transform .5s cubic-bezier(.6,0,.2,1)}
+  #order.flip .arr{transform:rotate(180deg)}
+  #list{transition:opacity .3s ease,transform .3s ease}
+  #list.swap-out{opacity:0;transform:translateY(16px)}
+  #list.swap-in .era,#list.swap-in .group-head,#list.swap-in .ev{animation:swapIn .65s cubic-bezier(.2,.7,.2,1) var(--d,0ms) both}
+  #list.swap-in .items::before{animation:lineIn 1s cubic-bezier(.6,0,.2,1) both}
+  @keyframes swapIn{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+  @keyframes lineIn{from{transform:translateX(-.5px) scaleY(0);transform-origin:top}to{transform:translateX(-.5px) scaleY(1);transform-origin:top}}
+
+  /* ───────── MOBILE ───────── */
+  @media (max-width:700px){
+    .wrap{padding:0 18px}
+    .hero-grid{grid-template-columns:110px 1fr}
+    .strip{grid-template-columns:1fr 1fr}
+    .strip>div:nth-child(3){border-left:none}
+    .strip>div:nth-child(n+3){border-top:1px solid var(--ink)}
+    .strip>div:first-child{grid-column:1/-1}
+    .strip>div:nth-child(2){border-left:none;border-top:1px solid var(--ink)}
+    .strip>div:nth-child(3){border-left:1px solid var(--ink)}
+    .items::before{left:10px}
+    .ev,.ev:nth-child(even){width:auto;margin-left:0;padding:0 0 22px 40px;text-align:left}
+    .ev+.ev{margin-top:0}
+    .node,.ev:nth-child(even) .node{left:10px;right:auto;transform:translateX(-50%)}
+    .ev.anim,.ev.anim:nth-child(even){transform:translateY(16px)}
+    .ev.anim.in,.ev.anim.in:nth-child(even){transform:none}
+    .ev.anim .node,.ev.anim:nth-child(even) .node{transform:translateX(-50%) scale(0)}
+    .ev.anim.in .node,.ev.anim.in:nth-child(even) .node{transform:translateX(-50%) scale(1)}
+    .ev.anim::after,.ev.anim:nth-child(even)::after{transform-origin:left}
+    .anim .items::before{transform:scaleY(0)}
+    .anim.in .items::before{transform:scaleY(1)}
+    .ev::after,.ev:nth-child(even)::after{left:21px;right:auto;width:12px}
+    .ev .meta,.ev:nth-child(even) .meta{justify-content:flex-start}
+    .group-head .deco{display:none}
+    .foot-grid{grid-template-columns:1fr 110px}
+    .scale-down{width:110px}
+  }
+</style>
+</head>
+<body>
+
+<!-- 천칭 (정방향) — 역방향은 같은 그림을 180° 회전 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="scales" viewBox="0 0 200 210" overflow="visible">
+      <circle cx="100" cy="16" r="7" fill="currentColor"/>
+      <path d="M100 4 v-4" stroke="currentColor" stroke-width="2"/>
+      <rect x="97" y="22" width="6" height="150" fill="currentColor"/>
+      <g class="beam">
+        <path d="M22 44 Q100 30 178 44" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="22" cy="44" r="4.5" fill="currentColor"/>
+        <circle cx="178" cy="44" r="4.5" fill="currentColor"/>
+        <path d="M22 48 L2 118 M22 48 L42 118 M178 48 L158 118 M178 48 L198 118" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M0 118 H44 A22 17 0 0 1 0 118 Z" fill="currentColor"/>
+        <path d="M156 118 H200 A22 17 0 0 1 156 118 Z" fill="currentColor"/>
+      </g>
+      <path d="M100 52 a7 7 0 1 0 0.01 0" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M70 186 L80 172 H120 L130 186 Z" fill="currentColor"/>
+      <rect x="56" y="188" width="88" height="7" fill="currentColor"/>
+      <path d="M44 202 H156" stroke="currentColor" stroke-width="1"/>
+    </symbol>
+    <symbol id="spark" viewBox="-50 -50 100 100">
+      <path d="M0-50 C3-10 10-3 50 0 C10 3 3 10 0 50 C-3 10-10 3-50 0 C-10-3-3-10 0-50Z" fill="currentColor"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="topline">
+      <b>THEMIS / ARCHIVE</b>
+      <span class="mono">Chronicle · Vol.<span id="volNo"></span></span>
+    </div>
+
+    <div class="hero-grid">
+      <svg class="scale-up" viewBox="0 0 200 210" aria-label="천칭"><use href="#scales"/></svg>
+      <div class="hero-art">
+        <svg viewBox="0 0 420 270" aria-hidden="true">
+          <g fill="none" stroke="currentColor" stroke-width="1">
+            <g transform="rotate(-32 250 140)">
+              <ellipse cx="250" cy="140" rx="150" ry="58"/>
+              <ellipse cx="250" cy="140" rx="132" ry="46"/>
+              <ellipse cx="250" cy="140" rx="112" ry="34"/>
+              <ellipse cx="250" cy="140" rx="90" ry="22"/>
+              <ellipse cx="250" cy="140" rx="66" ry="11"/>
+              <ellipse class="arc" cx="250" cy="140" rx="150" ry="58" pathLength="100" style="animation-duration:38s;animation-direction:normal;animation-delay:-0s"/>
+              <ellipse class="arc" cx="250" cy="140" rx="132" ry="46" pathLength="100" style="animation-duration:30s;animation-direction:reverse;animation-delay:-7s"/>
+              <ellipse class="arc" cx="250" cy="140" rx="112" ry="34" pathLength="100" style="animation-duration:24s;animation-direction:normal;animation-delay:-14s"/>
+              <ellipse class="arc" cx="250" cy="140" rx="90" ry="22" pathLength="100" style="animation-duration:19s;animation-direction:reverse;animation-delay:-21s"/>
+              <ellipse class="arc" cx="250" cy="140" rx="66" ry="11" pathLength="100" style="animation-duration:15s;animation-direction:normal;animation-delay:-28s"/>
+              <circle r="3.2" fill="currentColor" stroke="none"><animateMotion dur="46s" begin="-0s" repeatCount="indefinite" path="M100,140 a150,58 0 1,0 300,0 a150,58 0 1,0 -300,0"/></circle>
+              <circle r="2.4" fill="currentColor" stroke="none"><animateMotion dur="28s" begin="-5s" repeatCount="indefinite" path="M138,140 a112,34 0 1,0 224,0 a112,34 0 1,0 -224,0"/></circle>
+              <circle r="2.4" fill="currentColor" stroke="none"><animateMotion dur="17s" begin="-10s" repeatCount="indefinite" path="M184,140 a66,11 0 1,0 132,0 a66,11 0 1,0 -132,0"/></circle>
+            </g>
+          </g>
+          <path d="M330 0 A90 90 0 0 1 420 90 L420 0 Z" fill="currentColor"/>
+          <path d="M120 270 A70 70 0 0 1 190 200 L190 270 Z" fill="currentColor"/>
+          <rect x="215" y="128" width="70" height="24" fill="currentColor" transform="rotate(-32 250 140)"/>
+          <use class="tw" href="#spark" x="300" y="34" width="54" height="54"/>
+          <use class="tw d2" href="#spark" x="150" y="40" width="30" height="30"/>
+          <use class="tw d3" href="#spark" x="352" y="178" width="70" height="70"/>
+          <circle cx="110" cy="150" r="5" fill="currentColor"/><circle cx="395" cy="140" r="3" fill="currentColor"/>
+          <circle cx="235" cy="246" r="8" fill="currentColor"/><circle cx="182" cy="110" r="2.5" fill="currentColor"/>
+        </svg>
+        <div class="hero-codes"><span style="left:4%;top:8%">K-028</span><span style="right:30%;bottom:2%">A-032</span><span style="left:30%;top:58%">M-030</span></div>
+      </div>
+    </div>
+
+    <div class="title-row">
+      <h1 class="title" id="siteTitle"></h1>
+      <div class="title-sub">CHRONICLE</div>
+    </div>
+
+    <div class="strip">
+      <div id="siteSub"></div>
+      <div class="syms"><span>✦</span><span>◑</span><span>■</span></div>
+      <div class="yrs"><b id="yFrom"></b><span class="mono">—</span><b id="yTo"></b></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search-row">
+      <label class="mono" for="q">Search /</label>
+      <input class="search" id="q" type="search" placeholder="코드네임 · 본명 · 사건으로 검색">
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="chips teams" id="teams"><span class="row-label mono">Team /</span></div>
+    <div class="tools mono">
+      <span id="count"></span>
+      <span><button id="order"><span class="arr">↓</span> <span class="lbl">오래된 순</span></button> &nbsp;/&nbsp; <button id="fold">모두 접기</button></span>
+    </div>
+  </div>
+
+  <main id="list"></main>
+
+  <section class="todo" id="todo"></section>
+  <details class="roster" id="roster"></details>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <div class="fin">FIN.</div>
+      </div>
+      <svg class="scale-down" viewBox="0 0 200 210" aria-label="역방향 천칭"><use href="#scales"/></svg>
+    </div>
+    <div class="foot-line mono"><span>THEMIS ⟷ APSU</span><span>Order / Inversion</span></div>
+  </footer>
+</div>
+<button id="toTop" aria-label="맨 위로">↑</button>
+
+<script>
+const $ = s => document.querySelector(s);
+const SYM = { "각성":"✦", "테미스":"●", "압주":"◑", "설립":"■", "사건":"✕", "현재":"◇" };
+const sym = t => SYM[t] || "○";
+
+const years = [...new Set(EVENTS.map(e => e.year))];
+$("#siteTitle").textContent = SITE.title;
+$("#siteSub").textContent = "균열 원년(2028)부터 현재까지 — THEMIS · 압주 · 이형 관련 주요 기록 열람본.";
+$("#yFrom").textContent = years[0];
+$("#yTo").textContent = years[years.length - 1];
+$("#volNo").textContent = String(EVENTS.length).padStart(3, "0");
+document.title = SITE.title + " 연혁";
+
+let activeTag = null, activeTeam = null, newestFirst = false;
+
+// 분류 필터
+const chips = $("#chips");
+const mkChip = name => {
+  const b = document.createElement("button");
+  b.className = "chip" + (name === null ? " on" : "");
+  b.textContent = name === null ? "[ 전체 ]" : `${sym(name)} ${name}`;
+  b.onclick = () => {
+    if (activeTag === name) return;
+    activeTag = name;
+    chips.querySelectorAll(".chip").forEach(c => c.classList.remove("on"));
+    b.classList.add("on");
+    moveInd();
+    swapRender();
+  };
+  chips.appendChild(b);
+};
+mkChip(null);
+Object.keys(TAGS).forEach(mkChip);
+// 선택된 칩 뒤로 미끄러지는 검은 표시
+function makeInd(row){
+  const ind = document.createElement("span");
+  ind.className = "chip-ind";
+  row.prepend(ind);
+  const move = () => {
+    const on = row.querySelector(".chip.on");
+    if (!on) return;
+    ind.style.width = on.offsetWidth + "px";
+    ind.style.height = on.offsetHeight + "px";
+    ind.style.transform = `translate(${on.offsetLeft}px, ${on.offsetTop}px)`;
+  };
+  addEventListener("resize", move);
+  if (document.fonts) document.fonts.ready.then(move);
+  requestAnimationFrame(() => { ind.style.transition = "none"; move();
+    requestAnimationFrame(() => ind.style.transition = ""); });
+  return move;
+}
+
+// 팀 필터
+const teamRow = $("#teams");
+const mkTeam = t => {
+  const b = document.createElement("button");
+  b.className = "chip" + (t === null ? " on" : "");
+  b.textContent = t === null ? "[ ALL ]" : t.label;
+  b.onclick = () => {
+    if (activeTeam === t) return;
+    activeTeam = t;
+    teamRow.querySelectorAll(".chip").forEach(c => c.classList.remove("on"));
+    b.classList.add("on");
+    moveTeamInd();
+    swapRender();
+  };
+  teamRow.appendChild(b);
+};
+mkTeam(null);
+TEAMS.forEach(mkTeam);
+const moveInd = makeInd(chips);
+const moveTeamInd = makeInd(teamRow);
+
+// 이름이 단어로 들어 있는지 (로드 ≠ 로드리고, 불 ≠ 통불스급)
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const nameRe = n => new RegExp(`(^|[\\s·,(\\/—])${esc(n)}(?=$|[\\s·,)\\/—이가의은는을를와과도])`);
+function inTeam(e, t){
+  const text = e.title + " " + (e.spoiler ? "" : strip(e.desc || ""));
+  if (t.words.some(w => text.includes(w))) return true;
+  return (CHARS[t.group] || []).some(([c]) => nameRe(c).test(text));
+}
+
+const strip = h => h.replace(/<[^>]*>/g, "");
+const ALL_CHARS = Object.values(CHARS).flat();
+const UNIQUE = new Set(ALL_CHARS.map(c => c[0])).size;
+
+// 각 항목에 코드 번호 (예: 29.04)
+const codeOf = new Map();
+years.forEach(y => EVENTS.filter(e => e.year === y).forEach((e, i) =>
+  codeOf.set(e, `${y.slice(2)}.${String(i + 1).padStart(2, "0")}`)));
+
+// 화면에 들어올 때 하나씩 등장
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(en => {
+  if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+}), { rootMargin: "0px 0px -8% 0px", threshold: .12 }) : null;
+let firstRender = true;
+
+function render(){
+  const q = $("#q").value.trim().toLowerCase();
+  const terms = q ? [q] : [];
+  if (q.length >= 2) ALL_CHARS.forEach(([code, real]) => {
+    if ((real && !real.startsWith("(") && real.toLowerCase().includes(q)) || (EN[code] || "").toLowerCase().includes(q)) terms.push(code.toLowerCase());
+  });
+  let list = EVENTS.filter(e => {
+    if (activeTag && e.tag !== activeTag) return false;
+    if (activeTeam && !inTeam(e, activeTeam)) return false;
+    if (!terms.length) return true;
+    const text = (e.title + " " + (e.spoiler ? "" : strip(e.desc || "")) + " " + (e.date || "")).toLowerCase();
+    return terms.some(t => text.includes(t));
+  });
+  if (newestFirst) list = [...list].reverse();
+
+  const groups = [];
+  list.forEach(e => {
+    let g = groups.find(x => x.name === e.year);
+    if (!g) groups.push(g = { name: e.year, items: [] });
+    g.items.push(e);
+  });
+
+  $("#count").textContent = `${String(list.length).padStart(3, "0")} Records`;
+  const root = $("#list");
+  if (!list.length){ root.innerHTML = `<p class="empty mono">— No record found —</p>`; return; }
+
+  const eraOf = y => ERAS.find(e => +y >= e.from && +y <= e.to);
+  const eraHTML = e => `
+    <section class="era">
+      <div class="era-top mono"><span>Phase ${e.no}</span><span>균열 ${e.span}</span><span>${e.from}${e.to > e.from ? " — " + Math.min(e.to, +years[years.length - 1]) : ""}</span></div>
+      <div class="era-main">
+        <h2 class="era-en">${e.en}</h2>
+        <div class="era-txt"><b>${e.ko}</b><p>${e.desc}</p></div>
+      </div>
+      ${e.alert ? `<div class="alert"><div class="alert-h"><span class="mono">Now · 8년차</span><b>STATUS ALERT</b></div>
+        <div class="alert-tags">${e.alert.map(a => `<span>${a}</span>`).join("")}</div></div>` : ""}
+    </section>`;
+  let prevEra = null;
+  root.innerHTML = groups.map((g, gi) => {
+    const er = eraOf(g.name);
+    const pre = er && er !== prevEra ? eraHTML(er) : "";
+    prevEra = er;
+    return pre + `
+    <section class="group">
+      <div class="group-head">
+        <span class="deco l">${+g.name - 2028 ? "균열 " + (+g.name - 2028) + "년차" : "균열 원년"}</span>
+        <span class="deco r">${g.items.length.toString().padStart(2, "0")} ENTRIES</span>
+        <span class="yr${gi % 2 ? " alt" : ""}">${g.name}</span>
+        <span class="meta mono">
+          ${YEAR_NOTE[g.name] ? `<span class="note">${YEAR_NOTE[g.name]}</span>` : ""}
+          <span>[${g.items.length}]</span><span class="tog"></span>
+        </span>
+      </div>
+      <div class="fold"><div class="fold-in"><div class="items">
+        ${g.items.map(e => `
+          <article class="ev ${e.spoiler ? "spoil" : ""} ${e.key ? "key" : ""}">
+            <span class="node n-${e.tag}"><i></i></span>
+            <div class="meta mono">
+              <span>${codeOf.get(e)}</span>
+              ${e.date ? `<span>${e.date}</span>` : ""}
+              ${e.tag ? `<span class="tag">${sym(e.tag)} ${e.tag}</span>` : ""}
+            </div>
+            <h3>${e.title}</h3>
+            ${e.desc || e.link ? `<div><div class="body">
+              ${e.desc ? `<p class="desc">${e.desc}</p>` : ""}
+              ${e.link ? `<a class="more" href="${e.link}" target="_blank" rel="noopener">LINK ↗</a>` : ""}
+            </div></div>` : ""}
+            ${e.spoiler ? `<p class="spoil-label mono">■ Classified — 눌러서 열람</p>` : ""}
+          </article>`).join("")}
+      </div></div></div>
+    </section>`; }).join("");
+
+  if (firstRender && io) {
+    root.querySelectorAll(".era, .group, .ev").forEach(el => { el.classList.add("anim"); io.observe(el); });
+  }
+  firstRender = false;
+
+  root.querySelectorAll(".group-head").forEach(h =>
+    h.onclick = () => h.parentElement.classList.toggle("closed"));
+  root.querySelectorAll(".spoil").forEach(s =>
+    s.onclick = () => s.classList.add("open"));
+}
+
+// 확인 필요
+if (TODO.length) {
+  $("#todo").innerHTML = `
+    <div class="sec-head"><h2>Unverified</h2><span class="mono">Doc. TMS-ARC-UNV · ${String(TODO.length).padStart(2, "0")} Files</span></div>
+    <div class="unv-meta mono"><span>발신 / THEMIS 기록관리국</span><span>분류 / 연대 미확인</span><span>등급 / 내부 열람</span></div>
+    <div class="unv-row unv-th mono"><span>No.</span><span>대상</span><span>미확인 사항</span><span>상태</span></div>
+    ${TODO.map(([who, what, st], i) => `
+      <div class="unv-row ${st === "열람 불가" ? "sealed" : ""}">
+        <span class="mono">UNV-${String(i + 1).padStart(3, "0")}</span>
+        <span class="who">${who}</span>
+        <span class="what">${what}</span>
+        <span class="st mono">${st}</span>
+      </div>`).join("")}
+    <p class="unv-note">※ 본 목록은 THEMIS 기록 보관 규정에 따라 <b>미확인</b>으로 분류된 대상입니다. 기록이 확인되는 대로 연표에 등재됩니다.</p>`;
+}
+
+// 인물 목록
+$("#roster").innerHTML = `
+  <summary class="sec-head"><h2>Characters</h2><span class="mono">${UNIQUE} Persons · <span class="tog"></span></span></summary>
+  <div class="fold"><div class="fold-in">
+  ${Object.entries(CHARS).map(([group, arr], i) => `
+    <h5 class="mono"><i>${String(i + 1).padStart(2, "0")} /</i>${group}</h5>
+    <div class="grid">${arr.map(([c, r, d, url], k) => `
+      <div class="ch" style="animation-delay:${Math.min(k * 30, 400)}ms">
+        <button data-c="${c}" title="${c} 연혁만 보기"><b>${c}</b>${EN[c] ? `<span class="en">${EN[c]}</span>` : ""}${r ? `<small>${r}</small>` : ""}${d ? `<div class="dt">${d}</div>` : ""}</button>
+        ${url ? `<a class="chat" href="${url}" target="_blank" rel="noopener" title="${c} 캐릭터 챗 열기">CHAT<span>↗</span></a>` : ""}
+      </div>`).join("")}
+    </div>`).join("")}
+  </div></div>`;
+// 인물 목록 접기/펼치기 애니메이션
+const roster = $("#roster");
+roster.classList.add("shut");
+roster.querySelector("summary").onclick = ev => {
+  ev.preventDefault();
+  if (roster.open && !roster.classList.contains("shut")) {
+    roster.classList.add("shut");
+    setTimeout(() => { if (roster.classList.contains("shut")) roster.open = false; }, 560);
+  } else {
+    roster.open = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => roster.classList.remove("shut")));
+  }
+};
+$("#roster").querySelectorAll("button").forEach(b => b.onclick = () => {
+  $("#q").value = b.dataset.c; render();
+  $("#list").scrollIntoView({ behavior: "smooth" });
+});
+
+$("#q").oninput = render;
+// 목록 바꾸기 — 사라졌다가 새 내용으로 차례차례 등장 (순서·필터 공용)
+let swapTimer = null, endTimer = null;
+function swapRender(){
+  const list = $("#list");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  clearTimeout(swapTimer); clearTimeout(endTimer);
+  list.classList.remove("swap-in");
+  list.classList.add("swap-out");
+  swapTimer = setTimeout(() => {
+    const top = $(".controls").offsetTop;
+    if (scrollY > top) scrollTo({ top, behavior: "instant" });
+    render();
+    list.classList.remove("swap-out");
+    list.querySelectorAll(".era, .group-head, .ev").forEach((el, i) =>
+      el.style.setProperty("--d", Math.min(i * 35, 900) + "ms"));
+    void list.offsetWidth;
+    list.classList.add("swap-in");
+    endTimer = setTimeout(() => list.classList.remove("swap-in"), 1600);
+  }, reduce ? 0 : 320);
+}
+$("#order").onclick = () => {
+  newestFirst = !newestFirst;
+  const btn = $("#order");
+  btn.classList.toggle("flip", newestFirst);
+  btn.querySelector(".lbl").textContent = newestFirst ? "최신 순" : "오래된 순";
+  swapRender();
+};
+$("#fold").onclick = () => {
+  const gs = document.querySelectorAll(".group");
+  const closeAll = [...gs].some(g => !g.classList.contains("closed"));
+  gs.forEach(g => g.classList.toggle("closed", closeAll));
+  $("#fold").textContent = closeAll ? "모두 펼치기" : "모두 접기";
+};
+addEventListener("scroll", () => $("#toTop").classList.toggle("show", scrollY > 700));
+$("#toTop").onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+
+render();
+</script>
+</body>
+</html>
