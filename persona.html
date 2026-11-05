@@ -205,6 +205,38 @@
   .slots .off.none::before{display:none}
   .slots .ex-mine em{font-style:normal;font-size:11px;color:var(--sub)}
   .slot-legend{display:flex;gap:14px;color:var(--faint);margin-top:8px;font-size:10px;text-transform:none}
+  /* ───────── 3단계 사용법 ───────── */
+  .howto{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);margin-top:30px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .howto li{position:relative;cursor:pointer;padding:14px 16px 14px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:baseline;transition:background .2s}
+  .howto li + li{border-left:1px solid var(--hair)}
+  .howto li:hover{background:rgba(17,17,18,.05)}
+  .howto i{grid-row:1/3;font-style:normal;font-family:var(--disp);font-size:30px;font-weight:500;line-height:.9;letter-spacing:-.04em;
+           color:transparent;-webkit-text-stroke:1px var(--ink)}
+  .howto b{font-size:15px;font-weight:500}
+  .howto span{font-size:12px;color:var(--sub);line-height:1.5}
+  .howto em{position:absolute;right:12px;top:12px;font-style:normal;font-size:9.5px;color:var(--faint)}
+  .howto li.done i{color:var(--ink);-webkit-text-stroke-color:transparent}
+  .howto li.done em{color:var(--ink)}
+  .howto li + li::before{content:"→";position:absolute;left:-7px;top:50%;transform:translateY(-50%);background:var(--paper);font-size:11px;line-height:1;padding:2px 0;color:var(--sub)}
+  .notice{margin-top:14px!important;border:none!important;padding:0 2px!important;font-size:12px!important}
+  /* 처음 한 번만 뜨는 안내 */
+  .hint-pop{position:relative;display:flex;gap:12px;align-items:flex-start;background:var(--ink);color:var(--paper);padding:12px 14px;margin:0 0 18px;
+            font-size:13px;line-height:1.6;animation:popIn .45s cubic-bezier(.3,1.4,.5,1)}
+  .hint-pop[hidden]{display:none}
+  .hint-pop > span{font-size:14px;line-height:1.5}
+  .hint-pop p{flex:1}
+  .hint-pop b{font-weight:500}
+  .hint-pop button{background:none;border:1px solid rgba(228,227,223,.5);color:var(--paper);font-family:var(--mono);font-size:10.5px;padding:3px 8px;cursor:pointer;flex:none}
+  .hint-pop button:hover{background:var(--paper);color:var(--ink)}
+  #hintStart{margin:-22px 0 40px}
+  .hint-pop.arrow::before{content:"";position:absolute;top:-7px;left:26px;border:7px solid transparent;border-top:none;border-bottom-color:var(--ink)}
+  @keyframes popIn{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+  @media (max-width:700px){
+    .howto{grid-template-columns:1fr}
+    .howto li + li{border-left:none;border-top:1px solid var(--hair)}
+    .howto li + li::before{content:"↓";left:24px;top:-8px;transform:none}
+  }
+
   /* ───────── 탭 (포스터 톤) ───────── */
   .tabbar{position:sticky;top:0;z-index:20;background:var(--paper);display:grid;grid-template-columns:repeat(5,1fr);
           border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);margin-bottom:38px}
@@ -330,6 +362,11 @@
     <p>내 캐릭터의 기록을 공식 연표 사이에 끼워 넣고, 최애와 함께한 연대기를 이미지로 저장해요.</p>
   </div>
 
+  <ol class="howto" id="howto">
+    <li data-step="0"><i>01</i><b>최애 고르기</b><span>최애를 고르면 그 캐릭터의 연표가 나와요</span><em class="mono"></em></li>
+    <li data-step="2"><i>02</i><b>내 기록 넣기</b><span>연표에서 ＋ 자리를 눌러 내 캐릭터 기록을 끼워요</span><em class="mono"></em></li>
+    <li data-step="save"><i>03</i><b>이미지 저장</b><span>오른쪽 미리보기를 확인하고 저장하면 끝</span><em class="mono"></em></li>
+  </ol>
   <div class="notice"><b class="mono">Notice</b><span>입력한 내용은 <b>이 브라우저에만</b> 저장되고 어디에도 전송되지 않아요. 브라우저 기록을 지우거나 기기를 바꾸면 사라지니, <b>백업</b> 탭에서 백업 코드를 복사해 두세요.</span></div>
 
   <div class="cols">
@@ -366,6 +403,7 @@
           </div>
           <small class="type-hint" id="typeHint">내 캐릭터의 각성·합류·이탈 같은 기록이에요. 굵은 글씨와 ✦로 표시돼요.</small>
         </div>
+        <div class="hint-pop" id="hintSlots" hidden><span>✦</span><p><b>연도는 고를 필요 없어요.</b> 아래 연표에서 <b>＋ 여기에 넣기</b>를 누르면 연도와 순서가 한 번에 정해져요.</p><button aria-label="닫기">닫기</button></div>
         <div class="f slot-wrap">
           <span class="slot-label">언제 <em>— 연표에서 <b>＋ 자리</b>를 눌러 고르세요</em></span>
           <input type="hidden" id="eYear" value="2028"><input type="hidden" id="eAfter" value="-1">
@@ -643,6 +681,7 @@ function toggleFav(c){
   else {
     if (S.favs.length >= MAX_FAV) { toast(`최대 ${MAX_FAV}명까지 고를 수 있어요`); return; }
     S.favs.push(c);
+    const st = document.getElementById("hintStart"); if (st && !st.hidden) { st.hidden = true; markSeen("start"); }
   }
   save(); renderFav(); draw();
 }
@@ -903,6 +942,7 @@ function draw(){
   $("#pvSize").textContent = `1080 × ${H}`;
   updatePreviewImg();
   if (typeof updateTabSubs === "function") updateTabSubs();
+  if (typeof updateHowto === "function") updateHowto();
   const mineN = rows.filter(r => r.kind === "mine" || r.kind === "evt").length, favN = rows.filter(r => r.kind === "fav").length;
   $("#pvInfo").textContent = `내 기록 ${mineN} · 최애 기록 ${favN}`;
   $("#saveImg").style.display = "none";
@@ -933,6 +973,7 @@ $("#saveBtn").onclick = () => {
   const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   cv.toBlob(blob => {
     if (!blob) { toast("이미지를 만들지 못했어요"); return; }
+    markSeen("saved"); updateHowto();
     const url = URL.createObjectURL(blob);
     if (isIOS) {
       const box = $("#saveImg"); box.querySelector("img").src = url; box.style.display = "block";
@@ -968,7 +1009,7 @@ function showTab(i, scroll){
   secs.forEach((s, n) => s.classList.toggle("on", n === i));
   document.querySelectorAll(".tab").forEach((t, n) => { t.classList.toggle("on", n === i); t.setAttribute("aria-selected", n === i); });
   try { localStorage.setItem(KEY + "-tab", i); } catch (e) {}
-  if (i === 2) renderSlots("instant");
+  if (i === 2) { renderSlots("instant"); if (!seenHints.slots) $("#hintSlots").hidden = false; }
   if (scroll) { const top = $("#tabsCol").getBoundingClientRect().top + scrollY - 10; if (scrollY > top) scrollTo({ top, behavior: "smooth" }); }
 }
 document.querySelectorAll(".tab").forEach(t => t.onclick = () => showTab(+t.dataset.t));
@@ -982,10 +1023,45 @@ function updateTabSubs(){
   set(4, "");
 }
 
+// ───────── 사용법 단계 + 처음 안내 ─────────
+const HKEY = KEY + "-hints";
+let seenHints = {};
+try { seenHints = JSON.parse(localStorage.getItem(HKEY) || "{}"); } catch (e) {}
+const markSeen = k => { seenHints[k] = 1; try { localStorage.setItem(HKEY, JSON.stringify(seenHints)); } catch (e) {} };
+function popHint(id, key, where){
+  if (seenHints[key]) return;
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement("div"); el.id = id; el.className = "hint-pop arrow";
+    el.innerHTML = `<span>✦</span><p><b>처음이신가요?</b> 먼저 <b>최애</b>를 골라 보세요. 고른 캐릭터의 연표를 보면서 내 기록을 넣을 수 있어요.</p><button aria-label="닫기">닫기</button>`;
+    where.after(el);
+  }
+  el.hidden = false;
+  el.querySelector("button").onclick = () => { el.hidden = true; markSeen(key); };
+}
+function updateHowto(){
+  const done = [S.favs.length > 0, S.entries.length > 0, !!seenHints.saved];
+  const sub = [`${S.favs.length} / 6`, `${S.entries.length}건`, done[2] ? "저장함" : ""];
+  document.querySelectorAll("#howto li").forEach((li, n) => {
+    li.classList.toggle("done", done[n]);
+    li.querySelector("em").textContent = done[n] ? "✓ " + sub[n] : sub[n] && n < 2 ? sub[n] : "";
+  });
+}
+document.querySelectorAll("#howto li").forEach(li => li.onclick = () => {
+  if (li.dataset.step === "save") {
+    const pv = document.querySelector(".preview");
+    scrollTo({ top: pv.getBoundingClientRect().top + scrollY - 20, behavior: "smooth" });
+    $("#saveBtn").animate([{ transform: "scale(1)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 500, delay: 400 });
+  } else { showTab(+li.dataset.step, true); const top = $("#tabsCol").getBoundingClientRect().top + scrollY - 10; scrollTo({ top, behavior: "smooth" }); }
+});
+$("#hintSlots").querySelector("button").onclick = () => { $("#hintSlots").hidden = true; markSeen("slots"); };
+
 function boot(){
   $("#pName").value = S.name; $("#pEn").value = S.en;
   seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
   resetForm(); renderFav(); draw(); showTab(curTab); renderSlots("instant");
+  if (!S.favs.length && !S.entries.length) popHint("hintStart", "start", $("#tabbar"));
+  updateHowto();
 }
 let redraw; addEventListener("resize", () => { clearTimeout(redraw); redraw = setTimeout(draw, 200); });
 boot();
