@@ -634,7 +634,7 @@ function render(){
     if (activeTag && e.tag !== activeTag) return false;
     if (activeTeam && !inTeam(e, activeTeam)) return false;
     if (!terms.length) return true;
-    const text = (e.title + " " + (e.spoiler ? "" : strip(e.desc || "")) + " " + (e.date || "")).toLowerCase();
+    const text = (e.title + " " + (e.spoiler ? "" : strip(e.desc || "")) + " " + (e.date || "") + " " + e.year + "년").toLowerCase();
     return terms.some(t => text.includes(t));
   });
   if (newestFirst) list = [...list].reverse();
@@ -755,7 +755,20 @@ $("#roster").querySelectorAll("button").forEach(b => b.onclick = () => {
   $("#list").scrollIntoView({ behavior: "smooth" });
 });
 
-$("#q").oninput = render;
+// 검색: 결과를 그린 뒤, 결과가 화면 위쪽(안 보이는 곳)에 있으면 결과 첫 부분으로 이동
+let qTimer = null;
+$("#q").oninput = () => {
+  render();
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => {
+    const first = document.querySelector("#list > *");
+    if (!first) return;
+    const ctrl = $(".controls").offsetHeight;
+    const top = first.getBoundingClientRect().top + scrollY - ctrl - 10;
+    const r = first.getBoundingClientRect();
+    if (r.top < ctrl || r.top > innerHeight * .8) scrollTo({ top, behavior: "smooth" });
+  }, 250);
+};
 // 목록 바꾸기 — 사라졌다가 새 내용으로 차례차례 등장 (순서·필터 공용)
 let swapTimer = null, endTimer = null;
 function swapRender(){
