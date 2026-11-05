@@ -460,10 +460,16 @@ const riftOf = y => +y - 2028 ? `균열 ${+y - 2028}년차` : "균열 원년";
 const PICK_YEARS = YEARS_ALL.filter(y => +y <= 2037 || officialOf(y).length);
 $("#yJump").innerHTML = PICK_YEARS.map(y => `<button data-y="${y}">${y}</button>`).join("");
 $("#yJump").querySelectorAll("button").forEach(b => b.onclick = () => scrollPickTo(b.dataset.y));
+// 연도 제목은 위에 붙어 다니는(sticky) 요소라 위치값이 부정확해서, 그해 첫 자리(일반 요소)를 기준으로 계산해요
 function scrollPickTo(y, toSlot, instant){
   const box = $("#slots");
-  const el = toSlot ? box.querySelector(".slot.on") : box.querySelector(`[data-yh="${y}"]`);
-  if (el) box.scrollTo({ top: el.offsetTop - box.offsetTop - (toSlot ? 90 : 4), behavior: instant ? "auto" : "smooth" });
+  const el = toSlot ? box.querySelector(".slot.on") : box.querySelector(`.slot[data-y="${y}"]`);
+  if (!el) return;
+  const head = box.querySelector(`[data-yh="${y}"]`);
+  const headH = head ? head.offsetHeight : 0;
+  const top = el.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+  const target = toSlot ? top - 120 : top - headH - 14;
+  box.scrollTo({ top: Math.max(0, target), behavior: instant ? "auto" : "smooth" });
 }
 const WHEN = ["초", "봄", "여름", "가을", "겨울", "상반기", "하반기", "말"];
 $("#whenChips").innerHTML = WHEN.map(w => `<button type="button">${w}</button>`).join("");
