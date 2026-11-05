@@ -636,7 +636,7 @@ const TODO = [
   /* ───────── SCROLL SPY (왼쪽 떠 있는 연도) ───────── */
   .spy{display:none}
   @media (min-width:1240px){
-    .spy{display:block;position:fixed;left:calc((100vw - 1040px) / 4 - 46px);top:50%;transform:translateY(-50%);
+    .spy{display:block;position:fixed;left:clamp(32px, 3vw, 56px);top:50%;transform:translateY(-50%);
          width:170px;height:400px;z-index:15}
   }
   .spy-win{position:absolute;inset:0;overflow:hidden;
