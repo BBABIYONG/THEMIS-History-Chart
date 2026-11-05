@@ -63,7 +63,8 @@
   /* 내 기록 목록 */
   .mine-list{list-style:none;margin-top:6px}
   .mine-list li{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px dashed var(--hair)}
-  .mine-list .y{font-family:var(--disp);font-size:20px;font-weight:500}
+  .mine-list .y{font-family:var(--disp);font-size:20px;font-weight:500;line-height:1.1}
+  .mine-list .ty{display:block;font-family:var(--mono);font-size:9.5px;color:var(--sub);font-weight:400;margin-top:3px}
   .mine-list .t{font-weight:500}
   .mine-list .d{display:block;font-size:12.5px;color:var(--sub)}
   .mine-list .w{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.04em}
@@ -139,6 +140,20 @@
   .slots .slot.on::before{content:"";position:absolute;left:-23px;top:50%;width:13px;height:13px;margin-top:-6.5px;background:var(--ink);
     -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat}
   .slots .ex-mine{color:var(--ink);font-weight:500;padding:4px 10px;font-size:12.5px}
+  .type-seg{margin-top:2px}
+  .type-hint{display:block;font-size:12px;color:var(--sub);margin:6px 0 18px}
+  /* 주요 사건 체크 */
+  .keychk{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:2px 0 16px;user-select:none}
+  .keychk input{position:absolute;opacity:0;pointer-events:none}
+  .keychk .box{flex:none;width:18px;height:18px;border:1.5px solid var(--ink);margin-top:2px;position:relative;transition:.15s}
+  .keychk input:checked + .box{background:var(--ink)}
+  .keychk input:checked + .box::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--paper);border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .keychk input:focus-visible + .box{outline:2px solid var(--ink);outline-offset:2px}
+  .keychk .txt{font-size:14px;line-height:1.4}
+  .keychk .txt small{display:block;font-size:12px;color:var(--sub)}
+  .keychk .demo{font-style:normal;background:var(--ink);color:var(--paper);font-weight:700;font-size:12px;padding:1px 6px;margin-left:6px}
+  .mine-list .kb{font-family:var(--mono);font-size:9.5px;background:var(--ink);color:var(--paper);padding:1px 5px;margin-left:6px;vertical-align:2px}
+  .slots .ex-mine.key{background:var(--ink);color:var(--paper);display:inline-block;margin:2px 0}
   .backup textarea{font-family:var(--mono);font-size:11px;min-height:70px;border:1px solid var(--hair);padding:8px;margin-top:8px}
 
   @media (max-width:880px){
@@ -183,12 +198,21 @@
       <section class="sec">
         <div class="sec-h"><h2><i>02</i>Records</h2><span class="mono">내 기록</span></div>
         <p class="hint">연도와 내용을 적고, 아래 작은 연표에서 <b>들어갈 자리</b>를 눌러 주세요. 안 고르면 그해 맨 끝에 들어가요.</p>
+        <div class="f">
+          <span class="slot-label">기록 종류</span>
+          <div class="seg type-seg" id="typeSeg">
+            <button data-v="char" class="on">✦ 내 캐릭터</button><button data-v="event">◇ 사건 · 기타</button>
+          </div>
+          <small class="type-hint" id="typeHint">내 캐릭터의 각성·합류·이탈 같은 기록이에요. 굵은 글씨와 ✦로 표시돼요.</small>
+        </div>
         <div class="row2">
           <label class="f"><span>연도</span><select id="eYear"></select></label>
           <label class="f"><span>시기 (선택)</span><input type="text" id="eWhen" maxlength="12" placeholder="예: 봄, 하반기"></label>
         </div>
         <label class="f"><span>내용 *</span><input type="text" id="eTitle" maxlength="40" placeholder="예: 스텔라 각성 · MUSE 배속"></label>
         <label class="f"><span>설명 (선택)</span><input type="text" id="eDesc" maxlength="60" placeholder="예: 올림포스 아스테리아 각인"></label>
+        <label class="keychk"><input type="checkbox" id="eKey"><span class="box"></span>
+          <span class="txt">주요 사건으로 강조 <em class="demo">검은 띠</em><small>공식 연표의 주요 사건처럼 검은 띠로 표시돼요</small></span></label>
         <div class="f slot-wrap">
           <span class="slot-label">위치 <em>— 그해 연표에서 <b>＋ 자리</b>를 눌러 고르세요</em></span>
           <input type="hidden" id="eAfter" value="-1">
@@ -258,6 +282,7 @@ try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const uid = () => Math.random().toString(36).slice(2, 9);
 let editing = null;
+let curType = "char";
 
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
@@ -284,9 +309,9 @@ function renderSlots(){
   const others = S.entries.filter(e => e.year === y && e.id !== editing);
   const slot = i => {
     const mine = others.filter(e => (list.length ? Math.min(Math.max(e.after, -1), list.length - 1) : -1) === i);
-    const extra = mine.map(e => `<li class="ex-mine">✦ ${safe(e.title)}</li>`).join("");
+    const extra = mine.map(e => `<li class="ex-mine${e.key ? " key" : ""}">${e.type === "event" ? "◇" : "✦"} ${safe(e.title)}</li>`).join("");
     return extra + (i === cur
-      ? `<li class="slot on" data-i="${i}"><span>✦ ${safe(t)}</span><small>여기에 들어가요</small></li>`
+      ? `<li class="slot on" data-i="${i}"><span>${curType === "event" ? "◇" : "✦"} ${safe(t)}</span><small>여기에 들어가요</small></li>`
       : `<li class="slot" data-i="${i}"><span>＋ 여기에 넣기</span></li>`);
   };
   let html = slot(-1);
@@ -302,9 +327,20 @@ $("#eYear").onchange = () => fillAfter(false);
 $("#eTitle").addEventListener("input", renderSlots);
 fillAfter();
 
+function setType(t){
+  curType = t;
+  document.querySelectorAll("#typeSeg button").forEach(b => b.classList.toggle("on", b.dataset.v === t));
+  $("#typeHint").textContent = t === "char"
+    ? "내 캐릭터의 각성·합류·이탈 같은 기록이에요. 굵은 글씨와 ✦로 표시돼요."
+    : "세계관 사건, 내 설정 속 사건, 다른 인물 이야기 등. 공식 기록처럼 섞이고 ◇로만 살짝 구분돼요.";
+  $("#eTitle").placeholder = t === "char" ? "예: 스텔라 각성 · MUSE 배속" : "예: 서울 남부 균열 확장 사건";
+  if (typeof renderSlots === "function") renderSlots();
+}
+document.querySelectorAll("#typeSeg button").forEach(b => b.onclick = () => setType(b.dataset.v));
+
 function resetForm(){
   editing = null;
-  $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = "";
+  $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = ""; $("#eKey").checked = false; setType("char");
   $("#eAdd").textContent = "+ 기록 추가"; $("#eCancel").style.display = "none";
   renderMine(); if (typeof renderSlots === "function") renderSlots();
 }
@@ -312,7 +348,7 @@ $("#eAdd").onclick = () => {
   const title = $("#eTitle").value.trim();
   if (!title) { toast("내용을 입력해 주세요"); $("#eTitle").focus(); return; }
   const rec = { id: editing || uid(), year: $("#eYear").value, after: +$("#eAfter").value,
-                when: $("#eWhen").value.trim(), title, desc: $("#eDesc").value.trim() };
+                when: $("#eWhen").value.trim(), title, desc: $("#eDesc").value.trim(), key: $("#eKey").checked, type: curType };
   const wasEdit = !!editing;
   if (wasEdit) S.entries = S.entries.map(e => e.id === editing ? rec : e);
   else S.entries.push(rec);
@@ -329,8 +365,8 @@ function renderMine(){
     const off = officialOf(e.year);
     const where = e.after < 0 || !off.length ? "맨 앞" : `「${strip(off[Math.min(e.after, off.length - 1)].title).slice(0, 18)}」 다음`;
     return `<li class="${editing === e.id ? "editing" : ""}">
-      <span class="y">${e.year}</span>
-      <span><span class="t">${safe(e.title)}</span>${e.when ? ` <span class="mono" style="color:var(--sub)">${safe(e.when)}</span>` : ""}
+      <span class="y">${e.year}<span class="ty">${e.type === "event" ? "◇ 사건" : "✦ 캐릭터"}</span></span>
+      <span><span class="t">${safe(e.title)}</span>${e.key ? `<span class="kb">KEY</span>` : ""}${e.when ? ` <span class="mono" style="color:var(--sub)">${safe(e.when)}</span>` : ""}
         ${e.desc ? `<span class="d">${safe(e.desc)}</span>` : ""}<span class="w">위치 · ${safe(where)}</span></span>
       <span class="ops"><button data-ed="${e.id}" title="수정">수정</button><button data-del="${e.id}" title="삭제">✕</button></span>
     </li>`;
@@ -342,7 +378,7 @@ function renderMine(){
     const e = S.entries.find(x => x.id === b.dataset.ed); if (!e) return;
     editing = e.id;
     $("#eYear").value = e.year; $("#eAfter").value = String(e.after); fillAfter(true);
-    $("#eWhen").value = e.when || ""; $("#eTitle").value = e.title; $("#eDesc").value = e.desc || "";
+    $("#eWhen").value = e.when || ""; $("#eTitle").value = e.title; $("#eDesc").value = e.desc || ""; $("#eKey").checked = !!e.key; setType(e.type || "char");
     $("#eAdd").textContent = "수정 완료"; $("#eCancel").style.display = "";
     renderMine(); $("#eTitle").focus();
   });
@@ -419,7 +455,7 @@ function buildRows(){
     const slots = off.map(e => [e]);
     const head = [];
     mine.forEach(m => {
-      const item = { year: y, title: m.title, desc: m.desc, date: m.when, mine: true };
+      const item = { year: y, title: m.title, desc: m.desc, date: m.when, mine: true, key: !!m.key, etype: m.type || "char" };
       if (m.after < 0 || !slots.length) head.push(item);
       else slots[Math.min(m.after, slots.length - 1)].push(item);
     });
@@ -428,7 +464,7 @@ function buildRows(){
   const keep = new Map();
   const favRes = S.favs.map(nameRe);
   merged.forEach((e, i) => {
-    if (e.mine) keep.set(i, "mine");
+    if (e.mine) keep.set(i, e.etype === "event" ? "evt" : "mine");
     else if (favRes.some(r => r.test(textOf(e)))) keep.set(i, "fav");
   });
   merged.forEach((e, i) => {
@@ -503,7 +539,7 @@ function layout(ctx, rows){
     if (r.type === "gap") { L.push({ t: "gap", y: y + 14 }); y += 26; return; }
     const e = r.e, k = r.kind, isKey = e.key && k !== "ctx";
     const size = k === "ctx" ? 16 : 17.5;
-    ctx.font = font(k === "mine" && S.mark ? 700 : (isKey ? 700 : 400), size, KR);
+    ctx.font = font(k === "mine" && S.mark ? 700 : (isKey ? 700 : (k === "evt" ? 500 : 400)), size, KR);
     const title = strip(e.title) + (e.mine && e.date ? ` · ${e.date}` : "");
     const tl = wrap(ctx, title, TW - (isKey ? 20 : 0));
     let d = [];
@@ -548,6 +584,7 @@ function draw(){
   let lx = W - PAD; ctx.textAlign = "left";
   const legend = [];
   legend.push(["mine", nm]);
+  if (S.mark && S.entries.some(e => e.type === "event")) legend.push(["evt", "추가 사건"]);
   if (S.favs.length) legend.push(["fav", S.favs.length > 3 ? `${S.favs.slice(0, 3).join(" · ")} 외 ${S.favs.length - 3}` : S.favs.join(" · ")]);
   if (S.ctx) legend.push(["ctx", "주변 사건"]);
   ctx.font = font(400, 13, KR);
@@ -557,6 +594,7 @@ function draw(){
     const cy = 268;
     ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink;
     if (i.k === "mine") star(ctx, x0 + 6, cy, 7);
+    else if (i.k === "evt") { ctx.save(); ctx.translate(x0 + 6, cy); ctx.rotate(Math.PI / 4); ctx.lineWidth = 1.5; ctx.strokeRect(-4, -4, 8, 8); ctx.restore(); }
     else if (i.k === "fav") { ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x0 + 6, cy, 5, 0, Math.PI * 2); ctx.stroke(); }
     else { ctx.fillStyle = C.faint; ctx.beginPath(); ctx.arc(x0 + 6, cy, 3, 0, Math.PI * 2); ctx.fill(); }
     ctx.fillStyle = C.sub; ctx.fillText(i.t, x0 + 18, cy + 5);
@@ -588,6 +626,11 @@ function draw(){
       const cy = baseY - size * .35;
       ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink;
       if (k === "mine" && S.mark) { ctx.fillStyle = C.paper; ctx.fillRect(LINE_X - 9, cy - 9, 19, 18); ctx.fillStyle = C.ink; star(ctx, LINE_X + .5, cy, 8.5); }
+      else if (k === "evt" && S.mark) {
+        ctx.save(); ctx.translate(LINE_X + .5, cy); ctx.rotate(Math.PI / 4);
+        ctx.fillStyle = C.paper; ctx.fillRect(-5, -5, 10, 10); ctx.lineWidth = 1.6; ctx.strokeStyle = C.ink; ctx.strokeRect(-5, -5, 10, 10);
+        ctx.restore();
+      }
       else if (k === "fav") { ctx.fillStyle = C.paper; ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 6, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 1.6; ctx.stroke(); }
       else if (k === "ctx") { ctx.fillStyle = C.sub; ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 2.8, 0, Math.PI * 2); ctx.fill(); }
       else { ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 4.5, 0, Math.PI * 2); ctx.fill(); }
@@ -622,7 +665,7 @@ function draw(){
 
   $("#pvSize").textContent = `1080 × ${H}`;
   updatePreviewImg();
-  const mineN = rows.filter(r => r.kind === "mine").length, favN = rows.filter(r => r.kind === "fav").length;
+  const mineN = rows.filter(r => r.kind === "mine" || r.kind === "evt").length, favN = rows.filter(r => r.kind === "fav").length;
   $("#pvInfo").textContent = `내 기록 ${mineN} · 최애 기록 ${favN}`;
   $("#saveImg").style.display = "none";
 }
