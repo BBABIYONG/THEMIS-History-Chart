@@ -81,9 +81,38 @@
   .picked button{background:var(--ink);color:var(--paper);border:none;font:inherit;font-size:13px;padding:3px 10px;cursor:pointer}
   .picked button::after{content:" ×";opacity:.6}
   .picked .none{font-size:13px;color:var(--faint)}
-  .grp{margin-bottom:10px}
-  .grp h5{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--sub);font-weight:500;margin-bottom:4px}
-  .grp div{display:flex;flex-wrap:wrap;gap:4px}
+  .grp{border-top:1px solid var(--hair)}
+  .grp:last-child{border-bottom:1px solid var(--hair)}
+  .grp summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:9px 2px;line-height:1.4;user-select:none}
+  .grp summary::-webkit-details-marker{display:none}
+  .grp summary .g{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;font-weight:500}
+  .grp summary .cnt{color:var(--faint);font-size:10px}
+  .grp summary .sel{color:var(--ink);font-size:10.5px;text-transform:none;letter-spacing:0;margin-left:auto;text-align:right}
+  .grp summary .arr,.fav-tl summary .arr{width:9px;height:9px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);
+    transform:rotate(45deg);transition:transform .3s;flex:none;margin:0 4px 4px 6px}
+  .grp[open] summary .arr,.fav-tl[open] summary .arr{transform:rotate(225deg);margin-bottom:-2px}
+  .grp summary:hover .g{text-decoration:underline;text-underline-offset:3px}
+  .grp-in{display:flex;flex-wrap:wrap;gap:7px;padding:2px 0 18px}
+  .grp[open] .grp-in{animation:grpIn .35s ease}
+  @keyframes grpIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .grp-tools{display:flex;justify-content:space-between;color:var(--sub);margin:26px 0 8px}
+  .grp-tools button{background:none;border:none;font:inherit;color:var(--ink);cursor:pointer;letter-spacing:inherit;text-transform:inherit}
+  .grp-tools button:hover{text-decoration:line-through}
+  /* 고른 캐릭터의 연표 */
+  .fav-tl{border:1px solid var(--ink);margin:0 0 6px}
+  .fav-tl summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;padding:12px 16px;user-select:none}
+  .fav-tl summary::-webkit-details-marker{display:none}
+  .fav-tl summary .mono{color:var(--sub)}
+  .fav-tl summary b{font-weight:500;font-size:15px}
+  .fav-tl summary .arr{margin-left:auto;align-self:center}
+  .fav-tl-list{list-style:none;padding:4px 16px 14px;max-height:320px;overflow-y:auto;border-top:1px solid var(--hair)}
+  .fav-tl-list li{display:grid;grid-template-columns:52px 74px 1fr;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px dashed var(--hair);font-size:13.5px}
+  .fav-tl-list li:last-child{border-bottom:none}
+  .fav-tl-list .y{font-family:var(--disp);font-weight:500;font-size:16px}
+  .fav-tl-list .y.ghost{color:transparent}
+  .fav-tl-list .who{font-size:10px;color:var(--sub);text-transform:none;letter-spacing:0}
+  .fav-tl-list li.key .t{background:var(--ink);color:var(--paper);padding:0 6px;font-weight:500;justify-self:start}
+  .fav-tl-list .none{display:block;color:var(--faint);border:none}
   .pick{background:none;border:1px solid var(--hair);color:var(--ink);font:inherit;font-size:13px;padding:2px 9px;cursor:pointer;transition:.12s}
   .pick:hover{border-color:var(--ink)}
   .pick.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -199,7 +228,7 @@
   .mine-list li{padding:16px 0;gap:16px}
   .picked{margin-bottom:22px;gap:8px}
   .picked button{padding:5px 12px}
-  .grp{margin-bottom:20px}
+  .grp{margin-bottom:0}
   .grp h5{margin-bottom:8px}
   .grp div{gap:7px}
   .pick{padding:5px 12px}
@@ -231,7 +260,19 @@
     <!-- ───────── 왼쪽: 입력 ───────── -->
     <div>
       <section class="sec">
-        <div class="sec-h"><h2><i>01</i>My Character</h2><span class="mono">내 캐릭터</span></div>
+        <div class="sec-h"><h2><i>01</i>Favorites</h2><span class="fav-count">최애 <b id="favN">0</b> / 6</span></div>
+        <p class="hint">함께 보여줄 캐릭터를 골라 주세요. 최대 6명까지 고를 수 있어요. 옆의 숫자는 연표에 나오는 기록 수예요.</p>
+        <div class="picked" id="picked"></div>
+        <details class="fav-tl" id="favTlBox" open>
+          <summary><span class="mono">Selected Chronicle</span><b>고른 캐릭터의 연표</b><span class="arr"></span></summary>
+          <ol class="fav-tl-list" id="favTl"></ol>
+        </details>
+        <div class="grp-tools mono"><span>팀별 목록</span><span><button id="grpOpen">모두 펼치기</button> / <button id="grpClose">모두 접기</button></span></div>
+        <div id="pickGroups"></div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2><i>02</i>My Character</h2><span class="mono">내 캐릭터</span></div>
         <div class="row2">
           <label class="f"><span>코드네임 *</span><input type="text" id="pName" maxlength="16" placeholder="예: 스텔라"></label>
           <label class="f"><span>영문 표기 (선택)</span><input type="text" id="pEn" maxlength="24" placeholder="예: STELLA"></label>
@@ -239,7 +280,7 @@
       </section>
 
       <section class="sec">
-        <div class="sec-h"><h2><i>02</i>Records</h2><span class="mono">내 기록</span></div>
+        <div class="sec-h"><h2><i>03</i>Records</h2><span class="mono">내 기록</span></div>
         <p class="hint">연도와 내용을 적고, 아래 작은 연표에서 <b>들어갈 자리</b>를 눌러 주세요. 안 고르면 그해 맨 끝에 들어가요.</p>
         <div class="f">
           <span class="slot-label">기록 종류</span>
@@ -268,12 +309,7 @@
         <ul class="mine-list" id="mineList"></ul>
       </section>
 
-      <section class="sec">
-        <div class="sec-h"><h2><i>03</i>Favorites</h2><span class="fav-count">최애 <b id="favN">0</b> / 6</span></div>
-        <p class="hint">함께 보여줄 캐릭터를 골라 주세요. 최대 6명까지 고를 수 있어요. 옆의 숫자는 연표에 나오는 기록 수예요.</p>
-        <div class="picked" id="picked"></div>
-        <div id="pickGroups"></div>
-      </section>
+
 
       <section class="sec">
         <div class="sec-h"><h2><i>04</i>Options</h2><span class="mono">이미지 설정</span></div>
@@ -434,8 +470,12 @@ const seen = new Set();
 $("#pickGroups").innerHTML = Object.entries(CHARS).map(([g, arr]) => {
   const btns = arr.filter(([c]) => !seen.has(c) && seen.add(c)).map(([c]) =>
     `<button class="pick" data-c="${c}">${c}<span class="n">${countFor(c)}</span></button>`).join("");
-  return btns ? `<div class="grp"><h5>${g}</h5><div>${btns}</div></div>` : "";
+  const n = (btns.match(/class="pick"/g) || []).length;
+  const open = arr.some(([c]) => S.favs.includes(c));
+  return btns ? `<details class="grp"${open ? " open" : ""}><summary><span class="g">${g}</span><span class="cnt mono">${n}명</span><span class="sel mono"></span><span class="arr"></span></summary><div class="grp-in">${btns}</div></details>` : "";
 }).join("");
+$("#grpOpen").onclick = () => document.querySelectorAll("#pickGroups details").forEach(d => d.open = true);
+$("#grpClose").onclick = () => document.querySelectorAll("#pickGroups details").forEach(d => d.open = false);
 function renderFav(){
   $("#favN").textContent = S.favs.length;
   document.querySelectorAll(".pick").forEach(b => b.classList.toggle("on", S.favs.includes(b.dataset.c)));
@@ -443,6 +483,28 @@ function renderFav(){
     ? S.favs.map(c => `<button data-c="${c}" title="선택 해제">${c}</button>`).join("")
     : `<span class="none">선택한 캐릭터가 없어요.</span>`;
   $("#picked").querySelectorAll("button").forEach(b => b.onclick = () => toggleFav(b.dataset.c));
+  // 팀 제목 옆에 고른 사람 표시
+  document.querySelectorAll("#pickGroups details").forEach(d => {
+    const on = [...d.querySelectorAll(".pick.on")].map(b => b.dataset.c);
+    d.querySelector(".sel").textContent = on.length ? "● " + on.join(" · ") : "";
+  });
+  renderFavTl();
+}
+// 고른 캐릭터들의 연표 (연도순)
+function renderFavTl(){
+  const box = $("#favTlBox"), ol = $("#favTl");
+  if (!S.favs.length) { box.style.display = "none"; return; }
+  box.style.display = "";
+  const res = S.favs.map(n => [n, nameRe(n)]);
+  let lastY = null;
+  const rows = EVENTS.map(e => {
+    const who = res.filter(([, r]) => r.test(textOf(e))).map(([n]) => n);
+    if (!who.length) return "";
+    const yh = e.year !== lastY ? `<span class="y">${e.year}</span>` : `<span class="y ghost">${e.year}</span>`;
+    lastY = e.year;
+    return `<li class="${e.key ? "key" : ""}">${yh}<span class="who mono">${who.join(" · ")}</span><span class="t">${safe(strip(e.title))}</span></li>`;
+  }).filter(Boolean);
+  ol.innerHTML = rows.length ? rows.join("") : `<li class="none">연표에 이 캐릭터 이름이 들어간 기록이 아직 없어요.</li>`;
 }
 function toggleFav(c){
   if (S.favs.includes(c)) S.favs = S.favs.filter(x => x !== c);
