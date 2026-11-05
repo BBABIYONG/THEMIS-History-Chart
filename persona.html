@@ -155,7 +155,7 @@
   .slot-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase;margin-bottom:6px}
   .slot-label em{font-style:normal;text-transform:none;font-family:"Noto Sans KR",sans-serif;letter-spacing:0;font-size:12px}
   .slot-label b{color:var(--ink);font-weight:500}
-  .slots{list-style:none;border-left:1px solid var(--ink);margin-left:6px;padding:4px 0 4px 16px;max-height:340px;overflow-y:auto}
+  .slots{list-style:none;border-left:1px solid var(--ink);margin-left:6px;padding:4px 0 4px 16px;max-height:340px;overflow-y:auto;position:relative}
   .slots li{position:relative;font-size:13px;line-height:1.45}
   .slots .off{color:var(--sub);padding:5px 0}
   .slots .off::before{content:"";position:absolute;left:-20px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--ink)}
@@ -171,6 +171,38 @@
   .slots .ex-mine{color:var(--ink);font-weight:500;padding:4px 10px;font-size:12.5px}
   .type-seg{margin-top:2px}
   .type-hint{display:block;font-size:12px;color:var(--sub);margin:6px 0 18px}
+  /* 위치 고르기 보강 */
+  .pick-now{border:1px solid var(--ink);padding:12px 14px;margin-bottom:12px;display:grid;grid-template-columns:auto 1fr auto;
+            column-gap:14px;row-gap:2px;align-items:baseline}
+  .pick-now .mono{color:var(--sub);grid-row:1}
+  .pick-now b{font-family:var(--disp);font-size:22px;font-weight:500;grid-row:1}
+  .pick-now .go{grid-row:1;justify-self:end;background:none;border:none;color:var(--ink);cursor:pointer;font-size:10.5px}
+  .pick-now .go:hover{text-decoration:underline}
+  .pick-now .ctx,.pick-now .rel{grid-column:1/-1;font-size:12.5px;color:var(--sub)}
+  .pick-now .rel{color:var(--ink)}
+  .yjump{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+  .yjump button,.when-chips button{background:none;border:1px solid var(--hair);font-family:var(--disp);font-size:13px;padding:3px 9px;cursor:pointer;color:var(--ink)}
+  .yjump button:hover,.when-chips button:hover{border-color:var(--ink)}
+  .yjump button.on,.when-chips button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .when-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+  .when-chips button{font-family:"Noto Sans KR",sans-serif;font-size:12.5px}
+  .slots{max-height:460px!important}
+  .slots .yh{position:sticky;top:-8px;z-index:2;background:var(--paper);margin:14px 0 2px -17px;padding:8px 0 6px 17px;
+             border-top:1px solid var(--ink);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .slots .yh:first-child{margin-top:0}
+  .slots .yh b{font-family:var(--disp);font-size:20px;font-weight:500;letter-spacing:-.02em}
+  .slots .yh .mono{font-size:9.5px;color:var(--sub)}
+  .slots .yh small{font-size:11.5px;color:var(--ink);font-weight:500}
+  .slots .off .no{display:block;margin:0 0 1px;font-size:9.5px;letter-spacing:.04em;text-transform:none}
+  .slots .off .tt{display:block}
+  .slots .off .dd{display:block;font-size:11.5px;color:var(--faint);line-height:1.5}
+  .slots .off.key .tt{display:inline;background:var(--ink);color:var(--paper);padding:0 6px}
+  .slots .off.fav::before{background:var(--paper);border:1.5px solid var(--ink);width:8px;height:8px;left:-21px}
+  .slots .off.fav .no{color:var(--ink)}
+  .slots .off::before{top:22px!important}
+  .slots .off.none::before{display:none}
+  .slots .ex-mine em{font-style:normal;font-size:11px;color:var(--sub)}
+  .slot-legend{display:flex;gap:14px;color:var(--faint);margin-top:8px;font-size:10px;text-transform:none}
   /* 주요 사건 체크 */
   .keychk{display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin:2px 0 16px;user-select:none}
   .keychk input{position:absolute;opacity:0;pointer-events:none}
@@ -281,7 +313,7 @@
 
       <section class="sec">
         <div class="sec-h"><h2><i>03</i>Records</h2><span class="mono">내 기록</span></div>
-        <p class="hint">연도와 내용을 적고, 아래 작은 연표에서 <b>들어갈 자리</b>를 눌러 주세요. 안 고르면 그해 맨 끝에 들어가요.</p>
+        <p class="hint">① 종류를 고르고 ② 아래 연표에서 <b>언제인지 자리를 누른 뒤</b> ③ 내용을 적으면 돼요. 연도는 자리를 누르면 자동으로 정해져요.</p>
         <div class="f">
           <span class="slot-label">기록 종류</span>
           <div class="seg type-seg" id="typeSeg">
@@ -289,19 +321,23 @@
           </div>
           <small class="type-hint" id="typeHint">내 캐릭터의 각성·합류·이탈 같은 기록이에요. 굵은 글씨와 ✦로 표시돼요.</small>
         </div>
-        <div class="row2">
-          <label class="f"><span>연도</span><select id="eYear"></select></label>
-          <label class="f"><span>시기 (선택)</span><input type="text" id="eWhen" maxlength="12" placeholder="예: 봄, 하반기"></label>
+        <div class="f slot-wrap">
+          <span class="slot-label">언제 <em>— 연표에서 <b>＋ 자리</b>를 눌러 고르세요</em></span>
+          <input type="hidden" id="eYear" value="2028"><input type="hidden" id="eAfter" value="-1">
+          <div class="pick-now" id="pickNow"></div>
+          <div class="yjump" id="yJump"></div>
+          <ol class="slots" id="slots"></ol>
+          <p class="slot-legend mono"><span>● 공식 기록</span><span>○ 고른 최애 등장</span><span>✦◇ 내 기록</span></p>
+        </div>
+        <div class="f">
+          <span class="slot-label">시기 <em>(선택) — 눌러서 넣거나 직접 적으세요</em></span>
+          <div class="when-chips" id="whenChips"></div>
+          <input type="text" id="eWhen" maxlength="12" placeholder="예: 늦봄, 3월, 개문 직후">
         </div>
         <label class="f"><span>내용 *</span><input type="text" id="eTitle" maxlength="40" placeholder="예: 스텔라 각성 · MUSE 배속"></label>
         <label class="f"><span>설명 (선택)</span><input type="text" id="eDesc" maxlength="60" placeholder="예: 올림포스 아스테리아 각인"></label>
         <label class="keychk"><input type="checkbox" id="eKey"><span class="box"></span>
           <span class="txt">주요 사건으로 강조 <em class="demo">검은 띠</em><small>공식 연표의 주요 사건처럼 검은 띠로 표시돼요</small></span></label>
-        <div class="f slot-wrap">
-          <span class="slot-label">위치 <em>— 그해 연표에서 <b>＋ 자리</b>를 눌러 고르세요</em></span>
-          <input type="hidden" id="eAfter" value="-1">
-          <ol class="slots" id="slots"></ol>
-        </div>
         <div class="btns">
           <button class="btn solid" id="eAdd">+ 기록 추가</button>
           <button class="btn" id="eCancel" style="display:none">수정 취소</button>
@@ -375,35 +411,78 @@ $("#pEn").oninput = e => { S.en = e.target.value.trim(); save(); draw(); };
 
 /* ───────── 02 내 기록 ───────── */
 const officialOf = y => EVENTS.filter(e => e.year === y);
-$("#eYear").innerHTML = YEARS_ALL.map(y => `<option>${y}</option>`).join("");
-// 위치 고르기: 그해 공식 기록을 작은 연표로 보여주고, 사이사이 자리를 눌러 고름
+// 위치 고르기: 전체 연표를 보여주고, 사이사이 자리를 누르면 연도·위치가 함께 정해져요
+const eraOfY = y => ERAS.find(x => +y >= x.from && +y <= x.to);
+const riftOf = y => +y - 2028 ? `균열 ${+y - 2028}년차` : "균열 원년";
+const PICK_YEARS = YEARS_ALL.filter(y => +y <= 2037 || officialOf(y).length);
+$("#yJump").innerHTML = PICK_YEARS.map(y => `<button data-y="${y}">${y}</button>`).join("");
+$("#yJump").querySelectorAll("button").forEach(b => b.onclick = () => scrollPickTo(b.dataset.y));
+function scrollPickTo(y, toSlot, instant){
+  const box = $("#slots");
+  const el = toSlot ? box.querySelector(".slot.on") : box.querySelector(`[data-yh="${y}"]`);
+  if (el) box.scrollTo({ top: el.offsetTop - box.offsetTop - (toSlot ? 90 : 4), behavior: instant ? "auto" : "smooth" });
+}
+const WHEN = ["초", "봄", "여름", "가을", "겨울", "상반기", "하반기", "말"];
+$("#whenChips").innerHTML = WHEN.map(w => `<button type="button">${w}</button>`).join("");
+$("#whenChips").querySelectorAll("button").forEach(b => b.onclick = () => {
+  $("#eWhen").value = $("#eWhen").value.trim() === b.textContent ? "" : b.textContent; syncWhen(); renderSlots();
+});
+function syncWhen(){ $("#whenChips").querySelectorAll("button").forEach(b => b.classList.toggle("on", $("#eWhen").value.trim() === b.textContent)); }
+$("#eWhen").addEventListener("input", () => { syncWhen(); renderSlots(); });
+
 function fillAfter(keep){
   const y = $("#eYear").value, list = officialOf(y);
-  if (!keep) $("#eAfter").value = String(list.length - 1);   // 기본값: 그해 맨 끝
+  if (!keep) $("#eAfter").value = String(list.length - 1);
   renderSlots();
 }
-function renderSlots(){
-  const y = $("#eYear").value, list = officialOf(y), cur = +$("#eAfter").value;
-  const t = ($("#eTitle").value.trim() || "내 기록") ;
-  const others = S.entries.filter(e => e.year === y && e.id !== editing);
-  const slot = i => {
-    const mine = others.filter(e => (list.length ? Math.min(Math.max(e.after, -1), list.length - 1) : -1) === i);
-    const extra = mine.map(e => `<li class="ex-mine${e.key ? " key" : ""}">${e.type === "event" ? "◇" : "✦"} ${safe(e.title)}</li>`).join("");
-    return extra + (i === cur
-      ? `<li class="slot on" data-i="${i}"><span>${curType === "event" ? "◇" : "✦"} ${safe(t)}</span><small>여기에 들어가요</small></li>`
-      : `<li class="slot" data-i="${i}"><span>＋ 여기에 넣기</span></li>`);
-  };
-  let html = slot(-1);
-  list.forEach((e, i) => {
-    html += `<li class="off${e.key ? " key" : ""}"><span class="no">${String(i + 1).padStart(2, "0")}</span>${safe(strip(e.title))}</li>`;
-    html += slot(i);
+function renderSlots(scroll){
+  const Y = $("#eYear").value, cur = +$("#eAfter").value;
+  const t = $("#eTitle").value.trim() || (curType === "event" ? "새 사건" : "내 기록");
+  const sym = curType === "event" ? "◇" : "✦";
+  const favRes = S.favs.map(n => [n, nameRe(n)]);
+  const txt = e => e.title + " " + (e.spoiler ? "" : strip(e.desc));
+  let html = "";
+  PICK_YEARS.forEach(y => {
+    const list = officialOf(y), er = eraOfY(y);
+    html += `<li class="yh" data-yh="${y}"><b>${y}</b><span class="mono">${er ? er.no + " " + er.en + " · " : ""}${riftOf(y)}</span>${YEAR_NOTE[y] ? `<small>${YEAR_NOTE[y]}</small>` : ""}</li>`;
+    const others = S.entries.filter(e => e.year === y && e.id !== editing);
+    const slot = i => {
+      const mine = others.filter(e => (list.length ? Math.min(Math.max(e.after, -1), list.length - 1) : -1) === i);
+      const extra = mine.map(e => `<li class="ex-mine${e.key ? " key" : ""}">${e.type === "event" ? "◇" : "✦"} ${safe(e.title)}${e.when ? ` <em>${safe(e.when)}</em>` : ""}</li>`).join("");
+      const on = y === Y && i === cur;
+      const label = i < 0 ? (list.length ? `${y}년 첫 기록 앞` : `${y}년`) : `${y}년 · 위 기록 다음`;
+      return extra + (on
+        ? `<li class="slot on" data-y="${y}" data-i="${i}"><span>${sym} ${safe(t)}${$("#eWhen").value.trim() ? ` · ${safe($("#eWhen").value.trim())}` : ""}</span><small>여기에 들어가요 · ${label}</small></li>`
+        : `<li class="slot" data-y="${y}" data-i="${i}"><span>＋ 여기에 넣기</span></li>`);
+    };
+    html += slot(-1);
+    list.forEach((e, i) => {
+      const who = favRes.filter(([, r]) => r.test(txt(e))).map(([n]) => n);
+      const d = e.spoiler ? "" : strip(e.desc);
+      html += `<li class="off${e.key ? " key" : ""}${who.length ? " fav" : ""}">
+        <span class="no mono">${y.slice(2)}.${String(i + 1).padStart(2, "0")}${e.date ? ` · ${safe(e.date)}` : ""}${who.length ? ` · ○ ${who.join("·")}` : ""}</span>
+        <span class="tt">${safe(strip(e.title))}</span>${d ? `<span class="dd">${safe(d)}</span>` : ""}</li>`;
+      html += slot(i);
+    });
+    if (!list.length) html = html.replace(/<li class="slot( on)?" data-y="${y}" data-i="-1">/, m => `<li class="off none">공식 기록 없음</li>` + m);
   });
-  if (!list.length) html = `<li class="off none">이 해에는 공식 기록이 없어요. 그대로 추가하면 돼요.</li>` + slot(-1);
   $("#slots").innerHTML = html;
-  $("#slots").querySelectorAll(".slot").forEach(s => s.onclick = () => { $("#eAfter").value = s.dataset.i; renderSlots(); });
+  $("#slots").querySelectorAll(".slot").forEach(s => s.onclick = () => {
+    $("#eYear").value = s.dataset.y; $("#eAfter").value = s.dataset.i; renderSlots();
+  });
+  // 선택한 위치 요약
+  const list = officialOf(Y), er = eraOfY(Y);
+  const prev = cur >= 0 && list[cur] ? `「${strip(list[cur].title)}」 다음` : (list.length ? "그해 맨 앞" : "그해 유일한 기록");
+  const next = list[cur + 1] ? `「${strip(list[cur + 1].title)}」 앞` : "";
+  $("#pickNow").innerHTML = `<span class="mono">선택한 자리</span><b>${Y}년${$("#eWhen").value.trim() ? " " + safe($("#eWhen").value.trim()) : ""}</b>
+    <span class="ctx">${er ? er.no + " " + er.en + " · " : ""}${riftOf(Y)}${YEAR_NOTE[Y] ? " · " + YEAR_NOTE[Y] : ""}</span>
+    <span class="rel">${safe(prev)}${next ? " · " + safe(next) : ""}</span>
+    <button type="button" class="go mono" id="pickGo">자리로 이동 ↓</button>`;
+  $("#pickGo").onclick = () => scrollPickTo(Y, true);
+  $("#yJump").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.y === Y));
+  if (scroll) requestAnimationFrame(() => scrollPickTo(Y, true, scroll === "instant"));
 }
-$("#eYear").onchange = () => fillAfter(false);
-$("#eTitle").addEventListener("input", renderSlots);
+$("#eTitle").addEventListener("input", () => renderSlots());
 fillAfter();
 
 function setType(t){
@@ -419,7 +498,7 @@ document.querySelectorAll("#typeSeg button").forEach(b => b.onclick = () => setT
 
 function resetForm(){
   editing = null;
-  $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = ""; $("#eKey").checked = false; setType("char");
+  $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = ""; $("#eKey").checked = false; setType("char"); if (typeof syncWhen === "function") syncWhen();
   $("#eAdd").textContent = "+ 기록 추가"; $("#eCancel").style.display = "none";
   renderMine(); if (typeof renderSlots === "function") renderSlots();
 }
@@ -456,7 +535,7 @@ function renderMine(){
   ul.querySelectorAll("[data-ed]").forEach(b => b.onclick = () => {
     const e = S.entries.find(x => x.id === b.dataset.ed); if (!e) return;
     editing = e.id;
-    $("#eYear").value = e.year; $("#eAfter").value = String(e.after); fillAfter(true);
+    $("#eYear").value = e.year; $("#eAfter").value = String(e.after); fillAfter(true); syncWhen(); renderSlots(true);
     $("#eWhen").value = e.when || ""; $("#eTitle").value = e.title; $("#eDesc").value = e.desc || ""; $("#eKey").checked = !!e.key; setType(e.type || "char");
     $("#eAdd").textContent = "수정 완료"; $("#eCancel").style.display = "";
     renderMine(); $("#eTitle").focus();
@@ -817,7 +896,7 @@ $("#saveBtn").onclick = () => {
 function boot(){
   $("#pName").value = S.name; $("#pEn").value = S.en;
   seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
-  resetForm(); renderFav(); draw();
+  resetForm(); renderFav(); draw(); renderSlots("instant");
 }
 let redraw; addEventListener("resize", () => { clearTimeout(redraw); redraw = setTimeout(draw, 200); });
 boot();
