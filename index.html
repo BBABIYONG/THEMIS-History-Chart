@@ -633,6 +633,46 @@ const TODO = [
   @keyframes swapIn{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
   @keyframes lineIn{from{transform:translateX(-.5px) scaleY(0);transform-origin:top}to{transform:translateX(-.5px) scaleY(1);transform-origin:top}}
 
+  /* ───────── SCROLL SPY (왼쪽 떠 있는 연도) ───────── */
+  .spy{display:none}
+  @media (min-width:1240px){
+    .spy{display:block;position:fixed;left:calc((100vw - 1040px) / 4 - 46px);top:50%;transform:translateY(-50%);
+         width:170px;height:400px;z-index:15}
+  }
+  .spy-win{position:absolute;inset:0;overflow:hidden;
+           -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 38%,#000 62%,transparent 100%);
+                   mask-image:linear-gradient(to bottom,transparent 0,#000 38%,#000 62%,transparent 100%)}
+  /* 별자리처럼 점으로 이어진 선 */
+  .spy-win::before{content:"";position:absolute;left:14px;top:0;bottom:0;width:3px;opacity:.45;
+                   background:radial-gradient(circle,var(--ink) .9px,transparent 1.3px) center top/3px 8px repeat-y}
+  .spy-track{position:absolute;left:0;right:0;top:50%;transition:transform .7s cubic-bezier(.22,.8,.2,1)}
+  .spy-item{position:relative;display:flex;flex-direction:column;justify-content:center;width:100%;height:54px;padding:0 0 0 40px;
+            background:none;border:none;text-align:left;cursor:pointer;color:var(--ink);font:inherit;white-space:nowrap}
+  /* 연도마다 작은 별, 지금 위치는 큰 별 */
+  .spy-item::before{content:"";position:absolute;left:15.5px;top:50%;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;
+                    background:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100'%3E%3Cpath d='M0-50C3-10 10-3 50 0C10 3 3 10 0 50C-3 10-10 3-50 0C-10-3-3-10 0-50Z'/%3E%3C/svg%3E") center/contain no-repeat;opacity:.55;transform:scale(.7);
+                    transition:transform .6s cubic-bezier(.22,.8,.2,1),opacity .4s}
+  .spy-item::after{content:"";position:absolute;left:15.5px;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;
+                   border:1px solid var(--ink);opacity:0;transform:scale(.4);transition:opacity .5s,transform .7s cubic-bezier(.22,.8,.2,1)}
+  .spy-item b{font-family:var(--disp);font-weight:400;font-size:21px;line-height:1;letter-spacing:-.03em;
+              color:transparent;-webkit-text-stroke:.6px var(--ink);transform-origin:left center;
+              transition:font-size .5s cubic-bezier(.22,.8,.2,1),color .4s,-webkit-text-stroke-color .4s,letter-spacing .5s}
+  .spy-item.sec b{font-size:16px;letter-spacing:.02em;text-transform:uppercase}
+  .spy-item small{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--sub);max-height:0;opacity:0;overflow:hidden;
+                  transition:max-height .5s,opacity .4s .1s,margin .5s}
+  .spy-item:hover b{color:var(--ink)}
+  .spy-item.on::before{opacity:1;transform:scale(2.1);animation:spyStar 9s ease-in-out infinite}
+  .spy-item.on::after{opacity:.35;transform:scale(1)}
+  .spy-item:hover::before{opacity:.9}
+  @keyframes spyStar{0%,100%{transform:scale(2.1) rotate(0)}50%{transform:scale(1.85) rotate(45deg)}}
+  .spy-item.on b{font-size:34px;font-weight:600;color:var(--ink);-webkit-text-stroke-color:transparent;letter-spacing:-.04em}
+  .spy-item.on.sec b{font-size:22px}
+  .spy-item.on small{max-height:16px;opacity:1;margin-top:5px}
+  .spy-cap{position:absolute;left:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--sub);display:flex;gap:8px;align-items:center}
+  .spy-cap.top{top:-6px}.spy-cap.bot{bottom:-6px}
+  .spy-cap b{color:var(--ink);font-weight:500}
+  .spy-cap svg{width:9px;height:9px}
+
   /* ───────── MOBILE ───────── */
   @media (max-width:700px){
     .wrap{padding:0 18px}
@@ -771,6 +811,11 @@ const TODO = [
     <div class="foot-line mono"><span>THEMIS ⟷ APSU</span><span>Order / Inversion</span></div>
   </footer>
 </div>
+<nav class="spy" id="spy" aria-label="연도 바로가기">
+  <div class="spy-cap top"><svg viewBox="0 0 100 100"><use href="#spark" x="0" y="0" width="100" height="100"/></svg>INDEX</div>
+  <div class="spy-win"><div class="spy-track" id="spyTrack"></div></div>
+  <div class="spy-cap bot"><b id="spyNo">01</b>/ <span id="spyAll">10</span></div>
+</nav>
 <button id="toTop" aria-label="맨 위로">↑</button>
 
 <script>
@@ -913,7 +958,7 @@ function render(){
     const pre = er && er !== prevEra ? eraHTML(er) : "";
     prevEra = er;
     return pre + `
-    <section class="group">
+    <section class="group" data-year="${g.name}">
       <div class="group-head">
         <span class="deco l">${+g.name - 2028 ? "균열 " + (+g.name - 2028) + "년차" : "균열 원년"}</span>
         <span class="deco r">${g.items.length.toString().padStart(2, "0")} ENTRIES</span>
@@ -946,6 +991,7 @@ function render(){
     root.querySelectorAll(".era, .group, .ev").forEach(el => { el.classList.add("anim"); io.observe(el); });
   }
   firstRender = false;
+  buildSpy();
 
   root.querySelectorAll(".group-head").forEach(h =>
     h.onclick = () => h.parentElement.classList.toggle("closed"));
@@ -1036,6 +1082,42 @@ $("#fold").onclick = () => {
 };
 addEventListener("scroll", () => $("#toTop").classList.toggle("show", scrollY > 700));
 $("#toTop").onclick = () => scrollTo({ top: 0, behavior: "smooth" });
+
+// ── 왼쪽에 떠 있는 연도: 지금 위치만 진하게, 앞뒤는 흐리게
+const ITEM_H = 54;
+function buildSpy(){
+  const track = $("#spyTrack"); if (!track) return;
+  const items = [...document.querySelectorAll("#list > .group")].map(g => {
+    const y = g.dataset.year, er = ERAS.find(e => +y >= e.from && +y <= e.to);
+    return `<button class="spy-item" data-t="y-${y}"><b>${y}</b><small>${er ? er.no + " " + er.en : ""}${YEAR_NOTE[y] ? " · " + YEAR_NOTE[y] : ""}</small></button>`;
+  });
+  if (TODO.length) items.push(`<button class="spy-item sec" data-t="todo"><b>Unverified</b><small>미확인 기록</small></button>`);
+  items.push(`<button class="spy-item sec" data-t="roster"><b>Characters</b><small>인물 목록</small></button>`);
+  track.innerHTML = items.join("");
+  track.querySelectorAll(".spy-item").forEach(b => b.onclick = () => {
+    const t = b.dataset.t;
+    const el = t.startsWith("y-") ? document.querySelector(`.group[data-year="${t.slice(2)}"]`) : document.getElementById(t);
+    if (el) scrollTo({ top: el.getBoundingClientRect().top + scrollY - $(".controls").offsetHeight - 12, behavior: "smooth" });
+  });
+  spy();
+}
+function spy(){
+  const track = $("#spyTrack"); if (!track) return;
+  const btns = [...track.children]; if (!btns.length) return;
+  const probe = scrollY + $(".controls").offsetHeight + innerHeight * .25;
+  let idx = 0;
+  btns.forEach((b, i) => {
+    const t = b.dataset.t;
+    const el = t.startsWith("y-") ? document.querySelector(`.group[data-year="${t.slice(2)}"]`) : document.getElementById(t);
+    if (el && el.offsetParent !== null && el.getBoundingClientRect().top + scrollY <= probe) idx = i;
+  });
+  btns.forEach((b, i) => b.classList.toggle("on", i === idx));
+  track.style.transform = `translateY(${-(idx * ITEM_H) - ITEM_H / 2}px)`;
+  $("#spyNo").textContent = String(idx + 1).padStart(2, "0");
+  $("#spyAll").textContent = String(btns.length).padStart(2, "0");
+}
+addEventListener("scroll", spy, { passive: true });
+addEventListener("resize", spy);
 
 render();
 </script>
