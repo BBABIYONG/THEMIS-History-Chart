@@ -36,7 +36,7 @@
   .notice b{color:var(--ink);font-weight:500}
 
   /* 2단 */
-  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:34px;align-items:start}
+  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;margin-top:34px;align-items:start}
   .sec{margin-bottom:38px}
   .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:14px}
   .sec-h h2{font-family:var(--disp);font-weight:500;font-size:28px;letter-spacing:-.02em}
@@ -104,7 +104,18 @@
   /* 미리보기 */
   .preview{position:sticky;top:18px}
   .canvas-box{border:1px solid var(--ink);background:#d9d8d3;padding:14px;max-height:calc(100vh - 160px);overflow:auto}
-  .canvas-box canvas{display:block;width:100%;height:auto;box-shadow:0 10px 30px -18px rgba(0,0,0,.4)}
+  .canvas-box{position:relative}
+  .canvas-box canvas{display:none}
+  .canvas-box img{display:block;width:100%;height:auto;box-shadow:0 10px 30px -18px rgba(0,0,0,.4);cursor:zoom-in;
+                  image-rendering:auto;transition:opacity .2s}
+  .canvas-box.busy img{opacity:.6}
+  .canvas-box.zoom{max-height:none}
+  .canvas-box.zoom img{width:1080px;max-width:none;cursor:zoom-out}
+  .canvas-box.zoom{overflow:auto;max-height:calc(100vh - 120px)}
+  .zoom-hint{position:absolute;right:22px;top:22px;background:var(--ink);color:var(--paper);padding:3px 8px;font-size:10px;
+             opacity:0;transition:.2s;pointer-events:none}
+  .canvas-box:hover .zoom-hint{opacity:1}
+  .canvas-box.zoom .zoom-hint{display:none}
   .pv-meta{display:flex;justify-content:space-between;color:var(--sub);margin-top:8px}
   .save-img{display:none;margin-top:14px;text-align:center}
   .save-img img{max-width:100%;border:1px solid var(--ink)}
@@ -220,7 +231,7 @@
     <!-- ───────── 오른쪽: 미리보기 ───────── -->
     <div class="preview">
       <div class="sec-h"><h2><i>06</i>Preview</h2><span class="mono" id="pvSize"></span></div>
-      <div class="canvas-box"><canvas id="cv"></canvas></div>
+      <div class="canvas-box" id="pvBox"><canvas id="cv"></canvas><img id="pvImg" alt="미리보기"><span class="zoom-hint mono">클릭해서 크게 보기</span></div>
       <div class="pv-meta mono"><span id="pvInfo"></span><span>1080px · PNG</span></div>
       <div class="btns" style="margin-top:12px">
         <button class="btn solid" id="saveBtn">이미지 저장</button>
@@ -610,10 +621,28 @@ function draw(){
   spaced(ctx, "FAN-MADE PERSONAL EDITION · NOT OFFICIAL CANON", PAD, fy + 48, 1);
 
   $("#pvSize").textContent = `1080 × ${H}`;
+  updatePreviewImg();
   const mineN = rows.filter(r => r.kind === "mine").length, favN = rows.filter(r => r.kind === "fav").length;
   $("#pvInfo").textContent = `내 기록 ${mineN} · 최애 기록 ${favN}`;
   $("#saveImg").style.display = "none";
 }
+
+/* ───────── 미리보기: canvas를 이미지로 바꿔서 부드럽게 줄여 보이기 ───────── */
+let pvUrl = null, pvTimer = null;
+function updatePreviewImg(){
+  clearTimeout(pvTimer);
+  $("#pvBox").classList.add("busy");
+  pvTimer = setTimeout(() => {
+    $("#cv").toBlob(b => {
+      if (!b) return;
+      if (pvUrl) URL.revokeObjectURL(pvUrl);
+      pvUrl = URL.createObjectURL(b);
+      $("#pvImg").src = pvUrl;
+      $("#pvBox").classList.remove("busy");
+    }, "image/png");
+  }, 120);
+}
+$("#pvImg").onclick = () => $("#pvBox").classList.toggle("zoom");
 
 /* ───────── 저장 ───────── */
 $("#saveBtn").onclick = () => {
