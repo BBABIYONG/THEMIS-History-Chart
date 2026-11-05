@@ -582,14 +582,16 @@ const TODO = [
   .ev+.ev{margin-top:30px}                      /* 항목 사이 숨 쉴 공간 */
   .ev.key{margin-top:46px;margin-bottom:16px}   /* 주요 사건은 앞뒤로 더 띄움 */
   .ev:first-child{margin-top:0}
+  .ev.key .body{margin-top:0}
+  .ev.key .desc{margin-top:2px;line-height:1.6}   /* 주요 사건 설명은 제목에 붙여서 */
   .ev::after{width:46px}
   .ev .meta{gap:12px}
   .ev h3{margin-top:7px;line-height:1.55;font-size:16.5px}
   .ev.key h3{line-height:1.9}
-  .ev .desc{margin-top:9px;line-height:1.75;max-width:380px;display:inline-block}
-  .ev:nth-child(odd) .desc{text-align:right}
+  .ev .desc{margin-top:3px;line-height:1.6;max-width:380px;display:block}
+  .ev:nth-child(odd) .desc{text-align:right;margin-left:auto}
   .ev .body{margin-top:2px}
-  .spoil .body{margin-top:9px}
+  .spoil .body{margin-top:5px}
   .spoil-label{margin-top:7px}
   .group-head{padding:64px 0 38px}
   .group-head::before{top:calc(64px + clamp(60px,9vw,104px) * .46)}
@@ -714,7 +716,7 @@ const TODO = [
     .ev,.ev:nth-child(even){width:auto;margin-left:0;padding:0 0 0 40px;text-align:left}
     .ev+.ev{margin-top:26px}
     .ev.key{margin-top:34px;margin-bottom:8px}
-    .ev:nth-child(odd) .desc{text-align:left}
+    .ev:nth-child(odd) .desc{text-align:left;margin-left:0}
     .ev:first-child{margin-top:0}
     .node,.ev:nth-child(even) .node{left:10px;right:auto;transform:translateX(-50%)}
     .ev.anim,.ev.anim:nth-child(even){transform:translateY(16px)}
