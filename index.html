@@ -98,14 +98,14 @@ const EVENTS = [
   { year: "2030", title: "트러블, 한국 본부 올림피안 팀 합류", tag: "테미스" },
   { year: "2030", title: "스위퍼 테미스 편입", tag: "테미스" },
   { year: "2030", title: "스펙터 창설 (스위퍼)", tag: "설립", key: true },
-  { year: "2030", date: "2030 늦봄", title: "메어 각성", tag: "각성" },
-  { year: "2030", date: "2030 가을", title: "메어, 테미스 독일 지부 등록", tag: "테미스" },
+  { year: "2030", date: "2030년 늦봄", title: "메어 각성", tag: "각성" },
+  { year: "2030", date: "2030년 가을", title: "메어, 테미스 독일 지부 등록", tag: "테미스" },
 
   // ── 2031
   { year: "2031", title: "팔랑크스 팀 전멸 사건", desc: "키퍼 · 톡신 전락 및 이탈", tag: "사건", key: true },
   { year: "2031", title: "아트로포스, ZERO팀 부팀장 부임", tag: "테미스" },
   { year: "2031", title: "아멘 환속 신청 · 스펙터 상주 파견", tag: "테미스" },
-  { year: "2031", date: "2031 봄", title: "블랭크 각성", tag: "각성" },
+  { year: "2031", date: "2031년 봄", title: "블랭크 각성", tag: "각성" },
 
   // ── 2032
   { year: "2032", title: "넬, 시설 탈출 후 테미스 편입", desc: "테미스 관할권 확립 이전 일본의 인공 각성자 제작 계획 — 관할 강화로 폐쇄 진행 중 탈출", tag: "테미스", spoiler: true },
@@ -129,8 +129,8 @@ const EVENTS = [
   { year: "2033", title: "피그말리온 이탈 · 압주 합류", desc: "개인적 목적으로 압주행 · 알렉토 첫 가이드로 합류", tag: "압주" },
   { year: "2033", title: "테미스 홍콩 지부 재앙", desc: "홍콩 지부 3팀 인명 피해 · 팽 전락", tag: "사건", key: true },
   { year: "2033", title: "레드 · 불 이탈 · 압주 합류", tag: "압주" },
-  { year: "2033", date: "2033 초", title: "레퀴엠 테미스 등록 · 장의사 겸직", tag: "테미스" },
-  { year: "2033", date: "2033 하반기", title: "레퀴엠 스펙터 합류", tag: "테미스" },
+  { year: "2033", date: "2033년 초", title: "레퀴엠 테미스 등록 · 장의사 겸직", tag: "테미스" },
+  { year: "2033", date: "2033년 하반기", title: "레퀴엠 스펙터 합류", tag: "테미스" },
   { year: "2033", title: "메어 정식 요원 임용", tag: "테미스" },
   { year: "2033", title: "마스크 스펙터 편입", desc: "변신 능력 관리 명목", tag: "테미스" },
   { year: "2033", title: "아멘 환속 · 독신 의무 관면 완료", tag: "사건" },
@@ -586,6 +586,8 @@ const TODO = [
   .ev.key .desc{margin-top:2px;line-height:1.6}   /* 주요 사건 설명은 제목에 붙여서 */
   .ev::after{width:46px}
   .ev .meta{gap:12px}
+  .ev .meta .when{color:var(--ink);text-transform:none;letter-spacing:0;font-family:"Noto Sans KR",sans-serif;font-size:11.5px;
+                  border:1px solid var(--ink);padding:0 6px;line-height:1.5}
   .ev h3{margin-top:7px;line-height:1.55;font-size:16.5px}
   .ev.key h3{line-height:1.9}
   .ev .desc{margin-top:3px;line-height:1.6;max-width:380px;display:block}
@@ -1006,7 +1008,7 @@ function render(){
             <span class="node n-${e.tag}"><i></i></span>
             <div class="meta mono">
               <span>${codeOf.get(e)}</span>
-              ${e.date ? `<span>${e.date}</span>` : ""}
+              ${e.date ? `<span class="when">${e.date}</span>` : ""}
               ${e.tag ? `<span class="tag">${sym(e.tag)} ${e.tag}</span>` : ""}
             </div>
             <h3>${e.title}</h3>
