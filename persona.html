@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THEMIS 연혁 — Personal Edition</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23e4e3df%22/%3E%3Cpath%20fill%3D%22%23111112%22%20d%3D%22M32%206C33.5%2026%2038%2030.5%2058%2032C38%2033.5%2033.5%2038%2032%2058C30.5%2038%2026%2033.5%206%2032C26%2030.5%2030.5%2026%2032%206Z%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+  :root{
+    --paper:#e4e3df; --ink:#111112; --sub:#5d5d60; --faint:#a9a8a4; --hair:#c4c3be;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --disp:"Space Grotesk","Noto Sans KR",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:"Noto Sans KR",sans-serif;line-height:1.6;
+       -webkit-font-smoothing:antialiased;word-break:keep-all}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.13;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .mono{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .wrap{max-width:1180px;margin:0 auto;padding:34px 32px 80px}
+  a{color:inherit}
+
+  /* 머리 */
+  .topline{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:10px}
+  .topline b{font-family:var(--disp);font-weight:500;font-size:20px}
+  .back{white-space:nowrap;font-family:var(--mono);font-size:11.5px;text-decoration:none;border:1px solid var(--ink);padding:4px 10px;letter-spacing:.06em}
+  .back:hover{background:var(--ink);color:var(--paper)}
+  .title{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:26px}
+  .title h1{font-family:var(--disp);font-weight:500;font-size:clamp(52px,9vw,110px);line-height:.85;letter-spacing:-.045em}
+  .title p{max-width:420px;font-size:13.5px;color:var(--sub);padding-bottom:6px}
+  .notice{margin-top:22px;border:1px solid var(--ink);padding:10px 14px;font-size:12.5px;color:var(--sub);display:flex;gap:12px}
+  .notice b{color:var(--ink);font-weight:500}
+
+  /* 2단 */
+  .cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:34px;align-items:start}
+  .sec{margin-bottom:38px}
+  .sec-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:14px}
+  .sec-h h2{font-family:var(--disp);font-weight:500;font-size:28px;letter-spacing:-.02em}
+  .sec-h h2 i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--sub);margin-right:10px;vertical-align:middle}
+  .hint{font-size:12.5px;color:var(--sub);margin:-4px 0 12px}
+
+  /* 입력 */
+  label.f{display:block;margin-bottom:12px}
+  label.f > span{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase;margin-bottom:3px}
+  input[type=text],select,textarea{width:100%;border:none;border-bottom:1px solid var(--hair);background:transparent;color:var(--ink);
+    font:inherit;font-size:15px;padding:6px 0;outline:none;border-radius:0}
+  input[type=text]:focus,select:focus,textarea:focus{border-bottom-color:var(--ink)}
+  select{cursor:pointer}
+  textarea{resize:vertical;min-height:38px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .row3{display:grid;grid-template-columns:110px 1fr 1fr;gap:18px}
+  .btn{background:none;border:1px solid var(--ink);color:var(--ink);font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;
+       padding:7px 14px;cursor:pointer;transition:.15s;text-transform:uppercase}
+  .btn:hover,.btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover{background:transparent;color:var(--ink)}
+  .btn:disabled{opacity:.35;cursor:default;background:none;color:var(--ink)}
+  .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+  /* 내 기록 목록 */
+  .mine-list{list-style:none;margin-top:6px}
+  .mine-list li{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px dashed var(--hair)}
+  .mine-list .y{font-family:var(--disp);font-size:20px;font-weight:500}
+  .mine-list .t{font-weight:500}
+  .mine-list .d{display:block;font-size:12.5px;color:var(--sub)}
+  .mine-list .w{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.04em}
+  .mine-list .ops{display:flex;gap:4px}
+  .mine-list .ops button{background:none;border:none;font-family:var(--mono);font-size:12px;color:var(--sub);cursor:pointer;padding:2px 5px}
+  .mine-list .ops button:hover{background:var(--ink);color:var(--paper)}
+  .empty{font-size:13px;color:var(--faint);padding:10px 0}
+  li.editing{background:rgba(17,17,18,.05)}
+
+  /* 최애 선택 */
+  .fav-count{font-family:var(--mono);font-size:11px}
+  .fav-count b{font-size:14px}
+  .picked{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;margin-bottom:12px}
+  .picked button{background:var(--ink);color:var(--paper);border:none;font:inherit;font-size:13px;padding:3px 10px;cursor:pointer}
+  .picked button::after{content:" ×";opacity:.6}
+  .picked .none{font-size:13px;color:var(--faint)}
+  .grp{margin-bottom:10px}
+  .grp h5{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--sub);font-weight:500;margin-bottom:4px}
+  .grp div{display:flex;flex-wrap:wrap;gap:4px}
+  .pick{background:none;border:1px solid var(--hair);color:var(--ink);font:inherit;font-size:13px;padding:2px 9px;cursor:pointer;transition:.12s}
+  .pick:hover{border-color:var(--ink)}
+  .pick.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .pick .n{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:4px}
+  .pick.on .n{color:var(--faint)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:9px 16px;
+         font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* 옵션 */
+  .seg{display:inline-flex;border:1px solid var(--ink)}
+  .seg button{background:none;border:none;font-family:var(--mono);font-size:11.5px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+  .seg button+button{border-left:1px solid var(--ink)}
+  .seg button.on{background:var(--ink);color:var(--paper)}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+  .opt > span{font-size:14px}
+  .opt small{display:block;font-size:12px;color:var(--sub)}
+
+  /* 미리보기 */
+  .preview{position:sticky;top:18px}
+  .canvas-box{border:1px solid var(--ink);background:#d9d8d3;padding:14px;max-height:calc(100vh - 160px);overflow:auto}
+  .canvas-box canvas{display:block;width:100%;height:auto;box-shadow:0 10px 30px -18px rgba(0,0,0,.4)}
+  .pv-meta{display:flex;justify-content:space-between;color:var(--sub);margin-top:8px}
+  .save-img{display:none;margin-top:14px;text-align:center}
+  .save-img img{max-width:100%;border:1px solid var(--ink)}
+  .save-img p{font-size:12.5px;color:var(--sub);margin-top:6px}
+
+  .backup textarea{font-family:var(--mono);font-size:11px;min-height:70px;border:1px solid var(--hair);padding:8px;margin-top:8px}
+
+  @media (max-width:880px){
+    .cols{grid-template-columns:1fr}
+    .preview{position:static}
+    .canvas-box{max-height:none}
+  }
+  @media (max-width:520px){
+    .wrap{padding:24px 18px 70px}
+    .topline b{font-size:15px}
+    .back{white-space:nowrap;padding:3px 8px}
+    .row3{grid-template-columns:1fr 1fr}
+    .row3 label:first-child{grid-column:1/-1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topline">
+    <b>THEMIS / PERSONAL EDITION</b>
+    <a class="back" href="index.html">← 공식 연혁표로</a>
+  </div>
+
+  <div class="title">
+    <h1>Personal<br>Chronicle</h1>
+    <p>내 캐릭터의 기록을 공식 연표 사이에 끼워 넣고, 최애와 함께한 연대기를 이미지로 저장해요.</p>
+  </div>
+
+  <div class="notice"><b class="mono">Notice</b><span>입력한 내용은 <b>이 브라우저에만</b> 저장되고 어디에도 전송되지 않아요. 브라우저 기록을 지우거나 기기를 바꾸면 사라지니, 맨 아래 <b>백업 코드</b>를 복사해 두세요.</span></div>
+
+  <div class="cols">
+    <!-- ───────── 왼쪽: 입력 ───────── -->
+    <div>
+      <section class="sec">
+        <div class="sec-h"><h2><i>01</i>My Character</h2><span class="mono">내 캐릭터</span></div>
+        <div class="row2">
+          <label class="f"><span>코드네임 *</span><input type="text" id="pName" maxlength="16" placeholder="예: 스텔라"></label>
+          <label class="f"><span>영문 표기 (선택)</span><input type="text" id="pEn" maxlength="24" placeholder="예: STELLA"></label>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2><i>02</i>Records</h2><span class="mono">내 기록</span></div>
+        <p class="hint">연도와 내용을 넣고, 같은 해 공식 기록 중 <b>어느 사건 다음에</b> 들어갈지 골라 주세요.</p>
+        <div class="row3">
+          <label class="f"><span>연도</span><select id="eYear"></select></label>
+          <label class="f"><span>시기 (선택)</span><input type="text" id="eWhen" maxlength="12" placeholder="예: 봄, 하반기"></label>
+          <label class="f"><span>위치</span><select id="eAfter"></select></label>
+        </div>
+        <label class="f"><span>내용 *</span><input type="text" id="eTitle" maxlength="40" placeholder="예: 스텔라 각성 · MUSE 배속"></label>
+        <label class="f"><span>설명 (선택)</span><input type="text" id="eDesc" maxlength="60" placeholder="예: 올림포스 아스테리아 각인"></label>
+        <div class="btns">
+          <button class="btn solid" id="eAdd">+ 기록 추가</button>
+          <button class="btn" id="eCancel" style="display:none">수정 취소</button>
+        </div>
+        <ul class="mine-list" id="mineList"></ul>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2><i>03</i>Favorites</h2><span class="fav-count">최애 <b id="favN">0</b> / 6</span></div>
+        <p class="hint">함께 보여줄 캐릭터를 골라 주세요. 최대 6명까지 고를 수 있어요. 옆의 숫자는 연표에 나오는 기록 수예요.</p>
+        <div class="picked" id="picked"></div>
+        <div id="pickGroups"></div>
+      </section>
+
+      <section class="sec">
+        <div class="sec-h"><h2><i>04</i>Options</h2><span class="mono">이미지 설정</span></div>
+        <div class="opt"><span>주변 사건<small>내 기록 앞뒤로 보여줄 공식 기록 수</small></span>
+          <div class="seg" id="ctxSeg"><button data-v="0">0</button><button data-v="1">1</button><button data-v="2">2</button></div></div>
+        <div class="opt"><span>내 기록 강조<small>✦ 표시와 굵은 글씨로 구분</small></span>
+          <div class="seg" id="markSeg"><button data-v="1">표시</button><button data-v="0">숨김</button></div></div>
+      </section>
+
+      <section class="sec backup">
+        <div class="sec-h"><h2><i>05</i>Backup</h2><span class="mono">백업</span></div>
+        <p class="hint">다른 기기로 옮기거나 보관하려면 코드를 복사해 두세요. 붙여넣고 불러오면 그대로 돌아와요.</p>
+        <div class="btns">
+          <button class="btn" id="bkCopy">백업 코드 복사</button>
+          <button class="btn" id="bkLoad">코드 불러오기</button>
+          <button class="btn" id="bkReset">전체 초기화</button>
+        </div>
+        <textarea id="bkText" placeholder="여기에 백업 코드를 붙여넣고 '코드 불러오기'를 누르세요."></textarea>
+      </section>
+    </div>
+
+    <!-- ───────── 오른쪽: 미리보기 ───────── -->
+    <div class="preview">
+      <div class="sec-h"><h2><i>06</i>Preview</h2><span class="mono" id="pvSize"></span></div>
+      <div class="canvas-box"><canvas id="cv"></canvas></div>
+      <div class="pv-meta mono"><span id="pvInfo"></span><span>1080px · PNG</span></div>
+      <div class="btns" style="margin-top:12px">
+        <button class="btn solid" id="saveBtn">이미지 저장</button>
+      </div>
+      <div class="save-img" id="saveImg"><img alt="저장용 이미지"><p>이미지를 길게 눌러 저장하세요.</p></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ───────── 기본 준비 ───────── */
+const $ = s => document.querySelector(s);
+const KEY = "themis-persona-v1";
+const MAX_FAV = 6;
+const strip = h => (h || "").replace(/<br\s*\/?>/gi, " · ").replace(/<[^>]*>/g, "");
+const YEARS_ALL = []; for (let y = 2028; y <= 2040; y++) YEARS_ALL.push(String(y));
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const nameRe = n => new RegExp(`(^|[\\s·,(\\/—])${esc(n)}(?=$|[\\s·,)\\/—이가의은는을를와과도])`);
+const safe = s => String(s || "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+let S = { name: "", en: "", entries: [], favs: [], ctx: 1, mark: 1 };
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const uid = () => Math.random().toString(36).slice(2, 9);
+let editing = null;
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 1900);
+}
+
+/* ───────── 01 내 캐릭터 ───────── */
+$("#pName").value = S.name; $("#pEn").value = S.en;
+$("#pName").oninput = e => { S.name = e.target.value.trim(); save(); draw(); };
+$("#pEn").oninput = e => { S.en = e.target.value.trim(); save(); draw(); };
+
+/* ───────── 02 내 기록 ───────── */
+const officialOf = y => EVENTS.filter(e => e.year === y);
+$("#eYear").innerHTML = YEARS_ALL.map(y => `<option>${y}</option>`).join("");
+function fillAfter(){
+  const y = $("#eYear").value, list = officialOf(y);
+  $("#eAfter").innerHTML = `<option value="-1">맨 앞</option>` +
+    list.map((e, i) => `<option value="${i}">${String(i + 1).padStart(2, "0")} ${safe(strip(e.title)).slice(0, 22)} 다음</option>`).join("") +
+    (list.length ? "" : "");
+  $("#eAfter").value = list.length ? String(list.length - 1) : "-1";
+}
+$("#eYear").onchange = fillAfter;
+fillAfter();
+
+function resetForm(){
+  editing = null;
+  $("#eTitle").value = ""; $("#eDesc").value = ""; $("#eWhen").value = "";
+  $("#eAdd").textContent = "+ 기록 추가"; $("#eCancel").style.display = "none";
+  renderMine();
+}
+$("#eAdd").onclick = () => {
+  const title = $("#eTitle").value.trim();
+  if (!title) { toast("내용을 입력해 주세요"); $("#eTitle").focus(); return; }
+  const rec = { id: editing || uid(), year: $("#eYear").value, after: +$("#eAfter").value,
+                when: $("#eWhen").value.trim(), title, desc: $("#eDesc").value.trim() };
+  const wasEdit = !!editing;
+  if (wasEdit) S.entries = S.entries.map(e => e.id === editing ? rec : e);
+  else S.entries.push(rec);
+  save(); resetForm(); draw();
+  toast(wasEdit ? "수정했어요" : "기록을 추가했어요");
+};
+$("#eCancel").onclick = resetForm;
+
+function renderMine(){
+  const ul = $("#mineList");
+  const list = [...S.entries].sort((a, b) => a.year - b.year || a.after - b.after);
+  if (!list.length) { ul.innerHTML = `<li class="empty" style="display:block;border:none">아직 추가한 기록이 없어요.</li>`; return; }
+  ul.innerHTML = list.map(e => {
+    const off = officialOf(e.year);
+    const where = e.after < 0 || !off.length ? "맨 앞" : `「${strip(off[Math.min(e.after, off.length - 1)].title).slice(0, 18)}」 다음`;
+    return `<li class="${editing === e.id ? "editing" : ""}">
+      <span class="y">${e.year}</span>
+      <span><span class="t">${safe(e.title)}</span>${e.when ? ` <span class="mono" style="color:var(--sub)">${safe(e.when)}</span>` : ""}
+        ${e.desc ? `<span class="d">${safe(e.desc)}</span>` : ""}<span class="w">위치 · ${safe(where)}</span></span>
+      <span class="ops"><button data-ed="${e.id}" title="수정">수정</button><button data-del="${e.id}" title="삭제">✕</button></span>
+    </li>`;
+  }).join("");
+  ul.querySelectorAll("[data-del]").forEach(b => b.onclick = () => {
+    S.entries = S.entries.filter(e => e.id !== b.dataset.del); save(); if (editing === b.dataset.del) resetForm(); else renderMine(); draw();
+  });
+  ul.querySelectorAll("[data-ed]").forEach(b => b.onclick = () => {
+    const e = S.entries.find(x => x.id === b.dataset.ed); if (!e) return;
+    editing = e.id;
+    $("#eYear").value = e.year; fillAfter(); $("#eAfter").value = String(e.after);
+    $("#eWhen").value = e.when || ""; $("#eTitle").value = e.title; $("#eDesc").value = e.desc || "";
+    $("#eAdd").textContent = "수정 완료"; $("#eCancel").style.display = "";
+    renderMine(); $("#eTitle").focus();
+  });
+}
+
+/* ───────── 03 최애 선택 (최대 6명) ───────── */
+const textOf = e => e.title + " " + (e.spoiler ? "" : strip(e.desc));
+const countFor = n => EVENTS.filter(e => nameRe(n).test(textOf(e))).length;
+const seen = new Set();
+$("#pickGroups").innerHTML = Object.entries(CHARS).map(([g, arr]) => {
+  const btns = arr.filter(([c]) => !seen.has(c) && seen.add(c)).map(([c]) =>
+    `<button class="pick" data-c="${c}">${c}<span class="n">${countFor(c)}</span></button>`).join("");
+  return btns ? `<div class="grp"><h5>${g}</h5><div>${btns}</div></div>` : "";
+}).join("");
+function renderFav(){
+  $("#favN").textContent = S.favs.length;
+  document.querySelectorAll(".pick").forEach(b => b.classList.toggle("on", S.favs.includes(b.dataset.c)));
+  $("#picked").innerHTML = S.favs.length
+    ? S.favs.map(c => `<button data-c="${c}" title="선택 해제">${c}</button>`).join("")
+    : `<span class="none">선택한 캐릭터가 없어요.</span>`;
+  $("#picked").querySelectorAll("button").forEach(b => b.onclick = () => toggleFav(b.dataset.c));
+}
+function toggleFav(c){
+  if (S.favs.includes(c)) S.favs = S.favs.filter(x => x !== c);
+  else {
+    if (S.favs.length >= MAX_FAV) { toast(`최대 ${MAX_FAV}명까지 고를 수 있어요`); return; }
+    S.favs.push(c);
+  }
+  save(); renderFav(); draw();
+}
+document.querySelectorAll(".pick").forEach(b => b.onclick = () => toggleFav(b.dataset.c));
+
+/* ───────── 04 옵션 ───────── */
+function seg(id, key){
+  const box = $(id);
+  const sync = () => box.querySelectorAll("button").forEach(b => b.classList.toggle("on", +b.dataset.v === S[key]));
+  box.querySelectorAll("button").forEach(b => b.onclick = () => { S[key] = +b.dataset.v; save(); sync(); draw(); });
+  sync();
+}
+seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
+
+/* ───────── 05 백업 ───────── */
+const enc = o => btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+const dec = s => JSON.parse(decodeURIComponent(escape(atob(s.trim()))));
+$("#bkCopy").onclick = async () => {
+  const code = "THEMIS1:" + enc(S);
+  $("#bkText").value = code;
+  try { await navigator.clipboard.writeText(code); toast("백업 코드를 복사했어요"); }
+  catch (e) { $("#bkText").select(); toast("아래 칸의 코드를 직접 복사해 주세요"); }
+};
+$("#bkLoad").onclick = () => {
+  try {
+    const raw = $("#bkText").value.trim().replace(/^THEMIS1:/, "");
+    const o = dec(raw);
+    if (!o || !Array.isArray(o.entries)) throw 0;
+    S = Object.assign({ name: "", en: "", entries: [], favs: [], ctx: 1, mark: 1 }, o);
+    S.favs = (S.favs || []).slice(0, MAX_FAV);
+    save(); boot(); toast("불러왔어요");
+  } catch (e) { toast("코드를 읽을 수 없어요"); }
+};
+$("#bkReset").onclick = () => {
+  if (!confirm("입력한 캐릭터와 기록을 모두 지울까요? 백업 코드가 없으면 되돌릴 수 없어요.")) return;
+  S = { name: "", en: "", entries: [], favs: [], ctx: 1, mark: 1 }; save(); boot(); toast("초기화했어요");
+};
+
+/* ───────── 연표 합치기 ───────── */
+function buildRows(){
+  const years = [...new Set([...EVENTS.map(e => e.year), ...S.entries.map(e => e.year)])].sort();
+  const merged = [];
+  years.forEach(y => {
+    const off = officialOf(y).map(e => ({ ...e, kind: null }));
+    const mine = S.entries.filter(e => e.year === y).sort((a, b) => a.after - b.after);
+    // 뒤에서부터 끼워 넣어야 위치가 안 밀려요
+    const slots = off.map(e => [e]);
+    const head = [];
+    mine.forEach(m => {
+      const item = { year: y, title: m.title, desc: m.desc, date: m.when, mine: true };
+      if (m.after < 0 || !slots.length) head.push(item);
+      else slots[Math.min(m.after, slots.length - 1)].push(item);
+    });
+    merged.push(...head, ...slots.flat());
+  });
+  const keep = new Map();
+  const favRes = S.favs.map(nameRe);
+  merged.forEach((e, i) => {
+    if (e.mine) keep.set(i, "mine");
+    else if (favRes.some(r => r.test(textOf(e)))) keep.set(i, "fav");
+  });
+  merged.forEach((e, i) => {
+    if (!e.mine) return;
+    for (let d = 1; d <= S.ctx; d++) [i - d, i + d].forEach(j => {
+      if (j >= 0 && j < merged.length && merged[j].year === e.year && !keep.has(j) && !merged[j].mine) keep.set(j, "ctx");
+    });
+  });
+  const idx = [...keep.keys()].sort((a, b) => a - b);
+  const out = [];
+  let lastY = null;
+  idx.forEach((i, n) => {
+    const e = merged[i];
+    if (e.year !== lastY) {
+      out.push({ type: "year", year: e.year });
+      if (i > 0 && merged[i - 1].year === e.year && !keep.has(i - 1)) out.push({ type: "gap" });
+      lastY = e.year;
+    }
+    out.push({ type: "item", kind: keep.get(i), e });
+    const nx = i + 1;
+    if (nx < merged.length && merged[nx].year === e.year && !keep.has(nx)) out.push({ type: "gap" });
+  });
+  return out;
+}
+
+/* ───────── 이미지 그리기 (canvas) ───────── */
+const W = 1080, PAD = 70, YCOL = PAD, LINE_X = 244, TX = 267, TW = W - TX - PAD;
+const font = (w, px, fam) => `${w} ${px}px ${fam}`;
+const KR = `"Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif`,
+      GR = `"Space Grotesk","Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif`,
+      MO = `"JetBrains Mono","DejaVu Sans Mono",ui-monospace,monospace`;
+const C = { paper: "#e4e3df", ink: "#111112", sub: "#5d5d60", faint: "#a9a8a4", hair: "#c4c3be" };
+
+function wrap(ctx, text, maxW){
+  const words = String(text).split(/(\s+)/), lines = []; let cur = "";
+  words.forEach(w => {
+    const t = cur + w;
+    if (ctx.measureText(t).width > maxW && cur.trim()) { lines.push(cur.trim()); cur = w.trimStart(); }
+    else cur = t;
+  });
+  if (cur.trim()) lines.push(cur.trim());
+  // 너무 긴 단어(띄어쓰기 없음) 쪼개기
+  return lines.flatMap(l => {
+    if (ctx.measureText(l).width <= maxW) return [l];
+    const parts = []; let p = "";
+    [...l].forEach(ch => { if (ctx.measureText(p + ch).width > maxW) { parts.push(p); p = ch; } else p += ch; });
+    if (p) parts.push(p); return parts;
+  });
+}
+function spaced(ctx, text, x, y, sp, align = "left"){
+  const chars = [...text]; let w = chars.reduce((s, c) => s + ctx.measureText(c).width + sp, -sp);
+  let cx = align === "right" ? x - w : x;
+  chars.forEach(c => { ctx.fillText(c, cx, y); cx += ctx.measureText(c).width + sp; });
+  return w;
+}
+function star(ctx, cx, cy, r){
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - r);
+  ctx.bezierCurveTo(cx + r * .06, cy - r * .2, cx + r * .2, cy - r * .06, cx + r, cy);
+  ctx.bezierCurveTo(cx + r * .2, cy + r * .06, cx + r * .06, cy + r * .2, cx, cy + r);
+  ctx.bezierCurveTo(cx - r * .06, cy + r * .2, cx - r * .2, cy + r * .06, cx - r, cy);
+  ctx.bezierCurveTo(cx - r * .2, cy - r * .06, cx - r * .06, cy - r * .2, cx, cy - r);
+  ctx.fill();
+}
+const eraOf = y => ERAS.find(e => +y >= e.from && +y <= e.to);
+
+function layout(ctx, rows){
+  // 1차: 높이 계산
+  const L = []; let y = 330;
+  rows.forEach(r => {
+    if (r.type === "year") { if (L.length) { L.push({ t: "sep", y: y + 6 }); y += 22; } L.push({ t: "year", y: y + 6, year: r.year }); y += 14; return; }
+    if (r.type === "gap") { L.push({ t: "gap", y: y + 14 }); y += 26; return; }
+    const e = r.e, k = r.kind, isKey = e.key && k !== "ctx";
+    const size = k === "ctx" ? 16 : 17.5;
+    ctx.font = font(k === "mine" && S.mark ? 700 : (isKey ? 700 : 400), size, KR);
+    const title = strip(e.title) + (e.mine && e.date ? ` · ${e.date}` : "");
+    const tl = wrap(ctx, title, TW - (isKey ? 20 : 0));
+    let d = [];
+    const desc = e.spoiler ? "" : strip(e.desc);
+    if (desc && k !== "ctx") { ctx.font = font(400, 13.5, KR); d = wrap(ctx, desc, TW); }
+    const lh = size * 1.55, h = tl.length * lh + d.length * 20 + 14;
+    L.push({ t: "item", y: y + 4, k, e, tl, d, size, lh, isKey, h });
+    y += h;
+  });
+  return { L, H: Math.ceil(Math.max(1350, y + 150)) };
+}
+
+function draw(){
+  const cv = $("#cv"), ctx = cv.getContext("2d");
+  const rows = buildRows();
+  ctx.font = font(400, 17, KR);
+  const { L, H } = layout(ctx, rows);
+  const scale = 2;
+  cv.width = W * scale; cv.height = H * scale;
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  ctx.textBaseline = "alphabetic";
+
+  // 배경 + 종이 질감
+  ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "rgba(0,0,0,.035)";
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < W * H / 260; i++) ctx.fillRect(rnd() * W, rnd() * H, 1, 1);
+
+  // 머리
+  ctx.fillStyle = C.ink; ctx.font = font(500, 22, GR); ctx.fillText("THEMIS / ARCHIVE", PAD, 84);
+  ctx.font = font(400, 12, MO); ctx.fillStyle = C.ink; ctx.textAlign = "right";
+  spaced(ctx, "CHRONICLE · PERSONAL EDITION", W - PAD, 84, 1.2, "right"); ctx.textAlign = "left";
+  ctx.fillRect(PAD, 100, W - PAD * 2, 2);
+
+  const nm = S.name || "MY CHARACTER";
+  ctx.font = font(700, 110, GR); ctx.fillStyle = C.ink;
+  let tw = ctx.measureText("THEMIS").width; ctx.fillText("THEMIS", PAD - 4, 220);
+  ctx.font = font(300, 30, GR); ctx.strokeStyle = C.ink; ctx.lineWidth = 1;
+  { const chars = [..."CHRONICLE"]; let x = PAD; chars.forEach(c => { ctx.strokeText(c, x, 272); x += ctx.measureText(c).width + 10; }); }
+
+  // 범례
+  let lx = W - PAD; ctx.textAlign = "left";
+  const legend = [];
+  legend.push(["mine", nm]);
+  if (S.favs.length) legend.push(["fav", S.favs.length > 3 ? `${S.favs.slice(0, 3).join(" · ")} 외 ${S.favs.length - 3}` : S.favs.join(" · ")]);
+  if (S.ctx) legend.push(["ctx", "주변 사건"]);
+  ctx.font = font(400, 13, KR);
+  const items = legend.map(([k, t]) => ({ k, t, w: ctx.measureText(t).width + 20 }));
+  let tot = items.reduce((s, i) => s + i.w + 18, -18), x0 = W - PAD - tot;
+  items.forEach(i => {
+    const cy = 268;
+    ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink;
+    if (i.k === "mine") star(ctx, x0 + 6, cy, 7);
+    else if (i.k === "fav") { ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x0 + 6, cy, 5, 0, Math.PI * 2); ctx.stroke(); }
+    else { ctx.fillStyle = C.faint; ctx.beginPath(); ctx.arc(x0 + 6, cy, 3, 0, Math.PI * 2); ctx.fill(); }
+    ctx.fillStyle = C.sub; ctx.fillText(i.t, x0 + 18, cy + 5);
+    x0 += i.w + 18;
+  });
+  ctx.fillStyle = C.ink; ctx.fillRect(PAD, 300, W - PAD * 2, 1);
+
+  // 본문
+  if (!L.length) {
+    ctx.fillStyle = C.faint; ctx.font = font(400, 18, KR);
+    ctx.fillText("왼쪽에서 내 기록을 추가하거나 최애를 골라 주세요.", PAD, 400);
+  }
+  let yearTop = null;
+  const flushLine = (yEnd) => { if (yearTop != null) { ctx.fillStyle = C.ink; ctx.fillRect(LINE_X, yearTop, 1, yEnd - yearTop); } };
+  L.forEach((o, i) => {
+    if (o.t === "year") {
+      const er = eraOf(o.year);
+      ctx.fillStyle = C.ink; ctx.font = font(500, 36, GR); ctx.fillText(o.year, YCOL, o.y + 30);
+      if (er) { ctx.font = font(400, 11, MO); ctx.fillStyle = C.ink; spaced(ctx, `${er.no} ${er.en}`, YCOL, o.y + 52, 1); }
+      if (YEAR_NOTE[o.year]) { ctx.font = font(400, 12.5, KR); ctx.fillStyle = C.sub; wrap(ctx, YEAR_NOTE[o.year], 150).forEach((l, n) => ctx.fillText(l, YCOL, o.y + 72 + n * 18)); }
+      yearTop = o.y;
+    }
+    if (o.t === "sep") { flushLine(o.y - 6); yearTop = null; ctx.fillStyle = C.hair; ctx.fillRect(PAD, o.y, W - PAD * 2, 1); }
+    if (o.t === "gap") { ctx.fillStyle = C.faint; ctx.font = font(400, 14, MO); spaced(ctx, "· · ·", TX, o.y, 4); }
+    if (o.t === "item") {
+      const { k, e, tl, d, size, lh, isKey } = o;
+      const baseY = o.y + size + 4;
+      // 점
+      const cy = baseY - size * .35;
+      ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink;
+      if (k === "mine" && S.mark) { ctx.fillStyle = C.paper; ctx.fillRect(LINE_X - 9, cy - 9, 19, 18); ctx.fillStyle = C.ink; star(ctx, LINE_X + .5, cy, 8.5); }
+      else if (k === "fav") { ctx.fillStyle = C.paper; ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 6, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 1.6; ctx.stroke(); }
+      else if (k === "ctx") { ctx.fillStyle = C.sub; ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 2.8, 0, Math.PI * 2); ctx.fill(); }
+      else { ctx.beginPath(); ctx.arc(LINE_X + .5, cy, 4.5, 0, Math.PI * 2); ctx.fill(); }
+      // 제목
+      tl.forEach((line, n) => {
+        const ly = baseY + n * lh;
+        if (isKey) {
+          ctx.font = font(700, size, KR);
+          const w = ctx.measureText(line).width;
+          ctx.fillStyle = C.ink; ctx.fillRect(TX, ly - size * 1.02, w + 16, size * 1.42);
+          ctx.fillStyle = C.paper; ctx.fillText(line, TX + 8, ly);
+        } else {
+          ctx.font = font(k === "mine" && S.mark ? 700 : (k === "ctx" ? 400 : 500), size, KR);
+          ctx.fillStyle = k === "ctx" ? C.sub : C.ink; ctx.fillText(line, TX, ly);
+        }
+      });
+      ctx.font = font(400, 13.5, KR); ctx.fillStyle = C.sub;
+      d.forEach((line, n) => ctx.fillText(line, TX, baseY + (tl.length - 1) * lh + 22 + n * 20));
+    }
+  });
+  if (L.length) flushLine(L[L.length - 1].y + (L[L.length - 1].h || 0) - 4);
+
+  // 바닥
+  const fy = H - 72;
+  ctx.fillStyle = C.ink; ctx.fillRect(PAD, fy, W - PAD * 2, 2);
+  ctx.font = font(400, 12, MO); ctx.fillStyle = C.sub;
+  spaced(ctx, "THEMIS ⟷ APSU · ORDER / INVERSION", PAD, fy + 26, 1.2);
+  const tail = `EXCERPT · ${(S.en || S.name || "MY CHARACTER").toUpperCase()}${S.favs.length ? " × " + S.favs.length + " FAVORITES" : ""}`;
+  spaced(ctx, tail, W - PAD, fy + 26, 1.2, "right");
+  ctx.font = font(400, 11, MO); ctx.fillStyle = C.faint;
+  spaced(ctx, "FAN-MADE PERSONAL EDITION · NOT OFFICIAL CANON", PAD, fy + 48, 1);
+
+  $("#pvSize").textContent = `1080 × ${H}`;
+  const mineN = rows.filter(r => r.kind === "mine").length, favN = rows.filter(r => r.kind === "fav").length;
+  $("#pvInfo").textContent = `내 기록 ${mineN} · 최애 기록 ${favN}`;
+  $("#saveImg").style.display = "none";
+}
+
+/* ───────── 저장 ───────── */
+$("#saveBtn").onclick = () => {
+  draw();
+  const cv = $("#cv");
+  const fname = `themis-chronicle-${(S.en || S.name || "persona").replace(/[^\w가-힣-]/g, "")}.png`;
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  cv.toBlob(blob => {
+    if (!blob) { toast("이미지를 만들지 못했어요"); return; }
+    const url = URL.createObjectURL(blob);
+    if (isIOS) {
+      const box = $("#saveImg"); box.querySelector("img").src = url; box.style.display = "block";
+      box.scrollIntoView({ behavior: "smooth", block: "center" });
+      toast("이미지를 길게 눌러 저장하세요");
+    } else {
+      const a = document.createElement("a"); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      toast("이미지를 저장했어요");
+    }
+  }, "image/png");
+};
+
+/* ───────── 시작 ───────── */
+function boot(){
+  $("#pName").value = S.name; $("#pEn").value = S.en;
+  seg("#ctxSeg", "ctx"); seg("#markSeg", "mark");
+  resetForm(); renderFav(); draw();
+}
+let redraw; addEventListener("resize", () => { clearTimeout(redraw); redraw = setTimeout(draw, 200); });
+boot();
+if (document.fonts) document.fonts.ready.then(draw);
+</script>
+</body>
+</html>
