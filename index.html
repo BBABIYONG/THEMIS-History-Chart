@@ -365,6 +365,14 @@
   .pe-band:hover .mono,.pe-band:hover small{color:var(--faint)}
   @media (max-width:520px){ .tl-right{flex-direction:column;align-items:flex-end;gap:6px} }
 
+  /* ───────── 추정 기록 (불확실 · 옅은 회색) ───────── */
+  .ev.guess h3,.ev.key.guess h3,.ev.key.guess.anim h3,.ev.key.guess.anim.in h3{
+    display:inline;background:rgba(17,17,18,.1)!important;color:var(--ink)!important;padding:2px 8px;font-weight:500;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;line-height:1.9}
+  .ev .gs{border:1px dashed var(--sub);color:var(--sub);padding:0 5px;font-size:10px;letter-spacing:.04em}
+  .gs-legend{margin-left:14px;display:inline-flex;align-items:center;gap:6px;color:var(--sub)}
+  .gs-legend i{display:inline-block;width:18px;height:10px;background:rgba(17,17,18,.12)}
+
   /* ───────── MOBILE ───────── */
   @media (max-width:700px){
     .wrap{padding:0 18px}
@@ -487,7 +495,7 @@
     <div class="chips" id="chips"></div>
     <div class="chips teams" id="teams"><span class="row-label mono">Team /</span></div>
     <div class="tools mono">
-      <span id="count"></span>
+      <span><span id="count"></span><span class="gs-legend"><i></i>추정 기록</span></span>
       <span><button id="order"><span class="arr">↓</span> <span class="lbl">오래된 순</span></button> &nbsp;/&nbsp; <button id="fold">모두 접기</button></span>
     </div>
   </div>
@@ -671,12 +679,12 @@ function render(){
       </div>
       <div class="fold"><div class="fold-in"><div class="items">
         ${g.items.map(e => `
-          <article class="ev ${e.spoiler ? "spoil" : ""} ${e.key ? "key" : ""}">
+          <article class="ev ${e.spoiler ? "spoil" : ""} ${e.key ? "key" : ""} ${e.guess ? "guess" : ""}">
             <span class="node n-${e.tag}"><i></i></span>
             <div class="meta mono">
-              <span>${codeOf.get(e)}</span>
               ${e.date ? `<span class="when">${e.date}</span>` : ""}
               ${e.tag ? `<span class="tag">${sym(e.tag)} ${e.tag}</span>` : ""}
+              ${e.guess ? `<span class="gs">추정</span>` : ""}
             </div>
             <h3>${e.title}</h3>
             ${e.desc || e.link ? `<div><div class="body">

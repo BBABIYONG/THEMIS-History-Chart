@@ -199,6 +199,8 @@
   .slots .off .tt{display:block}
   .slots .off .dd{display:block;font-size:11.5px;color:var(--faint);line-height:1.5}
   .slots .off.key .tt{display:inline;background:var(--ink);color:var(--paper);padding:0 6px}
+  .slots .off.guess .tt{display:inline;background:rgba(17,17,18,.1);color:var(--ink);padding:0 6px}
+  .slots .off.guess .tt::after{content:"추정";font-family:var(--mono);font-size:9.5px;color:var(--sub);margin-left:8px;border:1px dashed var(--sub);padding:0 4px;vertical-align:1px}
   .slots .off.fav::before{background:var(--paper);border:1.5px solid var(--ink);width:8px;height:8px;left:-21px}
   .slots .off.fav .no{color:var(--ink)}
   .slots .off::before{top:22px!important}
@@ -549,8 +551,8 @@ function renderSlots(scroll){
     list.forEach((e, i) => {
       const who = favRes.filter(([, r]) => r.test(txt(e))).map(([n]) => n);
       const d = e.spoiler ? "" : strip(e.desc);
-      yhtml += `<li class="off${e.key ? " key" : ""}${who.length ? " fav" : ""}">
-        <span class="no mono">${y.slice(2)}.${String(i + 1).padStart(2, "0")}${e.date ? ` · ${safe(e.date)}` : ""}${who.length ? ` · ○ ${who.join("·")}` : ""}</span>
+      yhtml += `<li class="off${e.key ? " key" : ""}${e.guess ? " guess" : ""}${who.length ? " fav" : ""}">
+        ${e.date || who.length ? `<span class="no mono">${[e.date ? safe(e.date) : "", who.length ? "○ " + who.join("·") : ""].filter(Boolean).join(" · ")}</span>` : ""}
         <span class="tt">${safe(strip(e.title))}</span>${d ? `<span class="dd">${safe(d)}</span>` : ""}</li>`;
       yhtml += slot(i);
     });
@@ -813,7 +815,7 @@ function layout(ctx, rows){
   rows.forEach(r => {
     if (r.type === "year") { if (L.length) { L.push({ t: "sep", y: y + 6 }); y += 22; } L.push({ t: "year", y: y + 6, year: r.year }); y += 14; return; }
     if (r.type === "gap") { L.push({ t: "gap", y: y + 14 }); y += 26; return; }
-    const e = r.e, k = r.kind, isKey = e.key && k !== "ctx";
+    const e = r.e, k = r.kind, isKey = (e.key || e.guess) && k !== "ctx";
     const size = k === "ctx" ? 16 : 17.5;
     ctx.font = font(k === "mine" && S.mark ? 700 : (isKey ? 700 : (k === "evt" ? 500 : 400)), size, KR);
     const title = strip(e.title) + (e.mine && e.date ? ` · ${e.date}` : "");
@@ -863,6 +865,7 @@ function draw(){
   if (S.mark && S.entries.some(e => e.type === "event")) legend.push(["evt", "추가 사건"]);
   if (S.favs.length) legend.push(["fav", S.favs.length > 3 ? `${S.favs.slice(0, 3).join(" · ")} 외 ${S.favs.length - 3}` : S.favs.join(" · ")]);
   if (S.ctx) legend.push(["ctx", "주변 사건"]);
+  if (rows.some(r => r.e && r.e.guess)) legend.push(["guess", "추정"]);
   ctx.font = font(400, 13, KR);
   const items = legend.map(([k, t]) => ({ k, t, w: ctx.measureText(t).width + 20 }));
   let tot = items.reduce((s, i) => s + i.w + 18, -18), x0 = W - PAD - tot;
@@ -870,6 +873,7 @@ function draw(){
     const cy = 268;
     ctx.fillStyle = C.ink; ctx.strokeStyle = C.ink;
     if (i.k === "mine") star(ctx, x0 + 6, cy, 7);
+    else if (i.k === "guess") { ctx.fillStyle = "rgba(17,17,18,.14)"; ctx.fillRect(x0 - 2, cy - 5, 16, 10); }
     else if (i.k === "evt") { ctx.save(); ctx.translate(x0 + 6, cy); ctx.rotate(Math.PI / 4); ctx.lineWidth = 1.5; ctx.strokeRect(-4, -4, 8, 8); ctx.restore(); }
     else if (i.k === "fav") { ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(x0 + 6, cy, 5, 0, Math.PI * 2); ctx.stroke(); }
     else { ctx.fillStyle = C.faint; ctx.beginPath(); ctx.arc(x0 + 6, cy, 3, 0, Math.PI * 2); ctx.fill(); }
@@ -916,8 +920,15 @@ function draw(){
         if (isKey) {
           ctx.font = font(700, size, KR);
           const w = ctx.measureText(line).width;
-          ctx.fillStyle = C.ink; ctx.fillRect(TX, ly - size * 1.02, w + 16, size * 1.42);
-          ctx.fillStyle = C.paper; ctx.fillText(line, TX + 8, ly);
+          if (e.guess) {   // 추정: 옅은 회색 바탕
+            ctx.font = font(500, size, KR);
+            const w2 = ctx.measureText(line).width;
+            ctx.fillStyle = "rgba(17,17,18,.1)"; ctx.fillRect(TX, ly - size * 1.02, w2 + 16, size * 1.42);
+            ctx.fillStyle = C.ink; ctx.fillText(line, TX + 8, ly);
+          } else {
+            ctx.fillStyle = C.ink; ctx.fillRect(TX, ly - size * 1.02, w + 16, size * 1.42);
+            ctx.fillStyle = C.paper; ctx.fillText(line, TX + 8, ly);
+          }
         } else {
           ctx.font = font(k === "mine" && S.mark ? 700 : (k === "ctx" ? 400 : 500), size, KR);
           ctx.fillStyle = k === "ctx" ? C.sub : C.ink; ctx.fillText(line, TX, ly);
