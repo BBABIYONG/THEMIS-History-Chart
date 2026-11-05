@@ -67,11 +67,11 @@
   .mine-list .ty{display:block;font-family:var(--mono);font-size:9.5px;color:var(--sub);font-weight:400;margin-top:3px}
   .mine-list .t{font-weight:500}
   .mine-list .d{display:block;font-size:12.5px;color:var(--sub)}
-  .mine-list .w{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.04em}
+  .mine-list .w{display:block;font-family:var(--mono);font-size:10px;color:var(--sub);letter-spacing:.04em}
   .mine-list .ops{display:flex;gap:4px}
   .mine-list .ops button{background:none;border:none;font-family:var(--mono);font-size:12px;color:var(--sub);cursor:pointer;padding:2px 5px}
   .mine-list .ops button:hover{background:var(--ink);color:var(--paper)}
-  .empty{font-size:13px;color:var(--faint);padding:10px 0}
+  .empty{font-size:13px;color:var(--sub);padding:10px 0}
   li.editing{background:rgba(17,17,18,.05)}
 
   /* 최애 선택 */
@@ -80,13 +80,13 @@
   .picked{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;margin-bottom:12px}
   .picked button{background:var(--ink);color:var(--paper);border:none;font:inherit;font-size:13px;padding:3px 10px;cursor:pointer}
   .picked button::after{content:" ×";opacity:.6}
-  .picked .none{font-size:13px;color:var(--faint)}
+  .picked .none{font-size:13px;color:var(--sub)}
   .grp{border-top:1px solid var(--hair)}
   .grp:last-child{border-bottom:1px solid var(--hair)}
   .grp summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:9px 2px;line-height:1.4;user-select:none}
   .grp summary::-webkit-details-marker{display:none}
   .grp summary .g{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;font-weight:500}
-  .grp summary .cnt{color:var(--faint);font-size:10px}
+  .grp summary .cnt{color:var(--sub);font-size:10px}
   .grp summary .sel{color:var(--ink);font-size:10.5px;text-transform:none;letter-spacing:0;margin-left:auto;text-align:right}
   .grp summary .arr,.fav-tl summary .arr{width:9px;height:9px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);
     transform:rotate(45deg);transition:transform .3s;flex:none;margin:0 4px 4px 6px}
@@ -112,11 +112,11 @@
   .fav-tl-list .y.ghost{color:transparent}
   .fav-tl-list .who{font-size:10px;color:var(--sub);text-transform:none;letter-spacing:0}
   .fav-tl-list li.key .t{background:var(--ink);color:var(--paper);padding:0 6px;font-weight:500;justify-self:start}
-  .fav-tl-list .none{display:block;color:var(--faint);border:none}
+  .fav-tl-list .none{display:block;color:var(--sub);border:none}
   .pick{background:none;border:1px solid var(--hair);color:var(--ink);font:inherit;font-size:13px;padding:2px 9px;cursor:pointer;transition:.12s}
   .pick:hover{border-color:var(--ink)}
   .pick.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .pick .n{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-left:4px}
+  .pick .n{font-family:var(--mono);font-size:9.5px;color:var(--sub);margin-left:4px}
   .pick.on .n{color:var(--faint)}
   .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:9px 16px;
          font-size:13px;opacity:0;pointer-events:none;transition:.3s;z-index:60}
@@ -160,9 +160,9 @@
   .slots .off{color:var(--sub);padding:5px 0}
   .slots .off::before{content:"";position:absolute;left:-20px;top:11px;width:7px;height:7px;border-radius:50%;background:var(--ink)}
   .slots .off.key{color:var(--ink);font-weight:500}
-  .slots .off .no{font-family:var(--mono);font-size:10px;color:var(--faint);margin-right:8px}
+  .slots .off .no{font-family:var(--mono);font-size:10px;color:var(--sub);margin-right:8px}
   .slots .off.none::before{display:none}
-  .slots .slot{cursor:pointer;margin:1px 0;padding:3px 10px;border:1px dashed transparent;color:var(--faint);font-size:12px;transition:.12s}
+  .slots .slot{cursor:pointer;margin:1px 0;padding:3px 10px;border:1px dashed transparent;color:var(--sub);font-size:12px;transition:.12s}
   .slots .slot:hover{border-color:var(--ink);color:var(--ink)}
   .slots .slot.on{border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:500;padding:6px 10px}
   .slots .slot.on small{display:block;font-size:11px;font-weight:400;color:var(--faint)}
@@ -197,16 +197,16 @@
   .slots .yh small{font-size:11.5px;color:var(--ink);font-weight:500}
   .slots .off .no{display:block;margin:0 0 1px;font-size:9.5px;letter-spacing:.04em;text-transform:none}
   .slots .off .tt{display:block}
-  .slots .off .dd{display:block;font-size:11.5px;color:var(--faint);line-height:1.5}
+  .slots .off .dd{display:block;font-size:11.5px;color:var(--sub);line-height:1.5}
   .slots .off.key .tt{display:inline;background:var(--ink);color:var(--paper);padding:0 6px}
   .slots .off.guess .tt{display:inline;background:rgba(17,17,18,.1);color:var(--ink);padding:0 6px}
-  .slots .off.guess .tt::after{content:"추정";font-family:var(--mono);font-size:9.5px;color:var(--sub);margin-left:8px;border:1px dashed var(--sub);padding:0 4px;vertical-align:1px}
+  .slots .off.guess .tt::after{content:"추정";font-size:11px;font-weight:500;color:var(--ink);margin-left:8px;background:rgba(17,17,18,.10);padding:0 6px;vertical-align:1px}
   .slots .off.fav::before{background:var(--paper);border:1.5px solid var(--ink);width:8px;height:8px;left:-21px}
   .slots .off.fav .no{color:var(--ink)}
   .slots .off::before{top:22px!important}
   .slots .off.none::before{display:none}
   .slots .ex-mine em{font-style:normal;font-size:11px;color:var(--sub)}
-  .slot-legend{display:flex;gap:14px;color:var(--faint);margin-top:8px;font-size:10px;text-transform:none}
+  .slot-legend{display:flex;gap:14px;color:var(--sub);margin-top:8px;font-size:10px;text-transform:none}
   /* ───────── 3단계 사용법 ───────── */
   .howto{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);margin-top:30px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
   .howto li{position:relative;cursor:pointer;padding:14px 16px 14px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:baseline;transition:background .2s}
@@ -216,7 +216,7 @@
            color:transparent;-webkit-text-stroke:1px var(--ink)}
   .howto b{font-size:15px;font-weight:500}
   .howto span{font-size:12px;color:var(--sub);line-height:1.5}
-  .howto em{position:absolute;right:12px;top:12px;font-style:normal;font-size:9.5px;color:var(--faint)}
+  .howto em{position:absolute;right:12px;top:12px;font-style:normal;font-size:9.5px;color:var(--sub)}
   .howto li.done i{color:var(--ink);-webkit-text-stroke-color:transparent}
   .howto li.done em{color:var(--ink)}
   .howto li + li::before{content:"→";position:absolute;left:-7px;top:50%;transform:translateY(-50%);background:var(--paper);font-size:11px;line-height:1;padding:2px 0;color:var(--sub)}
@@ -835,7 +835,9 @@ function draw(){
   const rows = buildRows();
   ctx.font = font(400, 17, KR);
   const { L, H } = layout(ctx, rows);
-  const scale = 2;
+  // 아이폰 Safari 등은 캔버스 넓이가 약 1,670만 픽셀을 넘으면 이미지를 만들지 못해요 → 길면 배율을 낮춤
+  const MAX_PX = 16000000;
+  const scale = Math.max(0.5, Math.min(2, Math.sqrt(MAX_PX / (W * H))));
   cv.width = W * scale; cv.height = H * scale;
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.textBaseline = "alphabetic";
@@ -982,8 +984,8 @@ $("#saveBtn").onclick = () => {
   const cv = $("#cv");
   const fname = `themis-chronicle-${(S.en || S.name || "persona").replace(/[^\w가-힣-]/g, "")}.png`;
   const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  cv.toBlob(blob => {
-    if (!blob) { toast("이미지를 만들지 못했어요"); return; }
+  const handle = blob => {
+    if (!blob) { toast("이미지를 만들지 못했어요. 최애나 기록 수를 줄여서 다시 시도해 주세요"); return; }
     markSeen("saved"); updateHowto();
     const url = URL.createObjectURL(blob);
     if (isIOS) {
@@ -995,7 +997,15 @@ $("#saveBtn").onclick = () => {
       setTimeout(() => URL.revokeObjectURL(url), 4000);
       toast("이미지를 저장했어요");
     }
-  }, "image/png");
+  };
+  // toBlob이 실패하면 dataURL로 한 번 더 시도
+  try {
+    cv.toBlob(blob => {
+      if (blob) return handle(blob);
+      try { fetch(cv.toDataURL("image/png")).then(r => r.blob()).then(handle).catch(() => handle(null)); }
+      catch (e) { handle(null); }
+    }, "image/png");
+  } catch (e) { handle(null); }
 };
 
 /* ───────── 시작 ───────── */
