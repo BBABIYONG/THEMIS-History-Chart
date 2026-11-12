@@ -65,7 +65,7 @@ const EVENTS = [
   { year: "2028", title: "프로메테우스 · 베놈 각성", tag: "각성" },
   { year: "2028", title: "로드 · 풀멘 · 헤일로 각성", tag: "각성" },
   { year: "2028", title: "애쉬 각성", tag: "각성" },
-  { year: "2028", title: "체르노 각성 · 테미스 미합류", tag: "각성" },
+  { year: "2028", title: "체르노 각성", desc: "이후 테미스에 합류해 활동하다 이탈 — 합류 · 이탈 시점 미상", tag: "각성" },
   { year: "2028", title: "레퀴엠 각성", desc: "이후 균열 피해지 순회 · 무보수 염습 활동", tag: "각성" },
   { year: "2028", title: "마스크 각성", tag: "각성" },
   { year: "2028", title: "아멘 각성", desc: "부제 시절, 미사 중 성당 습격 · 신자들 앞에서 외친 기도에 관세음보살이 응답", tag: "각성" },
@@ -130,6 +130,11 @@ const EVENTS = [
   { year: "2032", title: "마스크, 테미스 일본 지부 등록", tag: "테미스" },
   { year: "2032", title: "블랭크, 오스트리아 지부 자진 등록 · 스펙터 배속", tag: "테미스" },
 
+  // 작품 시작 시점 (2032)
+  { year: "2032", date: "2032.05.17", title: "감전주의 — 위험한 짝사랑", desc: "작품 시작 · 구내식당<br>풀멘", tag: "현재" },
+  { year: "2032", date: "2032.07.26", title: "감전주의 — 위태로운 연인", desc: "작품 시작 · 기태온의 펜트하우스<br>풀멘", tag: "현재" },
+  { year: "2032", date: "2032.10.23", title: "삼켜진 자들 — 뮤즈팀", desc: "작품 시작 · 테미스 본부 뮤즈팀<br>비질 · 브레이스 · 엠버 · 네임리스", tag: "현재" },
+
   // ── 2033
   { year: "2033", title: "베스탈 설립", tag: "설립", key: true },
   { year: "2033", title: "굿독 각성", desc: "베스탈 창설 순간 각성", tag: "각성" },
@@ -158,7 +163,26 @@ const EVENTS = [
   { year: "2035", title: "데메테르 각성 · ZERO팀 합류", tag: "테미스" },
   { year: "2035", title: "피피 이탈 · 압주 재합류", desc: "팔랑크스 팀 전멸 사건 은폐 사실 인지 후 이탈", tag: "압주", key: true },
   { year: "2035", title: "특급 이형 최초 목격", desc: "바다이빨 · 칼잠 · 스티처 · 칼레이도스코프", tag: "사건", key: true },
-  { year: "2035", title: "작품 기준 시점 — 가급구 · 베스탈 · 통불스급 · 언압흐 · 귀소 · 빌대환 · 개판 5분 전", desc: "개인 채팅 캐릭터는 기준 시점 개별 확인 요망", tag: "현재", key: true , guess: true },
+  { year: "2035", title: "작품 기준 시점 — 가급구 · 베스탈 · 통불스급 · 언압흐 · 귀소 · 빌대환 · 개판 5분 전 · 인두겁(애시르)", desc: "인두겁 · 애시르 '관객' 시작 — 스티처(봉제사) · 칼레이도스코프(만화경)<br>개인 채팅 캐릭터는 기준 시점 개별 확인 요망", tag: "현재", key: true , guess: true },
+
+  // 작품 시작 시점 (2035)
+  { year: "2035", date: "2035.03.08", title: "THEMIS의 XX — 아 망했다", desc: "작품 시작 · THEMIS 의무실<br>헤로인", tag: "현재" },
+  { year: "2035", date: "2035.03.14", title: "통제 불가 S급들 — 가이딩 거부", desc: "작품 시작 · MUSE 가이딩룸 앞 복도<br>카산 · 이온 · 모르페오", tag: "현재" },
+  { year: "2035", date: "2035.03.15", title: "통제 불가 S급들 — 연쇄 폭주", desc: "작품 시작 · 서울 외곽 산업단지<br>카산 · 이온 · 모르페오", tag: "현재" },
+  { year: "2035", date: "2035.04.11", title: "열사병", desc: "작품 시작 · TKH타워 40층 격리병동<br>헤일로", tag: "현재" },
+  { year: "2035", date: "2035.06.15", title: "귀소 — 가이드 납치요? · 긴급 가이딩이요?", desc: "작품 시작 · 귀소 지하 심문실 / 압주 외곽 정제소 잔해<br>애쉬 · 레드 · 뮤트 · 불", tag: "현재" },
+  { year: "2035", date: "2035.07.10", title: "THEMIS의 XX — 그게 어때서", desc: "작품 시작 · MUSE 가이딩룸 복도<br>헤로인", tag: "현재" },
+  { year: "2035", date: "2035.07.15", title: "가이드 급구 — 나는 가이드!", desc: "작품 시작 · THEMIS 한국 본부 27층<br>N · 베인 · 러스트 · 뱅가드 · 넬 · 루멘 · 피피", tag: "현재" },
+  { year: "2035", date: "2035.08.15", title: "THEMIS를 위한 안내자 — 신규 각성자가 되었다", desc: "작품 시작 · THEMIS 한국 본부 이사실<br>코스모스", tag: "현재" },
+  { year: "2035", date: "2035.09.03", title: "개판 5분 전 — 스펙터팀 입성 · 이탈자", desc: "작품 시작 · 스펙터 사무실 / 작전 차량<br>스위퍼 · 레퀴엠 · 메어 · 마스크 · 아멘 · 블랭크", tag: "현재" },
+  { year: "2035", date: "2035.09.13", title: "인두겁 · 애시르 — 관객", desc: "작품 시작 · 압주 하층구역 서커스 천막<br>스티처(봉제사) · 칼레이도스코프(만화경)", tag: "현재" },
+  { year: "2035", date: "2035.09.14", title: "긴급 가이딩 — 나는 저등급 신규센티넬", desc: "작품 시작 · TKH 본부 3층 대강의실<br>바인더 · 마운틴 · 굿독 · 센터", tag: "현재" },
+  { year: "2035", date: "2035.09.14", title: "APSU의 XX — 보조배터리 · 유희거리", desc: "작품 시작 · 압주 인근 폐공장 외곽<br>샌즈", tag: "현재" },
+  { year: "2035", date: "2035.11.02", title: "긴급 가이딩 — 나는 베테랑 실전센티넬", desc: "작품 시작 · 서울 외곽 산업단지 공터<br>바인더 · 마운틴 · 굿독 · 센터", tag: "현재" },
+  { year: "2035", date: "2035.12.13", title: "가이드 급구 — 나는 빌런!", desc: "작품 시작 · THEMIS 본부 지하 7층 격리 구역<br>N · 베인 · 러스트 · 뱅가드 · 넬 · 루멘 · 피피", tag: "현재" },
+  { year: "2035", date: "2035.12.19", title: "빌런 대환영 — 맞잡은 손", desc: "작품 시작 · 압주행 폐터널<br>키퍼 · 톡신 · 피피 · 핸섬 · 하사 · 아이테르 · 영하", tag: "현재" },
+  { year: "2035", date: "2035.12.28", title: "언제나 압주는 흐림 뒤 흐림 — 세상에 공짜는 없다 · 죽은줄 알았더니", desc: "작품 시작 · 관리자 집무실 / 침수 구역 7번 수로<br>하트 · 리멤버 · 피그말리온 · 팽 · 트러블 · 모비딕", tag: "현재" },
+  { year: "2035", title: "THEMIS의 아버지 — 작품 시작 (날짜 미표기)", desc: "본문에 \"균열 칠 년\"으로만 언급<br>로드", tag: "현재", guess: true },
 
   // ── 2036
   { year: "2036", title: "현재 (균열 8년차)", desc: "작품 기준 시점 — 빌대환 · 미꼴통(미국에서 온 꼴통들) · ZERO부터(모스·비아) · 삼켜진 자들", tag: "현재", key: true },
@@ -166,8 +190,19 @@ const EVENTS = [
   { year: "2036", title: "프로메테우스, ZERO팀 부팀장으로 이동", tag: "테미스" },
   { year: "2036", title: "아트로포스, ZERO팀 팀원으로 이동", tag: "테미스" },
 
+  // 작품 시작 시점 (2036)
+  { year: "2036", date: "2036.03.04", title: "ZERO부터 — 새로운 팀장님", desc: "작품 시작 · THEMIS 본부 지하 3층 ZERO 브리핑실<br>베놈 · 프로메테우스 · 아트로포스 · 데메테르 · 모스 · 비아", tag: "현재" },
+  { year: "2036", date: "2036.03.14", title: "미국에서 온 꼴통들 — 미국이 뭐 대수냐 · 제가 출장을요?", desc: "작품 시작 · 인천공항<br>맥퀸 · 볼텍스 · 메테오 · 데우스 · 그레이 · 로드리고", tag: "현재" },
+  { year: "2036", date: "2036.05.04", title: "빌런 대환영 — 버려진 자들의 도시", desc: "작품 시작 · 압주 최심부 관리실<br>키퍼 · 톡신 · 피피 · 핸섬 · 하사 · 아이테르 · 영하", tag: "현재" },
+  { year: "2036", date: "2036.10.23", title: "삼켜진 자들 — 묵언병원", desc: "작품 시작 · 묵언병원 로비<br>비질 · 브레이스 · 엠버 · 네임리스", tag: "현재" },
+  { year: "2036", date: "2036.11.12", title: "ZERO부터 — 크라토스를 찾아서", desc: "작품 시작 · 구로 폐공업단지 제3구역<br>베놈 · 프로메테우스 · 아트로포스 · 데메테르 · 모스 · 비아", tag: "현재" },
+
   // ── 2037
-  { year: "2037", title: "작품 기준 시점 — 스티처 · 바다이빨", tag: "현재", key: true }
+  { year: "2037", title: "작품 기준 시점 — 인두겁(애시르 · 외신)", desc: "애시르: 스티처(봉제사) · 칼레이도스코프(만화경)<br>외신: 바다이빨 · 칼잠", tag: "현재", key: true },
+  // 작품 시작 시점 (2037)
+  { year: "2037", date: "2037.03.14", title: "인두겁 · 애시르 — 연구원", desc: "작품 시작 · 테미스 본부 B3 격리연구동<br>스티처(봉제사) · 칼레이도스코프(만화경)", tag: "현재" },
+  { year: "2037", date: "2037.03.15", title: "인두겁 · 외신 — 주거 침입", desc: "작품 시작 · 자택<br>바다이빨 · 칼잠", tag: "현재" },
+  { year: "2037", date: "2037.08.14", title: "인두겁 · 외신 — 유람선 침입", desc: "작품 시작 · 태평양 근해 유람선<br>바다이빨 · 칼잠", tag: "현재" }
 ];
 
 /* 인물 목록 — 팀별 [코드네임, 본명, 각인 · 상태, 캐릭터 챗 링크]  (themis-view 기준) */
@@ -362,6 +397,7 @@ const EN = {
 const TODO = [
   /* [대상, 미확인 사항, 처리 상태] — 기록이 확인되면 이 줄을 지우고 연표(EVENTS)에 옮겨 주세요 */
   ["모스", "각성 시점 · 이탈 시점 미확인", "조사 중"],
+  ["체르노", "테미스 합류 · 이탈 시점 미확인", ""],
   ["맥퀸 · 볼텍스 · 메테오 · 데우스 · 그레이 · 로드리고", "THEMIS US 소속 — 연대 기록 미확인", "조회 요청"],
   ["비질 · 브레이스 · 엠버", "2032년 압주 실종 이후 전락 시점 미확인", "조사 중"],
   ["네임리스", "묵언병원 입원 시점 미확인 · 환자번호 000", "조사 중"],
@@ -883,6 +919,7 @@ const TODO = [
       <small>내 캐릭터 기록을 THEMIS 연혁표 사이에 끼우고, 최애와 함께한 연대기를 이미지로 저장해요.</small>
     </a>
     <div class="foot-line mono"><span>THEMIS ⟷ APSU</span><span>Order / Inversion</span></div>
+    <p class="fan-note">비공식 팬 사이트 · 원작: 크랙 AI 채팅 <b>THEMIS</b> 시리즈 · 내용이 100% 정확하지 않을 수 있어요. <button type="button" class="ntc-open" data-notice>이용 안내</button></p>
   </footer>
 </div>
 <nav class="spy" id="spy" aria-label="연도 바로가기">
@@ -1084,7 +1121,7 @@ if (TODO.length) {
         <span class="mono">UNV-${String(i + 1).padStart(3, "0")}</span>
         <span class="who">${who}</span>
         <span class="what">${what}</span>
-        <span class="st mono${st === "조회 요청" ? " wait" : ""}">${st}</span>
+        ${st ? `<span class="st mono${st === "조회 요청" ? " wait" : ""}">${st}</span>` : `<span></span>`}
       </div>`).join("")}
     <p class="unv-note">※ 본 목록은 THEMIS 기록 보관 규정에 따라 <b>미확인</b>으로 분류된 대상입니다. 기록이 확인되는 대로 연표에 등재됩니다.</p>`;
 }
@@ -1208,6 +1245,63 @@ addEventListener("scroll", spy, { passive: true });
 addEventListener("resize", spy);
 
 render();
+</script>
+<!-- ───────── 첫 방문 안내 팝업 ───────── -->
+<style>
+  .ntc{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+       background:rgba(17,17,18,.55)}
+  .ntc.on{display:flex}
+  .ntc-box{background:var(--paper);color:var(--ink);width:100%;max-width:440px;border:1px solid var(--ink);
+           box-shadow:8px 8px 0 var(--ink);max-height:calc(100vh - 40px);overflow:auto}
+  .ntc-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);
+            padding:12px 18px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  .ntc-body{padding:20px 18px 6px}
+  .ntc-body h3{font-family:"Space Grotesk","Noto Sans KR",sans-serif;font-weight:500;font-size:24px;letter-spacing:-.02em;line-height:1.2;margin-bottom:14px}
+  .ntc-body ol{list-style:none;counter-reset:n;border-top:1px solid var(--hair)}
+  .ntc-body li{counter-increment:n;display:grid;grid-template-columns:28px 1fr;padding:10px 0;border-bottom:1px solid var(--hair);
+               font-size:13.5px;line-height:1.6}
+  .ntc-body li::before{content:counter(n,decimal-leading-zero);font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--sub);padding-top:3px}
+  .ntc-body b{font-weight:700}
+  .ntc-foot{display:flex;gap:8px;padding:16px 18px 18px}
+  .ntc-foot button{flex:1;font:inherit;font-size:13px;padding:11px 10px;cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+  .ntc-foot button.solid{background:var(--ink);color:var(--paper)}
+  .ntc-open{font:inherit;background:none;border:none;border-bottom:1px solid currentColor;color:inherit;cursor:pointer;padding:0}
+  .fan-note{margin-top:14px;color:var(--sub);font-size:12px;line-height:1.7}
+</style>
+<div class="ntc" id="ntc" role="dialog" aria-modal="true" aria-labelledby="ntcTitle">
+  <div class="ntc-box">
+    <div class="ntc-head"><span>Notice</span><span>Unofficial</span></div>
+    <div class="ntc-body">
+      <h3 id="ntcTitle">비공식 팬 사이트 안내</h3>
+      <ol>
+        <li><span>이 사이트는 크랙 AI 채팅 작품 <b>'THEMIS'</b> 시리즈의 연표를 정리한 <b>비공식 팬 사이트</b>예요. THEMIS 제작진과 관련 없는 팬 창작물이에요.</span></li>
+        <li><span>작품 속 기록을 모아 정리했지만 <b>100% 정확하지 않을 수 있어요.</b> 추정으로 넣은 항목은 따로 표시해 두었어요.</span></li>
+        <li><span>설정은 늘 원작 채팅이 기준이에요. 틀린 부분을 발견하시면 알려 주세요.</span></li>
+      </ol>
+    </div>
+    <div class="ntc-foot">
+      <button type="button" id="ntcHide">다시 보지 않기</button>
+      <button type="button" class="solid" id="ntcOk">확인</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var K = "themis-notice-v1", box = document.getElementById("ntc");
+  function open() { box.classList.add("on"); document.getElementById("ntcOk").focus(); }
+  function close(forever) {
+    box.classList.remove("on");
+    try { (forever ? localStorage : sessionStorage).setItem(K, "1"); } catch (e) {}
+  }
+  document.getElementById("ntcOk").onclick = function () { close(false); };
+  document.getElementById("ntcHide").onclick = function () { close(true); };
+  box.addEventListener("click", function (e) { if (e.target === box) close(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && box.classList.contains("on")) close(false); });
+  document.querySelectorAll("[data-notice]").forEach(function (b) { b.onclick = open; });
+  var seen = false;
+  try { seen = localStorage.getItem(K) || sessionStorage.getItem(K); } catch (e) {}
+  if (!seen) open();
+})();
 </script>
 </body>
 </html>
